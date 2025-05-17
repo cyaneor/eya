@@ -90,29 +90,6 @@ option(EYA_COMPILE_OPTION_VISIBILITY_HIDDEN
 
 # Option:
 #
-#     EYA_COMPILE_OPTION_NATIVE_TUNE
-#
-# Description:
-#
-#     CMake option EYA_COMPILE_OPTION_NATIVE_TUNE optimizes 
-#     code specifically for the host CPU architecture.
-#
-# Usage:
-#
-#     ON: Enables -march=native and -mtune=native optimizations
-#     OFF: Uses generic architecture settings
-#
-# Notes:
-#
-#     - Provides 5-15% performance improvement on host system
-#     - May produce binaries incompatible with older CPUs
-#     - Not recommended for distributed builds
-#
-option(EYA_COMPILE_OPTION_NATIVE_TUNE
-        "Optimize for native CPU architecture" ON)
-
-# Option:
-#
 #     EYA_COMPILE_OPTION_MEMORY_OPT
 #
 # Description:
