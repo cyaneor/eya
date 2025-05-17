@@ -80,17 +80,28 @@
 
 /**
  * @def eya_addr_is_aligned_mod
- * @brief Checks address alignment using modulus operation
+ * @brief Checks if a memory address is aligned
+ *        to a specified boundary using modulus operation
  *
- * This macro checks alignment by calculating the remainder of division
- * by the alignment value. Returns zero for aligned addresses.
+ * This macro determines alignment by calculating
+ * the remainder of the address divided by the alignment value.
+ * It returns `true` (non-zero) when the address is aligned,
+ * and `false` (zero) otherwise.
  *
- * @warning Less efficient than bitmask method. Suitable for non-power-of-two
- *          alignment values but requires additional checks
- * @param addr Memory address to check
- * @param align Alignment boundary
- * @return 0 if aligned, non-zero remainder if not aligned
+ * @warning Less efficient than bitmask-based alignment checks.
+ *          Suitable for non-power-of-two alignment values,
+ *          but ensure `align` is a positive integer to avoid undefined behavior.
+ *
+ *          Prefer bitmask methods (e.g., `& (align - 1)`)
+ *          for power-of-two alignment where possible.
+ *
+ * @param[in] addr  Memory address to check (integer or pointer type).
+ * @param[in] align Alignment boundary (must be a positive integer).
+ * @return Non-zero (true) if `addr` is aligned to `align`, zero (false) otherwise.
+ *
+ * @note Unlike bitmask alignment checks, this method works for arbitrary alignment values,
+ *       but division/modulus operations are generally slower than bitwise operations.
  */
-#define eya_addr_is_aligned_mod(addr, align) ((addr) % (align))
+#define eya_addr_is_aligned_mod(addr, align) (((addr) % (align)) == 0)
 
 #endif // EYA_ADDR_UTIL_H
