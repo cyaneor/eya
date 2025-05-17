@@ -43,6 +43,7 @@ enable_testing()
 # PROJECT_NAME here refers to ${CMAKE_PROJECT_NAME}_tests from project() command
 add_executable(${PROJECT_NAME}
         src/error.cpp
+        src/memory_std.cpp
         src/numeric_limits.cpp
 )
 
