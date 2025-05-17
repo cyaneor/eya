@@ -183,4 +183,4 @@ option(EYA_COMPILE_OPTION_THREAD_SAFETY
 #     - Not recommended for distributed builds
 #
 option(EYA_COMPILE_OPTION_NATIVE_TUNE
-        "Optimize for native CPU architecture" OFF)
+        "Optimize for native CPU architecture" ON)
