@@ -138,3 +138,26 @@ option(EYA_COMPILE_OPTION_NO_STACK_PROTECTOR
 #
 option(EYA_COMPILE_OPTION_PIC
         "Generate position-independent code" ON)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_THREAD_SAFETY
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_THREAD_SAFETY enables thread-safe compilation
+#     by linking with platform-specific threading libraries.
+#
+# Usage:
+#
+#     ON: Enables pthread linking (Unix) or equivalent thread support
+#     OFF: Disables explicit thread library linking
+#
+# Notes:
+#
+#     - Required for proper mutex and atomic operation support
+#     - Adds minimal runtime overhead when enabled
+#     - Recommended for all multi-threaded applications
+#
+option(EYA_COMPILE_OPTION_THREAD_SAFETY
+        "Enable thread-safe compilation" ON)

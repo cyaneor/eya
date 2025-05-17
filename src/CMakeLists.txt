@@ -88,3 +88,8 @@ target_compile_options(${CMAKE_PROJECT_NAME}
 target_link_options(${CMAKE_PROJECT_NAME}
         PRIVATE ${EYA_TARGET_PRIVATE_LINK_OPTIONS}
         PUBLIC ${EYA_TARGET_PUBLIC_LINK_OPTIONS})
+
+# Library linking configuration
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        PRIVATE ${EYA_TARGET_PRIVATE_LINK_LIBRARIES}
+        PUBLIC ${EYA_TARGET_PUBLIC_LINK_LIBRARIES})

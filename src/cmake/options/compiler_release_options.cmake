@@ -64,3 +64,141 @@ option(EYA_COMPILE_OPTION_OPTIMIZATION
 #
 option(EYA_COMPILE_OPTION_LTO
         "Enable link-time whole-program optimization" ON)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_VISIBILITY_HIDDEN
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_VISIBILITY_HIDDEN controls symbol visibility
+#     to reduce dynamic library export table size.
+#
+# Usage:
+#
+#     ON: Hides all non-exported symbols (recommended for shared libraries)
+#     OFF: Uses default symbol visibility
+#
+# Notes:
+#
+#     - Can reduce shared library size by 10-20%
+#     - Improves loading performance
+#     - Requires explicit export declarations for public APIs
+#
+option(EYA_COMPILE_OPTION_VISIBILITY_HIDDEN
+        "Enable hidden symbol visibility" ON)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_NATIVE_TUNE
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_NATIVE_TUNE optimizes 
+#     code specifically for the host CPU architecture.
+#
+# Usage:
+#
+#     ON: Enables -march=native and -mtune=native optimizations
+#     OFF: Uses generic architecture settings
+#
+# Notes:
+#
+#     - Provides 5-15% performance improvement on host system
+#     - May produce binaries incompatible with older CPUs
+#     - Not recommended for distributed builds
+#
+option(EYA_COMPILE_OPTION_NATIVE_TUNE
+        "Optimize for native CPU architecture" ON)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_MEMORY_OPT
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_MEMORY_OPT enables 
+#     memory access pattern optimizations.
+#
+# Usage:
+#
+#     ON: Enables prefetch and memory access optimizations
+#     OFF: Uses standard memory access patterns
+#
+# Notes:
+#
+#     - Can improve performance for memory-bound workloads
+#     - May increase code size slightly
+#     - Most effective on modern out-of-order CPUs
+#
+option(EYA_COMPILE_OPTION_MEMORY_OPT
+        "Enable memory access optimizations" OFF)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_PARALLEL
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_PARALLEL enables 
+#     automatic loop parallelization optimizations.
+#
+# Usage:
+#
+#     ON: Enables compiler auto-parallelization
+#     OFF: Disables automatic parallel transforms
+#
+# Notes:
+#
+#     - Uses 4 threads by default for parallel loops
+#     - Requires thread-safe runtime
+#     - Effectiveness varies by code structure
+#
+option(EYA_COMPILE_OPTION_PARALLEL
+        "Enable automatic loop parallelization" OFF)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_FUNCTION_SECTIONS
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_FUNCTION_SECTIONS enables
+#     per-function/data section generation for better dead code elimination.
+#
+# Usage:
+#
+#     ON: Places each function in separate section
+#     OFF: Uses standard section layout
+#
+# Notes:
+#
+#     - Can reduce final binary size by 5-15%
+#     - Improves linker optimization opportunities
+#     - May slightly increase compile time
+#
+option(EYA_COMPILE_OPTION_FUNCTION_SECTIONS
+        "Enable function/data sections optimization" OFF)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_BRANCH_PREDICTION
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_BRANCH_PREDICTION enables
+#     advanced branch prediction optimizations.
+#
+# Usage:
+#
+#     ON: Enables branch prediction hints and optimizations
+#     OFF: Uses standard branch handling
+#
+# Notes:
+#
+#     - Can improve performance on deep pipelines
+#     - May increase code size slightly
+#     - Most effective on modern speculative CPUs
+#
+option(EYA_COMPILE_OPTION_BRANCH_PREDICTION
+        "Enable branch prediction optimizations" OFF)
