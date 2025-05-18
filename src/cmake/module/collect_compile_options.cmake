@@ -270,6 +270,26 @@ foreach (CMAKE_OPTION IN ITEMS ${CMAKE_OPTIONS})
             continue()
         endif()
 
+        # Add the handling for the new option
+        if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_NO_TREE_VECTORIZE")
+            if (${CMAKE_OPTION} STREQUAL "ON")
+                if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+                    eya_add_compile_option_if_missing(-fno-tree-vectorize)
+                endif()
+            endif()
+            continue()
+        endif()
+
+        # Disable Semantic Interposition
+        if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_NO_SEMANTIC_INTERPOSITION")
+            if (${CMAKE_OPTION} STREQUAL "ON")
+                if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+                    eya_add_compile_option_if_missing(-fno-semantic-interposition)
+                endif()
+            endif()
+            continue()
+        endif() 
+
         # Function Sections (improves dead code elimination)
         if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_FUNCTION_SECTIONS")
             if (${CMAKE_OPTION} STREQUAL "ON")
@@ -283,7 +303,7 @@ foreach (CMAKE_OPTION IN ITEMS ${CMAKE_OPTIONS})
             endif()
             continue()
         endif()
-    endif()
+    endif()   
 endforeach()
 
 # Display enabled compilation options

@@ -137,7 +137,7 @@ option(EYA_COMPILE_OPTION_NO_STACK_PROTECTOR
 #     - Automatically enabled when BUILD_SHARED_LIBS=ON
 #
 option(EYA_COMPILE_OPTION_PIC
-        "Generate position-independent code" ON)
+        "Generate position-independent code" OFF)
 
 # Option:
 #
@@ -160,7 +160,7 @@ option(EYA_COMPILE_OPTION_PIC
 #     - Recommended for all multi-threaded applications
 #
 option(EYA_COMPILE_OPTION_THREAD_SAFETY
-        "Enable thread-safe compilation" ON)
+        "Enable thread-safe compilation" OFF)
 
 # Option:
 #
@@ -184,3 +184,51 @@ option(EYA_COMPILE_OPTION_THREAD_SAFETY
 #
 option(EYA_COMPILE_OPTION_NATIVE_TUNE
         "Optimize for native CPU architecture" ON)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_NO_TREE_VECTORIZE
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_NO_TREE_VECTORIZE disables
+#     the tree vectorization optimization in the compiler.
+#
+# Usage:
+#
+#     ON: Adds -fno-tree-vectorize flag to disable tree vectorization
+#     OFF: Enables tree vectorization (default behavior)
+#
+# Notes:
+#
+#     - Disabling tree vectorization may be beneficial for certain workloads
+#     - Can help avoid issues with vectorization of specific code patterns
+#     - Recommended for debugging or when vectorization leads to performance regressions
+#     - May impact performance negatively if vectorization is beneficial for the code
+#
+option(EYA_COMPILE_OPTION_NO_TREE_VECTORIZE
+        "Disable tree vectorization" OFF)
+
+# Option:
+#
+#     EYA_COMPILE_OPTION_NO_SEMANTIC_INTERPOSITION
+#
+# Description:
+#
+#     CMake option EYA_COMPILE_OPTION_NO_SEMANTIC_INTERPOSITION disables
+#     compiler-level semantic interposition for function calls.
+#
+# Usage:
+#
+#     ON: Adds -fno-semantic-interposition flag to enable call optimization
+#     OFF: Allows symbol interposition at runtime (default behavior)
+#
+# Notes:
+#
+#     - Improves performance by enabling cross-module inline optimizations
+#     - May prevent function overriding via LD_PRELOAD/dyld interposition
+#     - Recommended for closed components where ABI stability isn't required
+#     - Can reduce binary portability between compiler versions
+#
+option(EYA_COMPILE_OPTION_NO_SEMANTIC_INTERPOSITION
+        "Disable semantic interposition" ON)
