@@ -223,30 +223,97 @@
 #define eya_ptr_is_aligned_mod(ptr, align) eya_addr_is_aligned_mod(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_align_up(T, ptr, begin, type_size)
- * @brief Aligns a pointer upwards to the next multiple of type_size relative to begin.
+ * @def eya_ptr_align_up
+ * @brief Aligns a pointer's address upward to the specified boundary
  *
- * @param T Target pointer type.
- * @param ptr Pointer to align.
- * @param begin Base pointer for alignment calculation.
- * @param type_size Alignment size in bytes.
- * @return Aligned pointer of type T*.
+ * This macro converts the given pointer to an integer address
+ * and adjusts it to the nearest higher address that is a multiple
+ * of the alignment value using the eya_addr_align_up macro.
+ *
+ * @warning Requires power-of-two alignment value for correct operation.
+ *          Using non-power-of-two values will produce incorrect results.
+ *
+ * @param[in] ptr   Pointer to align (will be converted to an integer address).
+ * @param[in] align Alignment boundary (must be a power of two).
+ * @return Adjusted integer address aligned upward to the specified boundary.
+ *
+ * @note The pointer is converted to an address using eya_ptr_to_uaddr before alignment.
+ *       This macro is efficient due to bitwise operations used internally.
  */
-#define eya_ptr_align_up(T, ptr, begin, type_size)                                                 \
-    eya_ptr_add_offset(T, ptr, (type_size - (eya_ptr_diff(ptr, begin) % type_size)) % type_size)
+#define eya_ptr_align_up(ptr, align) eya_addr_align_up(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_align_down(T, ptr, begin, type_size)
- * @brief Aligns a pointer downwards to the previous multiple of type_size relative to begin.
+ * @def eya_ptr_align_down
+ * @brief Aligns a pointer's address downward to the specified boundary
  *
- * @param T Target pointer type.
- * @param ptr Pointer to align.
- * @param begin Base pointer for alignment calculation.
- * @param type_size Alignment size in bytes.
+ * This macro converts the given pointer to an integer address
+ * and adjusts it to the nearest lower address that is a multiple
+ * of the alignment value using the eya_addr_align_down macro.
+ *
+ * @warning Requires power-of-two alignment value for correct operation.
+ *          Using non-power-of-two values will produce incorrect results.
+ *
+ * @param[in] ptr   Pointer to align (will be converted to an integer address).
+ * @param[in] align Alignment boundary (must be a power of two).
+ * @return Adjusted integer address aligned downward to the specified boundary.
+ *
+ * @note The pointer is converted to an address using eya_ptr_to_uaddr before alignment.
+ *       This macro is efficient due to bitwise operations used internally.
+ */
+#define eya_ptr_align_down(ptr, align) eya_addr_align_down(eya_ptr_to_uaddr(ptr), align)
+
+/**
+ * @def eya_ptr_align_up_by_size(T, ptr, begin, size)
+ * @brief Aligns a pointer upwards to the next multiple of `size` bytes relative to `begin`.
+ *
+ * @param T         Target pointer type (e.g., `uint8_t`, `struct MyType`).
+ * @param ptr       Pointer to align (type must be compatible with `begin`).
+ * @param begin     Base address for alignment calculation (memory block starting address).
+ * @param size      Alignment size in bytes (must be a power of two for proper alignment).
+ * @return          Aligned pointer of type `T*`.
+ *
+ * @note Example: If `begin = 0x1000`, `ptr = 0x1005`, `size = 4`, result is `0x1008`.
+ */
+#define eya_ptr_align_up_by_size(T, ptr, begin, size)                                              \
+    eya_ptr_add_offset(T, ptr, (size - (eya_ptr_diff(ptr, begin) % size)) % size)
+
+/**
+ * @def eya_ptr_align_up_by_type(T, ptr, begin)
+ * @brief Aligns a pointer upwards to the next multiple of type's size relative to begin.
+ *
+ * @param T Target type whose size is used for alignment calculation.
+ * @param ptr Pointer to be aligned.
+ * @param begin Base address for alignment calculation.
  * @return Aligned pointer of type T*.
  */
-#define eya_ptr_align_down(T, ptr, begin, type_size)                                               \
-    eya_ptr_sub_offset(T, ptr, (eya_ptr_diff(ptr, begin) % type_size))
+#define eya_ptr_align_up_by_type(T, ptr, begin) eya_ptr_align_up_by_size(T, ptr, begin, sizeof(T))
+
+/**
+ * @def eya_ptr_align_down_by_size(T, ptr, begin, size)
+ * @brief Aligns a pointer downwards to the previous multiple of `size` bytes relative to `begin`.
+ *
+ * @param T         Target pointer type.
+ * @param ptr       Pointer to align.
+ * @param begin     Base address for alignment calculation.
+ * @param size      Alignment size in bytes.
+ * @return          Aligned pointer of type `T*`.
+ *
+ * @note Example: If `begin = 0x1000`, `ptr = 0x1005`, `size = 4`, result is `0x1004`.
+ */
+#define eya_ptr_align_down_by_size(T, ptr, begin, size)                                            \
+    eya_ptr_sub_offset(T, ptr, (eya_ptr_diff(ptr, begin) % size))
+
+/**
+ * @def eya_ptr_align_down_by_type(T, ptr, begin)
+ * @brief Aligns a pointer downwards to the previous multiple of type's size relative to begin.
+ *
+ * @param T Target type whose size is used for alignment calculation.
+ * @param ptr Pointer to be aligned.
+ * @param begin Base address for alignment calculation.
+ * @return Aligned pointer of type T*.
+ */
+#define eya_ptr_align_down_by_type(T, ptr, begin)                                                  \
+    eya_ptr_align_down_by_size(T, ptr, begin, sizeof(T))
 
 /**
  * @def eya_ptr_range_is_within(begin, end, ptr)

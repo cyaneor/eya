@@ -104,4 +104,42 @@
  */
 #define eya_addr_is_aligned_mod(addr, align) (((addr) % (align)) == 0)
 
+/**
+ * @def eya_addr_align_up
+ * @brief Aligns a memory address upward to the specified boundary
+ *
+ * This macro adjusts the given address to the nearest higher address
+ * that is a multiple of the alignment value using bitmask operations.
+ *
+ * @warning Requires power-of-two alignment value for correct operation.
+ *          Using non-power-of-two values will produce incorrect results.
+ *
+ * @param[in] addr  Memory address to align (integer or pointer type).
+ * @param[in] align Alignment boundary (must be a power of two).
+ * @return Adjusted address aligned upward to the specified boundary.
+ *
+ * @note More efficient than modulus-based alignment due to bitwise operations.
+ *       Formula: (addr + align - 1) & ~(align - 1)
+ */
+#define eya_addr_align_up(addr, align) (((addr) + (align) - 1) & ~((align) - 1))
+
+/**
+ * @def eya_addr_align_down
+ * @brief Aligns a memory address downward to the specified boundary
+ *
+ * This macro adjusts the given address to the nearest lower address
+ * that is a multiple of the alignment value using bitmask operations.
+ *
+ * @warning Requires power-of-two alignment value for correct operation.
+ *          Using non-power-of-two values will produce incorrect results.
+ *
+ * @param[in] addr  Memory address to align (integer or pointer type).
+ * @param[in] align Alignment boundary (must be a power of two).
+ * @return Adjusted address aligned downward to the specified boundary.
+ *
+ * @note More efficient than modulus-based alignment due to bitwise operations.
+ *       Formula: addr & ~(align - 1)
+ */
+#define eya_addr_align_down(addr, align) ((addr) & ~((align) - 1))
+
 #endif // EYA_ADDR_UTIL_H
