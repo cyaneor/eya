@@ -49,3 +49,133 @@ TEST(eya_memory_std_set, fill_large_buffer) {
   }
   EXPECT_EQ(ret, buffer + sizeof(buffer));
 }
+
+TEST(eya_memory_std_copy, small_array_copy) {
+  static const char src[] = "Hello, world!";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst + sizeof(src));
+  EXPECT_EQ(0, memcmp(dst, src, sizeof(src)));
+}
+
+TEST(eya_memory_std_copy, large_array_copy) {
+  static const size_t size = 1024 * 1024;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  memset(dst, 0, size);
+
+  void *ret = eya_memory_std_copy(dst, src, size);
+  EXPECT_EQ(ret, dst + size);
+  EXPECT_EQ(0, memcmp(dst, src, size));
+}
+
+TEST(eya_memory_std_copy, one_byte_copy) {
+  static const char src[] = {42};
+  char dst[1] = {0};
+
+  void *ret = eya_memory_std_copy(dst, src, 1);
+  EXPECT_EQ(ret, dst + 1);
+  EXPECT_EQ(dst[0], src[0]);
+}
+
+TEST(eya_memory_std_copy, nullptr_dst) {
+  static const char src[] = "data";
+  EXPECT_DEATH(eya_memory_std_copy(nullptr, src, sizeof(src)), ".*");
+}
+
+TEST(eya_memory_std_copy, nullptr_src) {
+  char dst[10];
+  EXPECT_DEATH(eya_memory_std_copy(dst, nullptr, 10), ".*");
+}
+
+TEST(eya_memory_std_copy, return_pointer_is_end_of_copied_block) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst + sizeof(src));
+}
+
+TEST(eya_memory_std_copy, return_pointer_with_zero_length) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy(dst, src, 0);
+  EXPECT_EQ(ret, dst);
+}
+
+TEST(eya_memory_std_rcopy, small_array_copy) {
+  static const char src[] = "Hello, world!";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_rcopy(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst);
+  EXPECT_EQ(0, memcmp(dst, src, sizeof(src)));
+}
+
+TEST(eya_memory_std_rcopy, large_array_copy) {
+  static const size_t size = 1024 * 1024;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  memset(dst, 0, size);
+
+  void *ret = eya_memory_std_rcopy(dst, src, size);
+  EXPECT_EQ(ret, dst);
+  EXPECT_EQ(0, memcmp(dst, src, size));
+}
+
+TEST(eya_memory_std_rcopy, one_byte_copy) {
+  static const char src[] = {42};
+  char dst[1] = {0};
+
+  void *ret = eya_memory_std_rcopy(dst, src, 1);
+  EXPECT_EQ(ret, dst);
+  EXPECT_EQ(dst[0], src[0]);
+}
+
+TEST(eya_memory_std_rcopy, zero_length_copy) {
+  static const char src[] = "test";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_rcopy(dst, src, 0);
+  EXPECT_EQ(ret, dst);
+  // dst should remain unchanged (all zeros)
+  for (size_t i = 0; i < sizeof(src); ++i) {
+    EXPECT_EQ(dst[i], 0);
+  }
+}
+
+TEST(eya_memory_std_rcopy, nullptr_dst) {
+  static const char src[] = "data";
+  EXPECT_DEATH(eya_memory_std_rcopy(nullptr, src, sizeof(src)), ".*");
+}
+
+TEST(eya_memory_std_rcopy, nullptr_src) {
+  char dst[10];
+  EXPECT_DEATH(eya_memory_std_rcopy(dst, nullptr, 10), ".*");
+}
+
+TEST(eya_memory_std_rcopy, return_pointer_is_start_of_dst) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_rcopy(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst);
+}
+
+TEST(eya_memory_std_rcopy, return_pointer_with_zero_length) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_rcopy(dst, src, 0);
+  EXPECT_EQ(ret, dst);
+}
