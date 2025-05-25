@@ -95,7 +95,7 @@ eya_memory_std_rcopy(void *__restrict dst, const void *__restrict src, eya_usize
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_std_set(void *dst, eya_char_t val, eya_usize_t n);
+eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n);
 
 EYA_COMPILER(EXTERN_C_END)
 

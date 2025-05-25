@@ -194,6 +194,22 @@
 #define eya_ptr_sub(T, ptr1, ptr2) eya_ptr_sub_offset(T, ptr1, eya_ptr_to_uaddr(ptr2))
 
 /**
+ * @def eya_ptr_align_mask
+ * @brief Computes pointer alignment offset using bitmask operation
+ *
+ * This macro converts the pointer to an integer address via eya_ptr_to_uaddr()
+ * and calculates the byte offset from the previous alignment boundary using
+ * bitwise AND with (alignment - 1). Equivalent to addr % align for power-of-two
+ * values, but more efficient.
+ *
+ * @note Alignment value must be a power of two for correct results
+ * @param[in] ptr Pointer to check (will be converted to integer address)
+ * @param[in] align Alignment boundary (power of two)
+ * @return Offset in bytes from previous aligned address (0 = already aligned)
+ */
+#define eya_ptr_align_mask(ptr, align) eya_addr_align_mask(eya_ptr_to_uaddr(ptr), align)
+
+/**
  * @def eya_ptr_is_aligned_mask
  * @brief Checks pointer alignment using bitmask comparison
  *
@@ -206,6 +222,21 @@
  * @return Non-zero (1) if aligned, 0 if not aligned
  */
 #define eya_ptr_is_aligned_mask(ptr, align) eya_addr_is_aligned_mask(eya_ptr_to_uaddr(ptr), align)
+
+/**
+ * @def eya_ptr_align_mod
+ * @brief Calculates pointer alignment offset using modulus operation
+ *
+ * Converts pointer to integer address via eya_ptr_to_uaddr() and computes
+ * offset from alignment boundary using modulus. Works with arbitrary alignment
+ * values but less efficient than bitmask method.
+ *
+ * @note For power-of-two alignments, prefer eya_ptr_align_mask for better performance
+ * @param[in] ptr Pointer to check (will be converted to integer address)
+ * @param[in] align Alignment boundary (any positive integer)
+ * @return Offset in bytes from previous aligned address (0 = already aligned)
+ */
+#define eya_ptr_align_mod(ptr, align) eya_addr_align_mod(eya_ptr_to_uaddr(ptr), align)
 
 /**
  * @def eya_ptr_is_aligned_mod

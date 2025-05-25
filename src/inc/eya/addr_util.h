@@ -64,6 +64,25 @@
 #define eya_addr_diff(addr1, addr2) (addr1 - addr2)
 
 /**
+ * @def eya_addr_align_mask
+ * @brief Computes alignment offset using bitmask operation
+ *
+ * This macro calculates the byte offset of a memory address from the previous
+ * alignment boundary by applying a bitmask. It performs a bitwise AND between
+ * the address and (alignment - 1), which is equivalent to calculating:
+ * offset = addr % align, but more efficient for power-of-two alignment values.
+ *
+ * @note Alignment value must be a power of two for correct results.
+ *       To align the address to the next boundary, subtract the result from
+ *       the alignment value when offset is non-zero.
+ *
+ * @param addr Memory address to check (integer or pointer type)
+ * @param align Alignment boundary (must be power of two)
+ * @return Offset in bytes from previous aligned address (0 indicates already aligned)
+ */
+#define eya_addr_align_mask(addr, align) ((addr) & ((align) - 1))
+
+/**
  * @def eya_addr_is_aligned_mask
  * @brief Checks if an address is aligned using bitmask comparison
  *
@@ -76,10 +95,10 @@
  * @param align Alignment boundary (power of two)
  * @return true - address is aligned, false - not aligned
  */
-#define eya_addr_is_aligned_mask(addr, align) ((addr & ((align) - 1)) == 0)
+#define eya_addr_is_aligned_mask(addr, align) (eya_addr_align_mask(addr, align) == 0)
 
 /**
- * @def eya_addr_align
+ * @def eya_addr_align_mod
  * @brief Calculates the address offset from the nearest alignment boundary
  *
  * This macro computes the remainder when the specified address is divided by
@@ -93,7 +112,7 @@
  * @param align Alignment boundary (must be power of two)
  * @return Offset in bytes from previous aligned address (0 indicates already aligned)
  */
-#define eya_addr_align(addr, align) ((addr) % (align))
+#define eya_addr_align_mod(addr, align) ((addr) % (align))
 
 /**
  * @def eya_addr_is_aligned_mod
@@ -119,7 +138,7 @@
  * @note Unlike bitmask alignment checks, this method works for arbitrary alignment values,
  *       but division/modulus operations are generally slower than bitwise operations.
  */
-#define eya_addr_is_aligned_mod(addr, align) (eya_addr_align(addr, align) == 0)
+#define eya_addr_is_aligned_mod(addr, align) (eya_addr_align_mod(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up

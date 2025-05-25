@@ -5,8 +5,30 @@
 
 #if defined(EYA_COMPILE_OPTION_SSE2) || defined(EYA_COMPILE_OPTION_AVX2) ||                        \
     defined(EYA_COMPILE_OPTION_AVX512)
-#    include <immintrin.h> // Для AVX, AVX2, AVX-512 и SSE
+#    include <immintrin.h>
 #endif
+
+#ifndef EYA_MEMORY_STD_SIMD_LEVEL
+#    if defined(EYA_COMPILE_OPTION_AVX512)
+#        define EYA_MEMORY_STD_SIMD_LEVEL 512
+#        define EYA_MEMORY_STD_SIMD_ALIGN 64
+#        define EYA_MEMORY_STD_SIMD_BLOCK 64
+#    elif defined(EYA_COMPILE_OPTION_AVX2)
+#        define EYA_MEMORY_STD_SIMD_LEVEL 256
+#        define EYA_MEMORY_STD_SIMD_ALIGN 32
+#        define EYA_MEMORY_STD_SIMD_BLOCK 32
+#    elif defined(EYA_COMPILE_OPTION_SSE2)
+#        define EYA_MEMORY_STD_SIMD_LEVEL 128
+#        define EYA_MEMORY_STD_SIMD_ALIGN 16
+#        define EYA_MEMORY_STD_SIMD_BLOCK 16
+#    else
+#        define EYA_MEMORY_STD_SIMD_LEVEL 0
+#        define EYA_MEMORY_STD_SIMD_ALIGN 8
+#        define EYA_MEMORY_STD_SIMD_BLOCK 8
+#    endif
+#endif
+
+#define EYA_MEMORY_STD_PTR_ALIGNMENT EYA_MEMORY_STD_SIMD_ALIGN
 
 void *
 eya_memory_std_copy(void *restrict dst, const void *restrict src, eya_usize_t n)
@@ -14,41 +36,157 @@ eya_memory_std_copy(void *restrict dst, const void *restrict src, eya_usize_t n)
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    eya_char_t       *d = (eya_char_t *)dst;
-    const eya_char_t *s = (const eya_char_t *)src;
+    eya_uchar_t       *d = eya_ptr_cast(eya_uchar_t, dst);
+    const eya_uchar_t *s = eya_ptr_cast(const eya_uchar_t, src);
 
-#if defined(EYA_COMPILE_OPTION_AVX512) && defined(__AVX512F__)
-    while (n >= 64)
+    // 1. Processing of small blocks
+    if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
     {
-        __m512i chunk = _mm512_loadu_si512((const __m512i *)s);
-        _mm512_storeu_si512((__m512i *)d, chunk);
-        s += 64;
-        d += 64;
-        n -= 64;
+        while (n >= 8)
+        {
+            *(eya_u64_t *)d = *(const eya_u64_t *)s;
+            d += 8;
+            s += 8;
+            n -= 8;
+        }
+        if (n >= 4)
+        {
+            *(eya_u32_t *)d = *(const eya_u32_t *)s;
+            d += 4;
+            s += 4;
+            n -= 4;
+        }
+        if (n >= 2)
+        {
+            *(eya_u16_t *)d = *(const eya_u16_t *)s;
+            d += 2;
+            s += 2;
+            n -= 2;
+        }
+        if (n > 0)
+        {
+            *d++ = *s;
+        }
+        return d;
     }
-#elif defined(EYA_COMPILE_OPTION_AVX2) && defined(__AVX2__)
-    while (n >= 32)
+
+    // 2. Alignment of the target buffer
+    eya_usize_t align = eya_ptr_align_mask(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
-        __m256i chunk = _mm256_loadu_si256((const __m256i *)s);
-        _mm256_storeu_si256((__m256i *)d, chunk);
-        s += 32;
-        d += 32;
-        n -= 32;
+        eya_usize_t head = align;
+        n -= head;
+        while (head--)
+        {
+            *d++ = *s++;
+        }
     }
-#elif defined(EYA_COMPILE_OPTION_SSE2) && defined(__SSE2__)
-    while (n >= 16)
+
+    // 3. Processing of large blocks with stream instructions
+    if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
-        __m128i chunk = _mm_loadu_si128((const __m128i *)s);
-        _mm_storeu_si128((__m128i *)d, chunk);
-        s += 16;
-        d += 16;
-        n -= 16;
-    }
+        // Source alignment
+        eya_usize_t src_align = eya_ptr_align_mask(s, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
+        {
+            eya_usize_t head = src_align;
+            n -= head;
+            while (head--)
+            {
+                *d++ = *s++;
+            }
+        }
+
+        // Stream copying
+        eya_usize_t stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        while (stream_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i val = _mm512_loadu_si512((__m512i *)s);
+            _mm512_stream_si512((__m512i *)d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i v0 = _mm256_loadu_si256((__m256i *)(s + 0));
+            __m256i v1 = _mm256_loadu_si256((__m256i *)(s + 32));
+            _mm256_stream_si256((__m256i *)(d + 0), v0);
+            _mm256_stream_si256((__m256i *)(d + 32), v1);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i v0 = _mm_loadu_si128((__m128i *)(s + 0));
+            __m128i v1 = _mm_loadu_si128((__m128i *)(s + 16));
+            __m128i v2 = _mm_loadu_si128((__m128i *)(s + 32));
+            __m128i v3 = _mm_loadu_si128((__m128i *)(s + 48));
+            _mm_stream_si128((__m128i *)(d + 0), v0);
+            _mm_stream_si128((__m128i *)(d + 16), v1);
+            _mm_stream_si128((__m128i *)(d + 32), v2);
+            _mm_stream_si128((__m128i *)(d + 48), v3);
+#else
+            // Fallback for non-SIMD: copy in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_STREAM_ALIGNMENT; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = *(const eya_u64_t *)(s + i);
+            }
 #endif
+            d += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            s += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            n -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        }
+#if EYA_MEMORY_STD_SIMD_LEVEL > 0
+        _mm_sfence();
+#endif
+    }
 
-    while (n--)
+    // 4. SIMD optimization for medium blocks
+    if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
     {
-        *d++ = *s++;
+        eya_usize_t simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
+        while (simd_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i val = _mm512_loadu_si512(s);
+            _mm512_storeu_si512(d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i val = _mm256_loadu_si256((__m256i *)s);
+            _mm256_storeu_si256((__m256i *)d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i val = _mm_loadu_si128((__m128i *)s);
+            _mm_storeu_si128((__m128i *)d, val);
+#else
+            // Fallback for non-SIMD: copy in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_SIMD_BLOCK; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = *(const eya_u64_t *)(s + i);
+            }
+#endif
+            d += EYA_MEMORY_STD_SIMD_BLOCK;
+            s += EYA_MEMORY_STD_SIMD_BLOCK;
+            n -= EYA_MEMORY_STD_SIMD_BLOCK;
+        }
+    }
+
+    // 5. Residual data processing
+    while (n >= 8)
+    {
+        *(eya_u64_t *)d = *(const eya_u64_t *)s;
+        d += 8;
+        s += 8;
+        n -= 8;
+    }
+    if (n >= 4)
+    {
+        *(eya_u32_t *)d = *(const eya_u32_t *)s;
+        d += 4;
+        s += 4;
+        n -= 4;
+    }
+    if (n >= 2)
+    {
+        *(eya_u16_t *)d = *(const eya_u16_t *)s;
+        d += 2;
+        s += 2;
+        n -= 2;
+    }
+    if (n > 0)
+    {
+        *d++ = *s;
     }
 
     return d;
@@ -60,39 +198,93 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    eya_char_t       *d = eya_ptr_add_offset_unsafe(eya_char_t, dst, n);
-    const eya_char_t *s = eya_ptr_add_offset_unsafe(const eya_char_t, src, n);
+    eya_uchar_t       *d = eya_ptr_add_offset_unsafe(eya_uchar_t, dst, n);
+    const eya_uchar_t *s = eya_ptr_add_offset_unsafe(const eya_uchar_t, src, n);
 
-#if defined(EYA_COMPILE_OPTION_AVX512) && defined(__AVX512F__)
-    while (n >= 64)
+    // 1. Processing of small blocks
+    if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
     {
-        d -= 64;
-        s -= 64;
-        __m512i chunk = _mm512_loadu_si512((const __m512i *)s);
-        _mm512_storeu_si512((__m512i *)d, chunk);
-        n -= 64;
+        while (n >= 8)
+        {
+            d -= 8;
+            s -= 8;
+            *(eya_u64_t *)d = *(const eya_u64_t *)s;
+            n -= 8;
+        }
+        if (n >= 4)
+        {
+            d -= 4;
+            s -= 4;
+            *(eya_u32_t *)d = *(const eya_u32_t *)s;
+            n -= 4;
+        }
+        if (n >= 2)
+        {
+            d -= 2;
+            s -= 2;
+            *(eya_u16_t *)d = *(const eya_u16_t *)s;
+            n -= 2;
+        }
+        if (n > 0)
+        {
+            *(--d) = *(--s);
+        }
+        return d;
     }
-#elif defined(EYA_COMPILE_OPTION_AVX2) && defined(__AVX2__)
-    while (n >= 32)
+
+    // 2. SIMD optimization for large blocks
+    if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
     {
-        d -= 32;
-        s -= 32;
-        __m256i chunk = _mm256_loadu_si256((const __m256i *)s);
-        _mm256_storeu_si256((__m256i *)d, chunk);
-        n -= 32;
-    }
-#elif defined(EYA_COMPILE_OPTION_SSE2) && defined(__SSE2__)
-    while (n >= 16)
-    {
-        d -= 16;
-        s -= 16;
-        __m128i chunk = _mm_loadu_si128((const __m128i *)s);
-        _mm_storeu_si128((__m128i *)d, chunk);
-        n -= 16;
-    }
+        eya_usize_t simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
+        eya_usize_t simd_size   = simd_blocks * EYA_MEMORY_STD_SIMD_BLOCK;
+
+        while (simd_blocks--)
+        {
+            d -= EYA_MEMORY_STD_SIMD_BLOCK;
+            s -= EYA_MEMORY_STD_SIMD_BLOCK;
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i val = _mm512_loadu_si512(s);
+            _mm512_storeu_si512(d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i val = _mm256_loadu_si256((const __m256i *)s);
+            _mm256_storeu_si256((__m256i *)d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i val = _mm_loadu_si128((const __m128i *)s);
+            _mm_storeu_si128((__m128i *)d, val);
+#else
+            // Fallback for non-SIMD: copy in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_SIMD_BLOCK; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = *(const eya_u64_t *)(s + i);
+            }
 #endif
+        }
+        n -= simd_size;
+    }
 
-    while (n--)
+    // 3. Residual data processing
+    while (n >= 8)
+    {
+        d -= 8;
+        s -= 8;
+        *(eya_u64_t *)d = *(const eya_u64_t *)s;
+        n -= 8;
+    }
+    if (n >= 4)
+    {
+        d -= 4;
+        s -= 4;
+        *(eya_u32_t *)d = *(const eya_u32_t *)s;
+        n -= 4;
+    }
+    if (n >= 2)
+    {
+        d -= 2;
+        s -= 2;
+        *(eya_u16_t *)d = *(const eya_u16_t *)s;
+        n -= 2;
+    }
+    if (n > 0)
     {
         *(--d) = *(--s);
     }
@@ -101,40 +293,143 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
 }
 
 void *
-eya_memory_std_set(void *dst, eya_char_t val, eya_usize_t n)
+eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
-    eya_char_t *d = (eya_char_t *)dst;
+    eya_uchar_t *d = eya_ptr_cast(eya_uchar_t, dst);
 
-#if defined(EYA_COMPILE_OPTION_AVX512) && defined(__AVX512F__)
-    __m512i fill = _mm512_set1_epi8(val);
-    while (n >= 64)
+    // 1. Processing of small blocks
+    if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
     {
-        _mm512_storeu_si512((__m512i *)d, fill);
-        d += 64;
-        n -= 64;
+        const eya_u64_t fill64 = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        while (n >= 8)
+        {
+            *(eya_u64_t *)d = fill64;
+            d += 8;
+            n -= 8;
+        }
+        if (n >= 4)
+        {
+            *(eya_u32_t *)d = eya_static_cast(eya_u32_t, fill64);
+            d += 4;
+            n -= 4;
+        }
+        if (n >= 2)
+        {
+            *(eya_u16_t *)d = eya_static_cast(eya_u16_t, fill64);
+            d += 2;
+            n -= 2;
+        }
+        if (n > 0)
+        {
+            *d++ = val;
+        }
+        return d;
     }
-#elif defined(EYA_COMPILE_OPTION_AVX2) && defined(__AVX2__)
-    __m256i fill = _mm256_set1_epi8(val);
-    while (n >= 32)
+
+    // 2. Alignment of the target buffer
+    eya_usize_t align = eya_ptr_align_mask(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
-        _mm256_storeu_si256((__m256i *)d, fill);
-        d += 32;
-        n -= 32;
+        eya_usize_t head = EYA_MEMORY_STD_PTR_ALIGNMENT - align;
+        if (head > n)
+        {
+            head = n;
+        }
+        n -= head;
+        while (head--)
+        {
+            *d++ = val;
+        }
     }
-#elif defined(EYA_COMPILE_OPTION_SSE2) && defined(__SSE2__)
-    __m128i fill = _mm_set1_epi8(val);
-    while (n >= 16)
+
+    // 3. Streaming instructions for large blocks
+    if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
-        _mm_storeu_si128((__m128i *)d, fill);
-        d += 16;
-        n -= 16;
-    }
+        eya_usize_t     stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        const eya_u64_t fill64        = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        while (stream_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i fill = _mm512_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm512_stream_si512((__m512i *)d, fill);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i fill = _mm256_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm256_stream_si256((__m256i *)(d + 0), fill);
+            _mm256_stream_si256((__m256i *)(d + 32), fill);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i fill = _mm_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm_stream_si128((__m128i *)(d + 0), fill);
+            _mm_stream_si128((__m128i *)(d + 16), fill);
+            _mm_stream_si128((__m128i *)(d + 32), fill);
+            _mm_stream_si128((__m128i *)(d + 48), fill);
+#else
+            // Fallback for non-SIMD: set in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_STREAM_ALIGNMENT; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = fill64;
+            }
 #endif
+            d += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            n -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        }
+#if EYA_MEMORY_STD_SIMD_LEVEL > 0
+        _mm_sfence();
+#endif
+    }
 
-    while (n--)
+    // 4. SIMD optimization for medium blocks
+    if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
+    {
+        eya_usize_t     simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
+        const eya_u64_t fill64      = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        while (simd_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i fill = _mm512_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm512_storeu_si512((__m512i *)d, fill);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i fill = _mm256_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm256_storeu_si256((__m256i *)d, fill);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i fill = _mm_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            _mm_storeu_si128((__m128i *)d, fill);
+#else
+            // Fallback for non-SIMD: set in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_SIMD_BLOCK; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = fill64;
+            }
+#endif
+            d += EYA_MEMORY_STD_SIMD_BLOCK;
+            n -= EYA_MEMORY_STD_SIMD_BLOCK;
+        }
+    }
+
+    // 5. Residual processing
+    const eya_u64_t fill64 = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+    while (n >= 8)
+    {
+        *(eya_u64_t *)d = fill64;
+        d += 8;
+        n -= 8;
+    }
+    if (n >= 4)
+    {
+        *(eya_u32_t *)d = eya_static_cast(eya_u32_t, fill64);
+        d += 4;
+        n -= 4;
+    }
+    if (n >= 2)
+    {
+        *(eya_u16_t *)d = eya_static_cast(eya_u16_t, fill64);
+        d += 2;
+        n -= 2;
+    }
+    if (n > 0)
     {
         *d++ = val;
     }
+
     return d;
 }
