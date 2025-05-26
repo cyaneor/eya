@@ -223,7 +223,7 @@
 #define eya_ptr_is_aligned_mask(ptr, align) eya_addr_is_aligned_mask(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_align_mod
+ * @def eya_ptr_align_rem
  * @brief Calculates pointer alignment offset using modulus operation
  *
  * Converts pointer to integer address via eya_ptr_to_uaddr() and computes
@@ -235,10 +235,10 @@
  * @param[in] align Alignment boundary (any positive integer)
  * @return Offset in bytes from previous aligned address (0 = already aligned)
  */
-#define eya_ptr_align_mod(ptr, align) eya_addr_align_mod(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_align_rem(ptr, align) eya_addr_align_rem(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_is_aligned_mod
+ * @def eya_ptr_is_aligned_rem
  * @brief Checks pointer alignment using modulus operation
  *
  * Converts pointer to integer address and checks alignment by calculating
@@ -250,7 +250,7 @@
  * @param align Alignment boundary
  * @return 0 if aligned, non-zero remainder if not aligned
  */
-#define eya_ptr_is_aligned_mod(ptr, align) eya_addr_is_aligned_mod(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_is_aligned_rem(ptr, align) eya_addr_is_aligned_rem(eya_ptr_to_uaddr(ptr), align)
 
 /**
  * @def eya_ptr_align_up

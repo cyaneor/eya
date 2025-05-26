@@ -98,7 +98,7 @@
 #define eya_addr_is_aligned_mask(addr, align) (eya_addr_align_mask(addr, align) == 0)
 
 /**
- * @def eya_addr_align_mod
+ * @def eya_addr_align_rem
  * @brief Calculates the address offset from the nearest alignment boundary
  *
  * This macro computes the remainder when the specified address is divided by
@@ -112,10 +112,10 @@
  * @param align Alignment boundary (must be power of two)
  * @return Offset in bytes from previous aligned address (0 indicates already aligned)
  */
-#define eya_addr_align_mod(addr, align) ((addr) % (align))
+#define eya_addr_align_rem(addr, align) ((addr) % (align))
 
 /**
- * @def eya_addr_is_aligned_mod
+ * @def eya_addr_is_aligned_rem
  * @brief Checks if a memory address is aligned
  *        to a specified boundary using modulus operation
  *
@@ -138,7 +138,7 @@
  * @note Unlike bitmask alignment checks, this method works for arbitrary alignment values,
  *       but division/modulus operations are generally slower than bitwise operations.
  */
-#define eya_addr_is_aligned_mod(addr, align) (eya_addr_align_mod(addr, align) == 0)
+#define eya_addr_is_aligned_rem(addr, align) (eya_addr_align_rem(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up
