@@ -232,12 +232,74 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
         return d;
     }
 
-    // 2. SIMD optimization for large blocks
+    // 2. Alignment of the target buffer for streaming
+    eya_usize_t align = eya_ptr_align_mask(d - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+    if (align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
+    {
+        eya_usize_t head = align;
+        n -= head;
+        while (head--)
+        {
+            *(--d) = *(--s);
+        }
+    }
+
+    // 3. Processing of large blocks with stream instructions
+    if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
+    {
+        // Source alignment
+        eya_usize_t src_align = eya_ptr_align_mask(s - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
+        {
+            eya_usize_t head = src_align;
+            n -= head;
+            while (head--)
+            {
+                *(--d) = *(--s);
+            }
+        }
+
+        // Stream copying in reverse
+        eya_usize_t stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        while (stream_blocks--)
+        {
+            d -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            s -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            __m512i val = _mm512_loadu_si512(s);
+            _mm512_stream_si512(d, val);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            __m256i v0 = _mm256_loadu_si256((const __m256i *)(s + 0));
+            __m256i v1 = _mm256_loadu_si256((const __m256i *)(s + 32));
+            _mm256_stream_si256((__m256i *)(d + 0), v0);
+            _mm256_stream_si256((__m256i *)(d + 32), v1);
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
+            __m128i v0 = _mm_loadu_si128((const __m128i *)(s + 0));
+            __m128i v1 = _mm_loadu_si128((const __m128i *)(s + 16));
+            __m128i v2 = _mm_loadu_si128((const __m128i *)(s + 32));
+            __m128i v3 = _mm_loadu_si128((const __m128i *)(s + 48));
+            _mm_stream_si128((__m128i *)(d + 0), v0);
+            _mm_stream_si128((__m128i *)(d + 16), v1);
+            _mm_stream_si128((__m128i *)(d + 32), v2);
+            _mm_stream_si128((__m128i *)(d + 48), v3);
+#else
+            // Fallback for non-SIMD: copy in 64-bit chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_STREAM_ALIGNMENT; i += 8)
+            {
+                *(eya_u64_t *)(d + i) = *(const eya_u64_t *)(s + i);
+            }
+#endif
+            n -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        }
+#if EYA_MEMORY_STD_SIMD_LEVEL > 0
+        _mm_sfence();
+#endif
+    }
+
+    // 4. SIMD optimization for medium blocks
     if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
     {
         eya_usize_t simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
-        eya_usize_t simd_size   = simd_blocks * EYA_MEMORY_STD_SIMD_BLOCK;
-
         while (simd_blocks--)
         {
             d -= EYA_MEMORY_STD_SIMD_BLOCK;
@@ -258,11 +320,11 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
                 *(eya_u64_t *)(d + i) = *(const eya_u64_t *)(s + i);
             }
 #endif
+            n -= EYA_MEMORY_STD_SIMD_BLOCK;
         }
-        n -= simd_size;
     }
 
-    // 3. Residual data processing
+    // 5. Residual data processing
     while (n >= 8)
     {
         d -= 8;
