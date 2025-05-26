@@ -13,7 +13,7 @@
  * @param T The numeric type (must be a signed integer type).
  * @return The minimum value of type T.
  */
-#define eya_numeric_limit_smin(T) (eya_static_cast(T, eya_bit_sign_type(T)))
+#define eya_numeric_limit_smin(T) (eya_type_cast(T, eya_bit_sign_type(T)))
 
 /**
  * @def eya_numeric_limit_smax
@@ -37,7 +37,7 @@
  * @param T The numeric type (must be an unsigned integer type).
  * @return The minimum value of type T (0).
  */
-#define eya_numeric_limit_umin(T) (eya_static_cast(T, 0))
+#define eya_numeric_limit_umin(T) (eya_type_cast(T, 0))
 
 /**
  * @def eya_numeric_limit_umax
@@ -50,7 +50,7 @@
  * @param T The numeric type (must be an unsigned integer type).
  * @return The maximum value of type T.
  */
-#define eya_numeric_limit_umax(T) (eya_static_cast(T, -1))
+#define eya_numeric_limit_umax(T) (eya_type_cast(T, -1))
 
 /**
  * @def eya_numeric_limit_is_signed
@@ -65,7 +65,7 @@
  * @param T The numeric type to check.
  * @return `true` if `T` is a signed type, `false` if `T` is an unsigned type.
  */
-#define eya_numeric_limit_is_signed(T) (eya_static_cast(T, 0) > eya_static_cast(T, -1))
+#define eya_numeric_limit_is_signed(T) (eya_type_cast(T, 0) > eya_type_cast(T, -1))
 
 /**
  * @def eya_numeric_limit_min

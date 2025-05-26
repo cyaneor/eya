@@ -1,7 +1,6 @@
 #ifndef SE_BIT_UTIL_H
 #define SE_BIT_UTIL_H
 
-#include "static_cast.h"
 #include "type_util.h"
 
 /**
@@ -26,7 +25,7 @@
  * @return Value of type T with the most significant bit set
  *
  * @note Implemented as a macro. Requires:
- *       - eya_static_cast(T, val) for literal casting
+ *       - eya_type_cast(T, val) for literal casting
  *       - eya_bit_sign_type_pos(T) to get sign bit position
  *
  * Example:
@@ -34,6 +33,6 @@
  * int val = eya_bit_sign_type(int); // 0x80000000 (interpreted as -2147483648)
  * @endcode
  */
-#define eya_bit_sign_type(T) (eya_static_cast(T, 1) << eya_bit_sign_type_pos(T))
+#define eya_bit_sign_type(T) (eya_type_cast(T, 1) << eya_bit_sign_type_pos(T))
 
 #endif // SE_BIT_UTIL_H

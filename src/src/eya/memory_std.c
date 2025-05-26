@@ -375,7 +375,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     // 1. Processing of small blocks
     if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
     {
-        const eya_u64_t fill64 = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        const eya_u64_t fill64 = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
         while (n >= 8)
         {
             *(eya_u64_t *)d = fill64;
@@ -384,13 +384,13 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
         }
         if (n >= 4)
         {
-            *(eya_u32_t *)d = eya_static_cast(eya_u32_t, fill64);
+            *(eya_u32_t *)d = eya_type_cast(eya_u32_t, fill64);
             d += 4;
             n -= 4;
         }
         if (n >= 2)
         {
-            *(eya_u16_t *)d = eya_static_cast(eya_u16_t, fill64);
+            *(eya_u16_t *)d = eya_type_cast(eya_u16_t, fill64);
             d += 2;
             n -= 2;
         }
@@ -421,18 +421,18 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         eya_usize_t     stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
-        const eya_u64_t fill64        = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        const eya_u64_t fill64        = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
         while (stream_blocks--)
         {
 #if EYA_MEMORY_STD_SIMD_LEVEL >= 512
-            __m512i fill = _mm512_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m512i fill = _mm512_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm512_stream_si512((__m512i *)d, fill);
 #elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
-            __m256i fill = _mm256_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m256i fill = _mm256_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm256_stream_si256((__m256i *)(d + 0), fill);
             _mm256_stream_si256((__m256i *)(d + 32), fill);
 #elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
-            __m128i fill = _mm_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m128i fill = _mm_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm_stream_si128((__m128i *)(d + 0), fill);
             _mm_stream_si128((__m128i *)(d + 16), fill);
             _mm_stream_si128((__m128i *)(d + 32), fill);
@@ -456,17 +456,17 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
     {
         eya_usize_t     simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
-        const eya_u64_t fill64      = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        const eya_u64_t fill64      = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
         while (simd_blocks--)
         {
 #if EYA_MEMORY_STD_SIMD_LEVEL >= 512
-            __m512i fill = _mm512_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m512i fill = _mm512_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm512_storeu_si512((__m512i *)d, fill);
 #elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
-            __m256i fill = _mm256_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m256i fill = _mm256_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm256_storeu_si256((__m256i *)d, fill);
 #elif EYA_MEMORY_STD_SIMD_LEVEL >= 128
-            __m128i fill = _mm_set1_epi8(eya_static_cast(eya_uchar_t, val));
+            __m128i fill = _mm_set1_epi8(eya_type_cast(eya_uchar_t, val));
             _mm_storeu_si128((__m128i *)d, fill);
 #else
             // Fallback for non-SIMD: set in 64-bit chunks
@@ -481,7 +481,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     }
 
     // 5. Residual processing
-    const eya_u64_t fill64 = eya_static_cast(eya_u64_t, val * 0x0101010101010101ULL);
+    const eya_u64_t fill64 = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
     while (n >= 8)
     {
         *(eya_u64_t *)d = fill64;
@@ -490,13 +490,13 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     }
     if (n >= 4)
     {
-        *(eya_u32_t *)d = eya_static_cast(eya_u32_t, fill64);
+        *(eya_u32_t *)d = eya_type_cast(eya_u32_t, fill64);
         d += 4;
         n -= 4;
     }
     if (n >= 2)
     {
-        *(eya_u16_t *)d = eya_static_cast(eya_u16_t, fill64);
+        *(eya_u16_t *)d = eya_type_cast(eya_u16_t, fill64);
         d += 2;
         n -= 2;
     }

@@ -32,7 +32,6 @@
 #include "addr_util.h"
 #include "interval_util.h"
 #include "nullptr.h"
-#include "static_cast.h"
 
 /**
  * @def eya_ptr_cast(T, ptr)
@@ -42,7 +41,7 @@
  * @param ptr Pointer to cast.
  * @return Pointer of type T*.
  */
-#define eya_ptr_cast(T, ptr) eya_static_cast(T *, ptr)
+#define eya_ptr_cast(T, ptr) eya_type_cast(T *, ptr)
 
 /**
  * @def eya_ptr_to_uaddr(ptr)
@@ -69,7 +68,7 @@
  * @param ptr Pointer to convert.
  * @return Signed integer representation of the pointer.
  */
-#define eya_ptr_to_diff(ptr) eya_static_cast(eya_saddr_t, ptr)
+#define eya_ptr_to_diff(ptr) eya_type_cast(eya_saddr_t, ptr)
 
 /**
  * @def eya_ptr_diff(ptr1, ptr2)
