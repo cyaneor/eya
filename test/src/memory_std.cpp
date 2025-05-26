@@ -309,3 +309,94 @@ TEST(eya_memory_std_rcopy, rcopy_512_bytes)
   EXPECT_EQ(ret, dst);
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
+
+TEST(MemoryStdMoveTest, NonOverlappingRegions)
+{
+  const char src[] = "test data";
+  char dst[sizeof(src)] = {0};
+
+  void *result = eya_memory_std_move(dst, src, sizeof(src));
+
+  // Verify data was copied correctly
+  EXPECT_EQ(0, memcmp(dst, src, sizeof(src)));
+
+  // Verify return value points to end of destination
+  EXPECT_EQ(static_cast<char *>(result), dst + sizeof(src));
+}
+
+TEST(MemoryStdMoveTest, OverlappingRegionsSrcBeforeDst)
+{
+  char buffer[] = "abcdefghij";
+  const size_t move_size = 5;
+  const char *src = buffer;
+  void *dst = buffer + 2; // Overlapping
+
+  void *result = eya_memory_std_move(dst, src, move_size);
+
+  // Verify expected result after move
+  EXPECT_STREQ(buffer, "ababcdehij");
+
+  // Verify return value
+  EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
+}
+
+TEST(MemoryStdMoveTest, OverlappingRegionsDstBeforeSrc)
+{
+  char buffer[] = "abcdefghij";
+  const size_t move_size = 5;
+  void *dst = buffer;
+  const char *src = buffer + 2; // Overlapping
+
+  void *result = eya_memory_std_move(dst, src, move_size);
+
+  // Verify expected result after move (should use reverse copy)
+  EXPECT_STREQ(buffer, "cdefgfghij");
+
+  // Verify return value
+  EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
+}
+
+TEST(MemoryStdMoveTest, ZeroByteMove)
+{
+  char src[] = "source";
+  char dst[] = "destination";
+
+  void *result = eya_memory_std_move(dst, src, 0);
+
+  // Verify nothing was changed
+  EXPECT_STREQ(dst, "destination");
+  EXPECT_EQ(result, dst);
+}
+
+TEST(MemoryStdMoveTest, NullPointers)
+{
+  // This test assumes the function handles null pointers gracefully
+  // Note: In real code, we might want to add assertions for this case
+  EXPECT_DEATH(eya_memory_std_move(nullptr, nullptr, 10), ".*");
+}
+
+TEST(MemoryStdMoveTest, FullOverlapSamePointer)
+{
+  char buffer[] = "test data";
+  const char *original = "test data";
+
+  void *result = eya_memory_std_move(buffer, buffer, sizeof(buffer));
+
+  // Should remain unchanged
+  EXPECT_STREQ(buffer, original);
+  EXPECT_EQ(static_cast<char *>(result), buffer + sizeof(buffer));
+}
+
+TEST(MemoryStdMoveTest, PartialOverlapSmallBuffer)
+{
+  char buffer[5] = {1, 2, 3, 4, 5};
+  void *result = eya_memory_std_move(buffer + 1, buffer, 3);
+
+  // Expected result: [1, 1, 2, 3, 5]
+  EXPECT_EQ(buffer[0], 1);
+  EXPECT_EQ(buffer[1], 1);
+  EXPECT_EQ(buffer[2], 2);
+  EXPECT_EQ(buffer[3], 3);
+  EXPECT_EQ(buffer[4], 5);
+  EXPECT_EQ(static_cast<char *>(result), buffer + 1 + 3);
+}

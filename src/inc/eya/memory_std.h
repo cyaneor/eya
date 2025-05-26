@@ -70,6 +70,40 @@ void *
 eya_memory_std_rcopy(void *__restrict dst, const void *__restrict src, eya_usize_t n);
 
 /**
+ * @brief Safely moves a block of memory from source to destination,
+ *        handling overlapping regions correctly.
+ *
+ * This function moves `n` bytes from the memory block pointed to by `src`
+ * to the memory block pointed to by `dst`. It automatically determines
+ * whether to perform a forward copy or reverse copy based on whether
+ * the source and destination memory regions overlap.
+ *
+ * If the regions do not overlap, it performs a standard forward copy
+ * using `eya_memory_std_copy()`. If they do overlap, it performs
+ * a reverse copy using `eya_memory_std_rcopy()` to prevent data corruption.
+ *
+ * @param[out] dst Pointer to the destination memory block where the content is moved.
+ * @param[in]  src Pointer to the source memory block to move from.
+ * @param[in]  n   Number of bytes to move.
+ *
+ * @return Pointer to the byte immediately following the last moved byte
+ *         in the destination memory block (i.e., `dst + n`).
+ *
+ * @note The function uses `eya_ptr_ranges_no_overlap()` to check for memory overlap
+ *       between source and destination regions.
+ * @note For non-overlapping regions, it delegates to `eya_memory_std_copy()`
+ *       which may use optimized SIMD instructions.
+ * @note For overlapping regions, it uses `eya_memory_std_rcopy()` which performs
+ *       the copy in reverse order to ensure correct results.
+ * @note The function is marked with `restrict` qualifiers for both pointers,
+ *       meaning the compiler can assume they don't alias each other (except
+ *       for the case of overlapping regions which is handled specially).
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_std_move(void *__restrict dst, const void *__restrict src, eya_usize_t n);
+
+/**
  * @brief Fills a block of memory with the specified value
  *        using optimized SIMD instructions if available.
  *

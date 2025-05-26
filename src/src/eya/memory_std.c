@@ -293,6 +293,18 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
 }
 
 void *
+eya_memory_std_move(void *restrict dst, const void *restrict src, eya_usize_t n)
+{
+    const void *src_end = eya_ptr_add(const void *, src, n);
+    if (eya_ptr_ranges_no_overlap(dst, src, src_end))
+    {
+        return eya_memory_std_copy(dst, src, n);
+    }
+    void *d = eya_memory_std_rcopy(dst, src, n);
+    return eya_ptr_add(void *, d, n);
+}
+
+void *
 eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
