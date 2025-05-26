@@ -224,31 +224,40 @@
 
 /**
  * @def eya_ptr_align_rem
- * @brief Calculates pointer alignment offset using modulus operation
+ * @brief Calculates alignment remainder for a pointer's address
  *
- * Converts pointer to integer address via eya_ptr_to_uaddr() and computes
- * offset from alignment boundary using modulus. Works with arbitrary alignment
- * values but less efficient than bitmask method.
+ * This macro converts the pointer to an unsigned memory address and computes
+ * the offset from the nearest lower alignment boundary using ::eya_addr_align_rem.
  *
- * @note For power-of-two alignments, prefer eya_ptr_align_mask for better performance
- * @param[in] ptr Pointer to check (will be converted to integer address)
- * @param[in] align Alignment boundary (any positive integer)
- * @return Offset in bytes from previous aligned address (0 = already aligned)
+ * @note Alignment value must be a power of two. Works with any pointer type through
+ *       implicit conversion to unsigned address via eya_ptr_to_uaddr().
+ *
+ * @param ptr Pointer to check (any pointer type)
+ * @param align Alignment boundary (must be power of two)
+ * @return Offset in bytes from previous aligned address (0 indicates already aligned)
+ *
+ * @see eya_addr_align_rem
+ * @see eya_ptr_is_aligned_rem
  */
 #define eya_ptr_align_rem(ptr, align) eya_addr_align_rem(eya_ptr_to_uaddr(ptr), align)
 
 /**
  * @def eya_ptr_is_aligned_rem
- * @brief Checks pointer alignment using modulus operation
+ * @brief Checks if a pointer's address is aligned to specified boundary
  *
- * Converts pointer to integer address and checks alignment by calculating
- * remainder of division. Returns zero for aligned pointers.
+ * This macro converts the pointer to an unsigned memory address and verifies
+ * alignment using ::eya_addr_is_aligned_rem.
  *
- * @warning Uses division operation - less efficient than bitmask method.
- *          Suitable for arbitrary alignment values
- * @param ptr Pointer to check (will be converted to integer via eya_ptr_to_uaddr)
- * @param align Alignment boundary
- * @return 0 if aligned, non-zero remainder if not aligned
+ * @note Alignment value must be a power of two. Uses pointer-to-address conversion
+ *       internally via eya_ptr_to_uaddr().
+ *
+ * @param ptr Pointer to check (any pointer type)
+ * @param align Alignment boundary (must be power of two)
+ * @return `true` (non-zero) if pointer is aligned to boundary
+ *         `false` (zero) if pointer requires adjustment
+ *
+ * @see eya_addr_is_aligned_rem
+ * @see eya_ptr_align_rem
  */
 #define eya_ptr_is_aligned_rem(ptr, align) eya_addr_is_aligned_rem(eya_ptr_to_uaddr(ptr), align)
 

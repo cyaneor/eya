@@ -116,65 +116,60 @@
 
 /**
  * @def eya_addr_is_aligned_rem
- * @brief Checks if a memory address is aligned
- *        to a specified boundary using modulus operation
+ * @brief Checks if a memory address is aligned to the specified boundary
  *
- * This macro determines alignment by calculating
- * the remainder of the address divided by the alignment value.
- * It returns `true` (non-zero) when the address is aligned,
- * and `false` (zero) otherwise.
+ * This macro determines whether the given address is aligned to the specified alignment
+ * boundary by checking if the remainder of the address divided by the alignment is zero.
  *
- * @warning Less efficient than bitmask-based alignment checks.
- *          Suitable for non-power-of-two alignment values,
- *          but ensure `align` is a positive integer to avoid undefined behavior.
+ * @note The alignment value must be a power of two to ensure correct behavior.
+ *       Uses ::eya_addr_align_rem internally to compute the alignment remainder.
  *
- *          Prefer bitmask methods (e.g., `& (align - 1)`)
- *          for power-of-two alignment where possible.
+ * @param addr Memory address to check for alignment
+ * @param align Alignment boundary (must be power of two)
+ * @return `true` (non-zero) if address is aligned to the specified boundary
+ *         `false` (zero) if address requires adjustment to meet alignment
  *
- * @param[in] addr  Memory address to check (integer or pointer type).
- * @param[in] align Alignment boundary (must be a positive integer).
- * @return Non-zero (true) if `addr` is aligned to `align`, zero (false) otherwise.
- *
- * @note Unlike bitmask alignment checks, this method works for arbitrary alignment values,
- *       but division/modulus operations are generally slower than bitwise operations.
+ * @see eya_addr_align_rem
  */
 #define eya_addr_is_aligned_rem(addr, align) (eya_addr_align_rem(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up
- * @brief Aligns a memory address upward to the specified boundary
+ * @brief Aligns a memory address up to the next specified boundary
  *
- * This macro adjusts the given address to the nearest higher address
- * that is a multiple of the alignment value using bitmask operations.
+ * This macro adjusts the given address to the nearest higher (or equal) memory address
+ * that matches the specified alignment boundary. Useful for ensuring memory allocations
+ * or pointers meet specific alignment requirements.
  *
- * @warning Requires power-of-two alignment value for correct operation.
- *          Using non-power-of-two values will produce incorrect results.
+ * @note Alignment value must be a power of two for correct results.
+ *       The operation works by rounding up to the next multiple of `align`.
  *
- * @param[in] addr  Memory address to align (integer or pointer type).
- * @param[in] align Alignment boundary (must be a power of two).
- * @return Adjusted address aligned upward to the specified boundary.
+ * @param addr Memory address to align
+ * @param align Alignment boundary (must be power of two)
+ * @return Aligned memory address (always >= original address)
  *
- * @note More efficient than modulus-based alignment due to bitwise operations.
- *       Formula: (addr + align - 1) & ~(align - 1)
+ * @see eya_addr_align_rem
+ * @see eya_addr_align_down
  */
 #define eya_addr_align_up(addr, align) (((addr) + (align) - 1) & ~((align) - 1))
 
 /**
  * @def eya_addr_align_down
- * @brief Aligns a memory address downward to the specified boundary
+ * @brief Aligns a memory address down to the previous specified boundary
  *
- * This macro adjusts the given address to the nearest lower address
- * that is a multiple of the alignment value using bitmask operations.
+ * This macro adjusts the given address to the nearest lower (or equal) memory address
+ * that matches the specified alignment boundary. Useful for finding the start of aligned
+ * memory regions from an arbitrary address.
  *
- * @warning Requires power-of-two alignment value for correct operation.
- *          Using non-power-of-two values will produce incorrect results.
+ * @note Alignment value must be a power of two for correct results.
+ *       The operation works by masking off lower bits of the address.
  *
- * @param[in] addr  Memory address to align (integer or pointer type).
- * @param[in] align Alignment boundary (must be a power of two).
- * @return Adjusted address aligned downward to the specified boundary.
+ * @param addr Memory address to align
+ * @param align Alignment boundary (must be power of two)
+ * @return Aligned memory address (always <= original address)
  *
- * @note More efficient than modulus-based alignment due to bitwise operations.
- *       Formula: addr & ~(align - 1)
+ * @see eya_addr_align_rem
+ * @see eya_addr_align_up
  */
 #define eya_addr_align_down(addr, align) ((addr) & ~((align) - 1))
 
