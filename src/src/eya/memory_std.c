@@ -507,3 +507,193 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 
     return d;
 }
+
+const void *
+eya_memory_std_compare(const void *restrict lhs, const void *restrict rhs, eya_usize_t n)
+{
+    eya_runtime_check_ref(lhs);
+    eya_runtime_check_ref(rhs);
+
+    const eya_u8_t *l = eya_ptr_cast(const eya_u8_t, lhs);
+    const eya_u8_t *r = eya_ptr_cast(const eya_u8_t, rhs);
+
+    // 1. Small block processing (scalar)
+    if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
+    {
+        while (n--)
+        {
+            if (*l != *r)
+            {
+                return l;
+            }
+            l++;
+            r++;
+        }
+        return nullptr;
+    }
+
+    // 2. Align left pointer to 32-byte boundary for AVX2
+    eya_usize_t align = eya_ptr_align_mask(l, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
+    {
+        eya_usize_t head = align;
+        n -= head;
+        while (head--)
+        {
+            if (*l != *r)
+            {
+                return l;
+            }
+            l++;
+            r++;
+        }
+    }
+
+    // 3. Large block processing with SIMD (64-byte chunks)
+    if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
+    {
+        // Align source (right) pointer to 64-byte boundary
+        eya_usize_t src_align = eya_ptr_align_mask(r, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
+        {
+            eya_usize_t head = src_align;
+            n -= head;
+            while (head--)
+            {
+                if (*l != *r)
+                {
+                    return l;
+                }
+                l++;
+                r++;
+            }
+        }
+
+        // Process 64-byte blocks
+        eya_usize_t stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        while (stream_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            // Use AVX-512 for 64-byte chunks
+            __m512i   l0   = _mm512_load_si512((__m512i *)l);
+            __m512i   r0   = _mm512_load_si512((__m512i *)r);
+            __m512i   cmp0 = _mm512_cmpeq_epi8(l0, r0);
+            eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
+            if (mask != 0xFFFFFFFFFFFFFFFFULL)
+            {
+                unsigned long index;
+                eya_bit_scan_forward64(&index, ~mask);
+                return l + index;
+            }
+#elif EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            // Use AVX2 for 32-byte chunks, process two per 64-byte block
+            __m256i   l0   = _mm256_load_si256((__m256i *)(l + 0));
+            __m256i   r0   = _mm256_load_si256((__m256i *)(r + 0));
+            __m256i   l1   = _mm256_load_si256((__m256i *)(l + 32));
+            __m256i   r1   = _mm256_load_si256((__m256i *)(r + 32));
+            __m256i   cmp0 = _mm256_cmpeq_epi8(l0, r0);
+            __m256i   cmp1 = _mm256_cmpeq_epi8(l1, r1);
+            eya_u64_t mask = (eya_u64_t)_mm256_movemask_epi8(cmp0) |
+                             ((eya_u64_t)_mm256_movemask_epi8(cmp1) << 32);
+            if (mask != 0xFFFFFFFFFFFFFFFFULL)
+            {
+                unsigned long index;
+                eya_bit_scan_forward64(&index, ~mask);
+                return l + index;
+            }
+#else
+            // Fallback to SSE2: process four 16-byte chunks
+            eya_u64_t mask = 0;
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_STREAM_ALIGNMENT; i += 16)
+            {
+                __m128i left  = _mm_load_si128((__m128i *)(l + i));
+                __m128i right = _mm_load_si128((__m128i *)(r + i));
+                __m128i cmp   = _mm_cmpeq_epi8(left, right);
+                mask |= (eya_u64_t)_mm_movemask_epi8(cmp) << (i * 4);
+            }
+            if (mask != 0xFFFFFFFFFFFFFFFFULL)
+            {
+                unsigned long index;
+                eya_bit_scan_forward64(&index, ~mask);
+                return l + index;
+            }
+#endif
+            l += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            r += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+            n -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+        }
+    }
+
+    // 4. Medium block processing with SIMD (32-byte chunks with AVX2 or 64-byte with AVX-512)
+    if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
+    {
+        eya_usize_t simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
+        while (simd_blocks--)
+        {
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 512
+            // Use AVX-512 for 64-byte chunks if enough data remains
+            if (n >= EYA_MEMORY_STD_STREAM_ALIGNMENT)
+            {
+                __m512i   l0   = _mm512_load_si512((__m512i *)l);
+                __m512i   r0   = _mm512_load_si512((__m512i *)r);
+                __m512i   cmp0 = _mm512_cmpeq_epi8(l0, r0);
+                eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
+                if (mask != 0xFFFFFFFFFFFFFFFFULL)
+                {
+                    unsigned long index;
+                    eya_bit_scan_forward64(&index, ~mask);
+                    return l + index;
+                }
+                l += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+                r += EYA_MEMORY_STD_STREAM_ALIGNMENT;
+                n -= EYA_MEMORY_STD_STREAM_ALIGNMENT;
+                continue;
+            }
+#endif
+#if EYA_MEMORY_STD_SIMD_LEVEL >= 256
+            // Use AVX2 for 32-byte chunks
+            __m256i   left  = _mm256_load_si256((__m256i *)l);
+            __m256i   right = _mm256_load_si256((__m256i *)r);
+            __m256i   cmp   = _mm256_cmpeq_epi8(left, right);
+            eya_u32_t mask  = _mm256_movemask_epi8(cmp);
+            if (mask != 0xFFFFFFFFU)
+            {
+                unsigned long index;
+                eya_bit_scan_forward32(&index, ~mask);
+                return l + index;
+            }
+#else
+            // Fallback to SSE2: process two 16-byte chunks
+            for (eya_usize_t i = 0; i < EYA_MEMORY_STD_SIMD_BLOCK; i += 16)
+            {
+                __m128i left  = _mm_load_si128((__m128i *)(l + i));
+                __m128i right = _mm_load_si128((__m128i *)(r + i));
+                __m128i cmp   = _mm_cmpeq_epi8(left, right);
+                int     mask  = _mm_movemask_epi8(cmp);
+                if (mask != 0xFFFF)
+                {
+                    unsigned long index;
+                    eya_bit_scan_forward32(&index, ~mask & 0xFFFF);
+                    return l + i + index;
+                }
+            }
+#endif
+            l += EYA_MEMORY_STD_SIMD_BLOCK;
+            r += EYA_MEMORY_STD_SIMD_BLOCK;
+            n -= EYA_MEMORY_STD_SIMD_BLOCK;
+        }
+    }
+
+    // 5. Residual data processing (scalar)
+    while (n--)
+    {
+        if (*l != *r)
+        {
+            return l;
+        }
+        l++;
+        r++;
+    }
+
+    return nullptr;
+}

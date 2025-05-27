@@ -26,7 +26,7 @@ TEST(eya_memory_std_set, fill_full_buffer)
 TEST(eya_memory_std_set, fill_partial_buffer)
 {
   static unsigned char buffer[32];
-  memset(buffer, 0, sizeof(buffer));
+  eya_memory_std_set(buffer, 0, sizeof(buffer));
   size_t fill_size = 20;
   void *ret = eya_memory_std_set(buffer, 0xFF, fill_size);
   for (size_t i = 0; i < fill_size; ++i)
@@ -51,7 +51,7 @@ TEST(eya_memory_std_set, fill_single_byte)
 TEST(eya_memory_std_set, fill_large_buffer)
 {
   static unsigned char buffer[128];
-  memset(buffer, 0, sizeof(buffer));
+  eya_memory_std_set(buffer, 0, sizeof(buffer));
   void *ret = eya_memory_std_set(buffer, 0x0F, sizeof(buffer));
   for (size_t i = 0; i < sizeof(buffer); ++i)
   {
@@ -80,7 +80,7 @@ TEST(eya_memory_std_copy, large_array_copy)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_copy(dst, src, size);
   EXPECT_EQ(ret, dst + size);
@@ -137,7 +137,7 @@ TEST(eya_memory_std_copy, copy_128_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_copy(dst, src, size);
   EXPECT_EQ(ret, dst + size);
@@ -154,7 +154,7 @@ TEST(eya_memory_std_copy, copy_256_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_copy(dst, src, size);
   EXPECT_EQ(ret, dst + size);
@@ -171,7 +171,7 @@ TEST(eya_memory_std_copy, copy_512_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_copy(dst, src, size);
   EXPECT_EQ(ret, dst + size);
@@ -198,7 +198,7 @@ TEST(eya_memory_std_rcopy, large_array_copy)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_rcopy(dst, src, size);
   EXPECT_EQ(ret, dst);
@@ -269,7 +269,7 @@ TEST(eya_memory_std_rcopy, rcopy_128_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_rcopy(dst, src, size);
   EXPECT_EQ(ret, dst);
@@ -286,7 +286,7 @@ TEST(eya_memory_std_rcopy, rcopy_256_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_rcopy(dst, src, size);
   EXPECT_EQ(ret, dst);
@@ -303,14 +303,14 @@ TEST(eya_memory_std_rcopy, rcopy_512_bytes)
   {
     src[i] = static_cast<char>(i & 0xFF);
   }
-  memset(dst, 0, size);
+  eya_memory_std_set(dst, 0, size);
 
   void *ret = eya_memory_std_rcopy(dst, src, size);
   EXPECT_EQ(ret, dst);
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(MemoryStdMoveTest, NonOverlappingRegions)
+TEST(eya_memory_std_move, non_overlapping_regions)
 {
   const char src[] = "test data";
   char dst[sizeof(src)] = {0};
@@ -324,7 +324,7 @@ TEST(MemoryStdMoveTest, NonOverlappingRegions)
   EXPECT_EQ(static_cast<char *>(result), dst + sizeof(src));
 }
 
-TEST(MemoryStdMoveTest, OverlappingRegionsSrcBeforeDst)
+TEST(eya_memory_std_move, overlapping_regions_src_before_dst)
 {
   char buffer[] = "abcdefghij";
   const size_t move_size = 5;
@@ -340,7 +340,7 @@ TEST(MemoryStdMoveTest, OverlappingRegionsSrcBeforeDst)
   EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
 }
 
-TEST(MemoryStdMoveTest, OverlappingRegionsDstBeforeSrc)
+TEST(eya_memory_std_move, overlapping_regions_dst_before_src)
 {
   char buffer[] = "abcdefghij";
   const size_t move_size = 5;
@@ -356,7 +356,7 @@ TEST(MemoryStdMoveTest, OverlappingRegionsDstBeforeSrc)
   EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
 }
 
-TEST(MemoryStdMoveTest, ZeroByteMove)
+TEST(eya_memory_std_move, zero_byte_move)
 {
   char src[] = "source";
   char dst[] = "destination";
@@ -368,14 +368,14 @@ TEST(MemoryStdMoveTest, ZeroByteMove)
   EXPECT_EQ(result, dst);
 }
 
-TEST(MemoryStdMoveTest, NullPointers)
+TEST(eya_memory_std_move, null_pointers)
 {
   // This test assumes the function handles null pointers gracefully
   // Note: In real code, we might want to add assertions for this case
   EXPECT_DEATH(eya_memory_std_move(nullptr, nullptr, 10), ".*");
 }
 
-TEST(MemoryStdMoveTest, FullOverlapSamePointer)
+TEST(eya_memory_std_move, full_overlap_same_pointer)
 {
   char buffer[] = "test data";
   const char *original = "test data";
@@ -387,7 +387,7 @@ TEST(MemoryStdMoveTest, FullOverlapSamePointer)
   EXPECT_EQ(static_cast<char *>(result), buffer + sizeof(buffer));
 }
 
-TEST(MemoryStdMoveTest, PartialOverlapSmallBuffer)
+TEST(eya_memory_std_move, partial_overlap_small_buffer)
 {
   char buffer[5] = {1, 2, 3, 4, 5};
   void *result = eya_memory_std_move(buffer + 1, buffer, 3);
@@ -399,4 +399,97 @@ TEST(MemoryStdMoveTest, PartialOverlapSmallBuffer)
   EXPECT_EQ(buffer[3], 3);
   EXPECT_EQ(buffer[4], 5);
   EXPECT_EQ(static_cast<char *>(result), buffer + 1 + 3);
+}
+
+TEST(MemoryCompareTest, EqualBuffers)
+{
+  // Small buffer (within EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
+  char buf1[] = "abcdefghijklmnop";
+  char buf2[] = "abcdefghijklmnop";
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf1, buf2, 16));
+
+  // Medium buffer (SIMD block size)
+  char buf3[32];
+  char buf4[32];
+  eya_memory_std_set(buf3, 'A', 32);
+  eya_memory_std_set(buf4, 'A', 32);
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf3, buf4, 32));
+
+  // Large buffer (stream threshold)
+  char buf5[128];
+  char buf6[128];
+  eya_memory_std_set(buf5, 'B', 128);
+  eya_memory_std_set(buf6, 'B', 128);
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf5, buf6, 128));
+
+  // Zero size
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf1, buf2, 0));
+}
+
+// Test unequal buffers with difference at various positions
+TEST(MemoryCompareTest, UnequalBuffers)
+{
+  // Difference in first byte
+  char buf1[] = "Xbcdefgh";
+  char buf2[] = "Ybcdefgh";
+  EXPECT_EQ(buf1, eya_memory_std_compare(buf1, buf2, 8));
+
+  // Difference in middle (byte 4)
+  char buf3[] = "abcdXghi";
+  char buf4[] = "abcdYghi";
+  EXPECT_EQ(buf3 + 4, eya_memory_std_compare(buf3, buf4, 8));
+
+  // Difference in last byte
+  char buf5[] = "abcdefgh";
+  char buf6[] = "abcdefgX";
+  EXPECT_EQ(buf5 + 7, eya_memory_std_compare(buf5, buf6, 8));
+
+  // Difference in 64-bit block
+  char buf7[] = "abcdefghijklmnop";
+  char buf8[] = "abcdefghijkXmnop";
+  EXPECT_EQ(buf7 + 11, eya_memory_std_compare(buf7, buf8, 16));
+
+  // Difference in SIMD block
+  char buf9[32];
+  char buf10[32];
+  eya_memory_std_set(buf9, 'A', 32);
+  eya_memory_std_set(buf10, 'A', 32);
+  buf9[20] = 'X';
+  buf10[20] = 'Y';
+  EXPECT_EQ(buf9 + 20, eya_memory_std_compare(buf9, buf10, 32));
+}
+
+// Test unaligned buffers
+TEST(MemoryCompareTest, UnalignedBuffers)
+{
+  char buf1[] = "abcdefghijklmnopqrst";
+  char buf2[] = "abcdefghijklmnopqrst";
+  // Offset lhs by 1 to make it unaligned
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf1 + 1, buf2 + 1, 16));
+
+  // Unequal unaligned buffers
+  char buf3[] = "abcdefghXjklmnopqrst";
+  char buf4[] = "abcdefghYjklmnopqrst";
+  EXPECT_EQ(buf3 + 8, eya_memory_std_compare(buf3 + 1, buf4 + 1, 16));
+}
+
+// Test partial block sizes
+TEST(MemoryCompareTest, PartialBlocks)
+{
+  char buf1[] = "abcdefg";
+  char buf2[] = "abcdefg";
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf1, buf2, 7));
+
+  char buf3[] = "abcdefX";
+  char buf4[] = "abcdefY";
+  EXPECT_EQ(buf3 + 6, eya_memory_std_compare(buf3, buf4, 7));
+
+  // Single byte
+  char buf5[] = "A";
+  char buf6[] = "A";
+  EXPECT_EQ(nullptr, eya_memory_std_compare(buf5, buf6, 1));
+
+  char buf7[] = "A";
+  char buf8[] = "B";
+  EXPECT_EQ(buf7, eya_memory_std_compare(buf7, buf8, 1));
 }

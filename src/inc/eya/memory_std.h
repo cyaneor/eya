@@ -89,12 +89,12 @@ eya_memory_std_rcopy(void *__restrict dst, const void *__restrict src, eya_usize
  * @return Pointer to the byte immediately following the last moved byte
  *         in the destination memory block (i.e., `dst + n`).
  *
- * @note The function uses `eya_ptr_ranges_no_overlap()` to check for memory overlap
- *       between source and destination regions.
+ * @note The function uses `eya_ptr_ranges_no_overlap()` to check
+ *       for memory overlap between source and destination regions.
  * @note For non-overlapping regions, it delegates to `eya_memory_std_copy()`
  *       which may use optimized SIMD instructions.
- * @note For overlapping regions, it uses `eya_memory_std_rcopy()` which performs
- *       the copy in reverse order to ensure correct results.
+ * @note For overlapping regions, it uses `eya_memory_std_rcopy()`
+ *       which performs the copy in reverse order to ensure correct results.
  * @note The function is marked with `restrict` qualifiers for both pointers,
  *       meaning the compiler can assume they don't alias each other (except
  *       for the case of overlapping regions which is handled specially).
@@ -107,10 +107,12 @@ eya_memory_std_move(void *__restrict dst, const void *__restrict src, eya_usize_
  * @brief Fills a block of memory with the specified value
  *        using optimized SIMD instructions if available.
  *
- * This function sets the first `n` bytes of the memory block pointed to by `dst` to the value
- * `val`. It utilizes SIMD instructions (AVX-512, AVX2, or SSE2) for optimal performance when the
- * respective compile-time options and CPU features are enabled. Remaining bytes are filled using
- * a standard loop.
+ * This function sets the first `n` bytes
+ * of the memory block pointed to by `dst` to the value `val`.
+ *
+ * It utilizes SIMD instructions (AVX-512, AVX2, or SSE2)
+ * for optimal performance when the respective compile-time options
+ * and CPU features are enabled. Remaining bytes are filled using a standard loop.
  *
  * @param[in,out] dst Pointer to the destination memory block to fill.
  * @param[in]     val Value to set for each byte in the memory block.
@@ -130,6 +132,41 @@ eya_memory_std_move(void *__restrict dst, const void *__restrict src, eya_usize_
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n);
+
+/**
+ * @brief Compares two memory blocks and returns the address of the first mismatch.
+ *
+ * This function performs a byte-wise comparison
+ * of two memory blocks `lhs` and `rhs` for up to `n` bytes.
+ * It employs optimized strategies based on the size of the data:
+ * - Small blocks are processed using scalar operations
+ * - Larger blocks utilize SIMD instructions (AVX2 or SSE2 as fallback) for efficiency
+ *
+ * The implementation includes pointer alignment optimizations
+ * for AVX2 when handling large data blocks to maximize performance.
+ *
+ * @param[in] lhs Pointer to the first memory block.
+ * @param[in] rhs Pointer to the second memory block.
+ * @param[in] n Number of bytes to compare
+ * @return Address of the first differing byte between `lhs` and `rhs`,
+ *         or `nullptr` if all bytes are equal
+ *
+ * @note The function performs runtime checks on `lhs` and `rhs`
+ *       to ensure they are valid references
+ * @note The thresholds for switching between scalar
+ *       and SIMD processing are determined by `EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD`,
+ *       `EYA_MEMORY_STD_STREAM_THRESHOLD`, and `EYA_MEMORY_STD_SIMD_BLOCK`
+ * @note If AVX2 is available (indicated by `EYA_MEMORY_STD_SIMD_LEVEL >= 256`),
+ *       32-byte SIMD operations are used.
+ * @note Otherwise,
+ *       SSE2 16-byte operations serve as a fallback
+ *
+ * @note Pointer alignment to 32-byte or 64-byte boundaries
+ *       is performed to optimize SIMD accesses
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_std_compare(const void *__restrict lhs, const void *__restrict rhs, eya_usize_t n);
 
 EYA_COMPILER(EXTERN_C_END)
 
