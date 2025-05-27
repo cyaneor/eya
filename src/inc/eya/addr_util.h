@@ -10,6 +10,7 @@
 #define EYA_ADDR_UTIL_H
 
 #include "addr.h"
+#include "bit_util.h"
 #include "reinterpret_cast.h"
 
 /**
@@ -61,7 +62,7 @@
  * @param addr2 Second address.
  * @return Address difference (addr1 - addr2).
  */
-#define eya_addr_diff(addr1, addr2) (addr1 - addr2)
+#define eya_addr_diff(addr1, addr2) eya_math_sub(addr1, addr2)
 
 /**
  * @def eya_addr_align_mask
@@ -80,7 +81,7 @@
  * @param align Alignment boundary (must be power of two)
  * @return Offset in bytes from previous aligned address (0 indicates already aligned)
  */
-#define eya_addr_align_mask(addr, align) ((addr) & ((align) - 1))
+#define eya_addr_align_mask(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
 
 /**
  * @def eya_addr_is_aligned_mask
@@ -98,7 +99,7 @@
 #define eya_addr_is_aligned_mask(addr, align) (eya_addr_align_mask(addr, align) == 0)
 
 /**
- * @def eya_addr_align_rem
+ * @def eya_addr_align_mod
  * @brief Calculates the address offset from the nearest alignment boundary
  *
  * This macro computes the remainder when the specified address is divided by
@@ -112,26 +113,26 @@
  * @param align Alignment boundary (must be power of two)
  * @return Offset in bytes from previous aligned address (0 indicates already aligned)
  */
-#define eya_addr_align_rem(addr, align) ((addr) % (align))
+#define eya_addr_align_mod(addr, align) eya_math_mod(addr, align)
 
 /**
- * @def eya_addr_is_aligned_rem
+ * @def eya_addr_is_aligned_mod
  * @brief Checks if a memory address is aligned to the specified boundary
  *
  * This macro determines whether the given address is aligned to the specified alignment
  * boundary by checking if the remainder of the address divided by the alignment is zero.
  *
  * @note The alignment value must be a power of two to ensure correct behavior.
- *       Uses ::eya_addr_align_rem internally to compute the alignment remainder.
+ *       Uses ::eya_addr_align_mod internally to compute the alignment remainder.
  *
  * @param addr Memory address to check for alignment
  * @param align Alignment boundary (must be power of two)
  * @return `true` (non-zero) if address is aligned to the specified boundary
  *         `false` (zero) if address requires adjustment to meet alignment
  *
- * @see eya_addr_align_rem
+ * @see eya_addr_align_mod
  */
-#define eya_addr_is_aligned_rem(addr, align) (eya_addr_align_rem(addr, align) == 0)
+#define eya_addr_is_aligned_mod(addr, align) (eya_addr_align_mod(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up
@@ -148,10 +149,11 @@
  * @param align Alignment boundary (must be power of two)
  * @return Aligned memory address (always >= original address)
  *
- * @see eya_addr_align_rem
+ * @see eya_addr_align_mod
  * @see eya_addr_align_down
  */
-#define eya_addr_align_up(addr, align) (((addr) + (align) - 1) & ~((align) - 1))
+#define eya_addr_align_up(addr, align)                                                             \
+    eya_bit_and(eya_math_add(addr, eya_math_sub_one(align)), eya_bit_not(eya_math_sub_one(align)))
 
 /**
  * @def eya_addr_align_down
@@ -168,9 +170,9 @@
  * @param align Alignment boundary (must be power of two)
  * @return Aligned memory address (always <= original address)
  *
- * @see eya_addr_align_rem
+ * @see eya_addr_align_mod
  * @see eya_addr_align_up
  */
-#define eya_addr_align_down(addr, align) ((addr) & ~((align) - 1))
+#define eya_addr_align_down(addr, align) eya_bit_and(addr, eya_bit_not(eya_math_sub_one(align)))
 
 #endif // EYA_ADDR_UTIL_H

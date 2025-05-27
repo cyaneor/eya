@@ -223,11 +223,11 @@
 #define eya_ptr_is_aligned_mask(ptr, align) eya_addr_is_aligned_mask(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_align_rem
+ * @def eya_ptr_align_mod
  * @brief Calculates alignment remainder for a pointer's address
  *
  * This macro converts the pointer to an unsigned memory address and computes
- * the offset from the nearest lower alignment boundary using ::eya_addr_align_rem.
+ * the offset from the nearest lower alignment boundary using ::eya_addr_align_mod.
  *
  * @note Alignment value must be a power of two. Works with any pointer type through
  *       implicit conversion to unsigned address via eya_ptr_to_uaddr().
@@ -236,17 +236,17 @@
  * @param align Alignment boundary (must be power of two)
  * @return Offset in bytes from previous aligned address (0 indicates already aligned)
  *
- * @see eya_addr_align_rem
- * @see eya_ptr_is_aligned_rem
+ * @see eya_addr_align_mod
+ * @see eya_ptr_is_aligned_mod
  */
-#define eya_ptr_align_rem(ptr, align) eya_addr_align_rem(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_align_mod(ptr, align) eya_addr_align_mod(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_is_aligned_rem
+ * @def eya_ptr_is_aligned_mod
  * @brief Checks if a pointer's address is aligned to specified boundary
  *
  * This macro converts the pointer to an unsigned memory address and verifies
- * alignment using ::eya_addr_is_aligned_rem.
+ * alignment using ::eya_addr_is_aligned_mod.
  *
  * @note Alignment value must be a power of two. Uses pointer-to-address conversion
  *       internally via eya_ptr_to_uaddr().
@@ -256,10 +256,10 @@
  * @return `true` (non-zero) if pointer is aligned to boundary
  *         `false` (zero) if pointer requires adjustment
  *
- * @see eya_addr_is_aligned_rem
- * @see eya_ptr_align_rem
+ * @see eya_addr_is_aligned_mod
+ * @see eya_ptr_align_mod
  */
-#define eya_ptr_is_aligned_rem(ptr, align) eya_addr_is_aligned_rem(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_is_aligned_mod(ptr, align) eya_addr_is_aligned_mod(eya_ptr_to_uaddr(ptr), align)
 
 /**
  * @def eya_ptr_align_up
