@@ -1,9 +1,28 @@
+/**
+ * @file memory_std.h
+ * @brief Provides optimized memory manipulation functions with SIMD support.
+ *
+ * This header defines a set of memory manipulation functions designed for high performance,
+ * leveraging SIMD instructions (AVX-512, AVX2, SSE2) when available and supported by the CPU.
+ * The functions include memory copying (forward and reverse), moving with overlap handling,
+ * filling memory with a specified value, and comparing memory blocks (forward and reverse).
+ *
+ * All functions perform runtime checks on input pointers for safety and are optimized for
+ * various block sizes and CPU capabilities. The implementation prioritizes performance
+ * while ensuring correctness for overlapping memory regions and edge cases.
+ *
+ * @note The functions use the `restrict` qualifier where applicable to allow compiler
+ *       optimizations, assuming no aliasing between pointers unless explicitly handled
+ *       (e.g., in `eya_memory_std_move`).
+ * @note SIMD optimizations are enabled based on compile-time flags
+ *       and runtime CPU feature detection.
+ */
+
 #ifndef EYA_MEMORY_STD_H
 #define EYA_MEMORY_STD_H
 
 #include "attribute.h"
 #include "size.h"
-#include "char.h"
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 
