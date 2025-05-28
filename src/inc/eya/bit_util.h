@@ -54,7 +54,7 @@
 #define eya_bit_not(x) (~(x))
 
 /**
- * @def eya_bit_has_common(a, b)
+ * @def eya_bit_intersect(a, b)
  * @brief Checks if two integers have at least one common bit set to 1.
  *
  * This macro determines whether there is any bit position where both arguments
@@ -73,10 +73,10 @@
  * @code
  * uint8_t flags = 0b1010;
  * uint8_t mask = 0b1100;
- * bool has_common = eya_bit_has_common(flags, mask); // Returns true (0b1000 != 0)
+ * bool intersect = eya_bit_intersect(flags, mask); // Returns true (0b1000 != 0)
  * @endcode
  */
-#define eya_bit_has_common(a, b) (eya_bit_and(a, b) != 0)
+#define eya_bit_intersect(a, b) (eya_bit_and(a, b) != 0)
 
 /**
  * @def eya_bit_is_disjoint(a, b)
