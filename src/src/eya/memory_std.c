@@ -31,7 +31,7 @@
 #define EYA_MEMORY_STD_PTR_ALIGNMENT EYA_MEMORY_STD_SIMD_ALIGN
 
 void *
-eya_memory_std_copy(void *restrict dst, const void *restrict src, eya_usize_t n)
+eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
@@ -193,7 +193,7 @@ eya_memory_std_copy(void *restrict dst, const void *restrict src, eya_usize_t n)
 }
 
 void *
-eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n)
+eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
@@ -355,7 +355,7 @@ eya_memory_std_rcopy(void *restrict dst, const void *restrict src, eya_usize_t n
 }
 
 void *
-eya_memory_std_move(void *restrict dst, const void *restrict src, eya_usize_t n)
+eya_memory_std_move(void *dst, const void *src, eya_usize_t n)
 {
     const void *src_end = eya_ptr_add(const void *, src, n);
     if (eya_ptr_ranges_no_overlap(dst, src, src_end))
@@ -509,7 +509,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 }
 
 const void *
-eya_memory_std_compare(const void *restrict lhs, const void *restrict rhs, eya_usize_t n)
+eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
 {
     eya_runtime_check_ref(lhs);
     eya_runtime_check_ref(rhs);
@@ -699,7 +699,7 @@ eya_memory_std_compare(const void *restrict lhs, const void *restrict rhs, eya_u
 }
 
 const void *
-eya_memory_std_rcompare(const void *restrict lhs, const void *restrict rhs, eya_usize_t n)
+eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
 {
     eya_runtime_check_ref(lhs);
     eya_runtime_check_ref(rhs);

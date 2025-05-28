@@ -53,7 +53,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_std_copy(void *__restrict dst, const void *__restrict src, eya_usize_t n);
+eya_memory_std_copy(void *dst, const void *src, eya_usize_t n);
 
 /**
  * @brief Copies a block of memory from source to destination
@@ -86,7 +86,7 @@ eya_memory_std_copy(void *__restrict dst, const void *__restrict src, eya_usize_
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_std_rcopy(void *__restrict dst, const void *__restrict src, eya_usize_t n);
+eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n);
 
 /**
  * @brief Safely moves a block of memory from source to destination,
@@ -120,7 +120,7 @@ eya_memory_std_rcopy(void *__restrict dst, const void *__restrict src, eya_usize
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_std_move(void *__restrict dst, const void *__restrict src, eya_usize_t n);
+eya_memory_std_move(void *dst, const void *src, eya_usize_t n);
 
 /**
  * @brief Fills a block of memory with the specified value
@@ -185,7 +185,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n);
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_std_compare(const void *__restrict lhs, const void *__restrict rhs, eya_usize_t n);
+eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n);
 
 /**
  * @brief Reverse-compares two memory blocks
@@ -229,7 +229,7 @@ eya_memory_std_compare(const void *__restrict lhs, const void *__restrict rhs, e
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_std_rcompare(const void *__restrict lhs, const void *__restrict rhs, eya_usize_t n);
+eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n);
 
 EYA_COMPILER(EXTERN_C_END)
 
