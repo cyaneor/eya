@@ -109,16 +109,6 @@
 #define eya_math_is_odd(n) (eya_math_mod(n, 2) != 0)
 
 /**
- * @def eya_math_is_power_of_two
- * @brief Checks if a number is a power of two.
- * @param x Integer value to check.
- * @return 1 (true) if x is a power of two, 0 (false) otherwise.
- * @note This is a function-like macro; argument must be an integer.
- *        Returns false for non-positive numbers.
- */
-#define eya_math_is_power_of_two(x) ((x) > 0 && !((x) & ((x)-1)))
-
-/**
  * @def eya_math_sub_one
  * @brief Decrements a number by one.
  * @param a Input value.
@@ -126,5 +116,15 @@
  * @note This is a function-like macro; argument may be evaluated multiple times.
  */
 #define eya_math_sub_one(a) ((a)-1)
+
+/**
+ * @def eya_math_is_power_of_two
+ * @brief Checks if a number is a power of two.
+ * @param x Integer value to check.
+ * @return 1 (true) if x is a power of two, 0 (false) otherwise.
+ * @note This is a function-like macro; argument must be an integer.
+ *       Returns false for non-positive numbers.
+ */
+#define eya_math_is_power_of_two(x) ((x) > 0 && !((x) & eya_math_sub_one(x)))
 
 #endif // EYA_MATH_UTIL_H
