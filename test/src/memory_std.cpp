@@ -401,7 +401,7 @@ TEST(eya_memory_std_move, partial_overlap_small_buffer)
   EXPECT_EQ(static_cast<char *>(result), buffer + 1 + 3);
 }
 
-TEST(MemoryCompareTest, EqualBuffers)
+TEST(eya_memory_std_compare, equal_buffers)
 {
   // Small buffer (within EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
   char buf1[] = "abcdefghijklmnop";
@@ -427,7 +427,7 @@ TEST(MemoryCompareTest, EqualBuffers)
 }
 
 // Test unequal buffers with difference at various positions
-TEST(MemoryCompareTest, UnequalBuffers)
+TEST(eya_memory_std_compare, unequal_buffers)
 {
   // Difference in first byte
   char buf1[] = "Xbcdefgh";
@@ -460,7 +460,7 @@ TEST(MemoryCompareTest, UnequalBuffers)
 }
 
 // Test unaligned buffers
-TEST(MemoryCompareTest, UnalignedBuffers)
+TEST(eya_memory_std_compare, unaligned_buffers)
 {
   char buf1[] = "abcdefghijklmnopqrst";
   char buf2[] = "abcdefghijklmnopqrst";
@@ -474,7 +474,7 @@ TEST(MemoryCompareTest, UnalignedBuffers)
 }
 
 // Test partial block sizes
-TEST(MemoryCompareTest, PartialBlocks)
+TEST(eya_memory_std_compare, partial_blocks)
 {
   char buf1[] = "abcdefg";
   char buf2[] = "abcdefg";
