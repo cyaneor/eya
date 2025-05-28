@@ -42,8 +42,11 @@ enable_testing()
 # Create test executable with specified source files
 # PROJECT_NAME here refers to ${CMAKE_PROJECT_NAME}_tests from project() command
 add_executable(${PROJECT_NAME}
+        src/main.cpp
         src/error.cpp
+        src/memory.cpp
         src/memory_std.cpp
+        src/memory_raw.cpp
         src/numeric_limits.cpp
 )
 
@@ -54,7 +57,7 @@ add_executable(${PROJECT_NAME}
 # Link test executable with dependencies
 # PRIVATE linkage keeps implementation details hidden
 target_link_libraries(${PROJECT_NAME}
-        PRIVATE 
+        PRIVATE
         gtest           # Google Test framework
         gtest_main      # Google Test main function
         eya             # Project's main library
@@ -78,4 +81,4 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 # Register test executable with CTest
 add_test(NAME ${PROJECT_NAME}
-         COMMAND ${PROJECT_NAME})
+        COMMAND ${PROJECT_NAME})

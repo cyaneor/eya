@@ -1,5 +1,5 @@
 #include <eya/memory_std.h>
-#include <eya/runtime_error_code.h>
+
 #include <eya/runtime_check_ref.h>
 #include <eya/ptr_util.h>
 

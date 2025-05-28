@@ -16,6 +16,7 @@
 #define EYA_RUNTIME_CHECK_REF_H
 
 #include "runtime_check.h"
+#include "runtime_error_code.h"
 
 /**
  * @def eya_runtime_check_ref

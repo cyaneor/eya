@@ -214,6 +214,78 @@ EYA_ATTRIBUTE(SYMBOL)
 const void *
 eya_memory_rcompare(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size);
 
+/**
+ * @brief Finds the first occurrence of a sub-buffer within a larger buffer.
+ *
+ * Searches for the first occurrence of the sub-buffer `rhs` (size `rhs_size`)
+ * within the main buffer `lhs` (size `lhs_size`). The search starts from the
+ * beginning of the main buffer and progresses byte-by-byte.
+ *
+ * @param[in] lhs       Pointer to the start of main memory block to search in.
+ * @param[in] lhs_size  Size of the main buffer in bytes.
+ * @param[in] rhs       Pointer to the start of sub-buffer to find.
+ * @param[in] rhs_size  Size of the sub-buffer to find in bytes.
+ *
+ * @return
+ *   - Pointer to the first occurrence of the sub-buffer within the main buffer
+ *   - `nullptr` if the sub-buffer is not found
+ *   - `nullptr` if either buffer size is zero
+ *
+ * @note Performs runtime pointer validation using `eya_runtime_check_ref()`
+ * @note Comparison at each position uses `eya_memory_compare()`, which:
+ *       - Compares only the minimum of remaining bytes and `rhs_size`
+ *       - Utilizes SIMD optimizations for efficient comparison
+ * @warning For complete match verification, ensure the remaining bytes after
+ *          the found position are sufficient for the full sub-buffer size
+ *
+ * @see eya_memory_compare()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_find(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size);
+
+/**
+ * @brief Finds the last occurrence of a sub-buffer within a larger buffer
+ *        by searching backward from the end.
+ *
+ * Searches for the last occurrence of the sub-buffer `rhs` (size `rhs_size`)
+ * within the main buffer `lhs` (size `lhs_size`). The search starts from the
+ * end of the main buffer and progresses backward byte-by-byte.
+ *
+ * @param[in] lhs       Pointer to the start of main memory block to search in.
+ * @param[in] lhs_size  Size of the main buffer in bytes.
+ * @param[in] rhs       Pointer to the start of sub-buffer to find.
+ * @param[in] rhs_size  Size of the sub-buffer to find in bytes.
+ *
+ * @return
+ *   - Pointer to the start of the last occurrence of the sub-buffer
+ *   - `nullptr` if the sub-buffer is not found
+ *   - `nullptr` if either buffer size is zero
+ *
+ * @note Performs runtime pointer validation using `eya_runtime_check_ref()`
+ * @note Comparison at each position uses `eya_memory_rcompare()`, which:
+ *       - Compares suffixes of the buffers
+ *       - Utilizes reverse-order SIMD optimizations
+ * @warning The found position may not have sufficient bytes after it for
+ *          the full sub-buffer size - caller must verify buffer boundaries
+ * @see eya_memory_rcompare()
+ *
+ * Example:
+ * @code
+ * const char data[] = "apple orange apple";
+ * const char sub[] = "apple";
+ * const void *pos = eya_memory_rfind(
+ *     data, sizeof(data)-1,
+ *     sub,  sizeof(sub)-1);
+ * // pos points to the second "apple" in the string
+ * @endcode
+ *
+ * @see eya_memory_rcompare()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_rfind(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_H

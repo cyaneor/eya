@@ -156,7 +156,7 @@
  * @return Resulting pointer of type T*.
  */
 #define eya_ptr_sub_offset_unsafe(T, ptr, offset)                                                  \
-    eya_addr_to_ptr(T, (eya_ptr_to_addr(ptr) - offset))
+    eya_addr_to_ptr(T, (eya_ptr_to_uaddr(ptr) - offset))
 
 /**
  * @def eya_ptr_sub_unsafe(T, ptr1, ptr2)
