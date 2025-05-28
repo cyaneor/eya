@@ -168,6 +168,50 @@ EYA_ATTRIBUTE(SYMBOL)
 const void *
 eya_memory_std_compare(const void *__restrict lhs, const void *__restrict rhs, eya_usize_t n);
 
+/**
+ * @brief Reverse-compares two memory blocks
+ *        to find the first differing byte from the end.
+ *
+ * This function compares two memory blocks byte-by-byte
+ * in reverse order (from the highest address to the lowest)
+ * and returns the address of the first mismatching byte
+ * in the left-hand side (LHS) block.
+ *
+ * It is optimized for performance using a combination of scalar
+ * and SIMD-based strategies depending on the block size
+ * and available CPU features.
+ *
+ * The implementation uses the following approach:
+ * 1. **Small blocks**:
+ *    Scalar comparison
+ *    for sizes below `EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD`.
+ * 2. **Alignment**:
+ *    Adjusts pointers to optimize memory access patterns
+ *    (32-byte or 64-byte boundaries).
+ * 3. **SIMD processing**: Uses AVX-512, AVX2, or SSE2 instructions
+ *    (based on `EYA_MEMORY_STD_SIMD_LEVEL`) for large/medium blocks
+ *    (≥`EYA_MEMORY_STD_STREAM_THRESHOLD`).
+ * 4. **Residual data**: Handles remaining bytes
+ *    with scalar comparisons after SIMD processing.
+ *
+ * @param[in] lhs Pointer to the left-hand side (LHS) memory block.
+ * @param[in] rhs Pointer to the right-hand side (RHS) memory block.
+ * @param[in] n Number of bytes to compare.
+ *
+ * @return Address of the first differing byte in `lhs`,
+ *         or `nullptr` if the blocks are identical.
+ *
+ * @note The `restrict` qualifier ensures `lhs` and `rhs` do not overlap.
+ *       Violation results in undefined behavior.
+ * @note Runtime checks (`eya_runtime_check_ref`) validate `lhs` and `rhs`.
+ *       Invalid pointers may trigger errors.
+ * @note Thresholds (e.g., `EYA_MEMORY_STD_STREAM_THRESHOLD`)
+ *       and SIMD level (`EYA_MEMORY_STD_SIMD_LEVEL`) control optimization strategies.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_std_rcompare(const void *__restrict lhs, const void *__restrict rhs, eya_usize_t n);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_STD_H

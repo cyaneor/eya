@@ -493,3 +493,100 @@ TEST(MemoryCompareTest, PartialBlocks)
   char buf8[] = "B";
   EXPECT_EQ(buf7, eya_memory_std_compare(buf7, buf8, 1));
 }
+
+TEST(eya_memory_std_rcompare, empty_input)
+{
+  uint8_t lhs[1] = {0};
+  uint8_t rhs[1] = {0};
+  EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 0));
+}
+
+TEST(eya_memory_std_rcompare, small_block_identical)
+{
+  uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  uint8_t rhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 16));
+}
+
+TEST(eya_memory_std_rcompare, small_block_mismatch_last)
+{
+  uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  uint8_t rhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 99};
+  EXPECT_EQ(lhs + 15, eya_memory_std_rcompare(lhs, rhs, 16));
+}
+
+TEST(eya_memory_std_rcompare, small_block_mismatch_first)
+{
+  uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  uint8_t rhs[16] = {99, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+  EXPECT_EQ(lhs + 0, eya_memory_std_rcompare(lhs, rhs, 16));
+}
+
+TEST(eya_memory_std_rcompare, medium_block_identical)
+{
+  uint8_t lhs[32];
+  uint8_t rhs[32];
+  eya_memory_std_set(lhs, 0xAA, 32);
+  eya_memory_std_set(rhs, 0xAA, 32);
+  EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 32));
+}
+
+TEST(eya_memory_std_rcompare, medium_block_mismatch_middle)
+{
+  uint8_t lhs[32];
+  uint8_t rhs[32];
+  eya_memory_std_set(lhs, 0xAA, 32);
+  eya_memory_std_set(rhs, 0xAA, 32);
+  lhs[16] = 0xBB;
+  EXPECT_EQ(lhs + 16, eya_memory_std_rcompare(lhs, rhs, 32));
+}
+
+TEST(eya_memory_std_rcompare, large_block_identical)
+{
+  uint8_t lhs[128];
+  uint8_t rhs[128];
+  eya_memory_std_set(lhs, 0x55, 128);
+  eya_memory_std_set(rhs, 0x55, 128);
+  EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 128));
+}
+
+TEST(eya_memory_std_rcompare, large_block_mismatch_end)
+{
+  uint8_t lhs[128];
+  uint8_t rhs[128];
+  eya_memory_std_set(lhs, 0x55, 128);
+  eya_memory_std_set(rhs, 0x55, 128);
+  lhs[127] = 0x66;
+  EXPECT_EQ(lhs + 127, eya_memory_std_rcompare(lhs, rhs, 128));
+}
+
+TEST(eya_memory_std_rcompare, large_block_mismatch_start)
+{
+  uint8_t lhs[128];
+  uint8_t rhs[128];
+  eya_memory_std_set(lhs, 0x55, 128);
+  eya_memory_std_set(rhs, 0x55, 128);
+  lhs[0] = 0x66;
+  EXPECT_EQ(lhs + 0, eya_memory_std_rcompare(lhs, rhs, 128));
+}
+
+TEST(eya_memory_std_rcompare, unaligned_input)
+{
+  alignas(64) uint8_t lhs[135];
+  alignas(64) uint8_t rhs[135];
+  eya_memory_std_set(lhs, 0x33, 135);
+  eya_memory_std_set(rhs, 0x33, 135);
+  // Test with unaligned start (offset by 1 byte)
+  EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs + 1, rhs + 1, 134));
+}
+
+TEST(eya_memory_std_rcompare, unaligned_mismatch)
+{
+  alignas(64) uint8_t lhs[135];
+  alignas(64) uint8_t rhs[135];
+  eya_memory_std_set(lhs, 0x33, 135);
+  eya_memory_std_set(rhs, 0x33, 135);
+  lhs[66] = 0x44;
+  // Test with unaligned start (offset by 1 byte)
+  EXPECT_EQ(lhs + 66, eya_memory_std_rcompare(lhs + 1, rhs + 1, 134));
+}
