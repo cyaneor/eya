@@ -196,13 +196,17 @@
  * @def eya_ptr_align_offset
  * @brief Computes the offset of a pointer within an alignment boundary
  *
- * This macro converts a pointer to an unsigned address and calculates its
- * offset within the specified alignment boundary. Equivalent to:
- * `(uintptr_t)ptr % align`
+ * This macro calculates the offset of a pointer
+ * within the specified alignment boundary using bitwise operations.
+ *
+ * The operation is equivalent to:
+ * `(uintptr_t)ptr % align` but more efficient when align is a power of two.
  *
  * @note Alignment value must be a power of two for correct results.
+ *       The implementation uses `addr & (align - 1)` which is
+ *       equivalent to modulo operation for power-of-two values.
  *
- * @param ptr Pointer to compute offset for
+ * @param ptr Pointer to compute offset for (may be any pointer type)
  * @param align Alignment boundary (must be power of two)
  * @return Offset of the pointer within the alignment block (0 to align-1)
  *
@@ -271,16 +275,14 @@
  * @def eya_ptr_align_up_by_size(T, ptr, begin, size)
  * @brief Aligns a pointer upwards to the next multiple of `size` bytes relative to `begin`.
  *
- * @param T         Target pointer type (e.g., `uint8_t`, `struct MyType`).
- * @param ptr       Pointer to align (type must be compatible with `begin`).
- * @param begin     Base address for alignment calculation (memory block starting address).
- * @param size      Alignment size in bytes (must be a power of two for proper alignment).
+ * @param T         Target pointer type.
+ * @param ptr       Pointer to align.
+ * @param begin     Base address for alignment calculation.
+ * @param size      Alignment size in bytes (must be a power of two).
  * @return          Aligned pointer of type `T*`.
- *
- * @note Example: If `begin = 0x1000`, `ptr = 0x1005`, `size = 4`, result is `0x1008`.
  */
 #define eya_ptr_align_up_by_size(T, ptr, begin, size)                                              \
-    eya_ptr_add_offset(T, ptr, (size - (eya_ptr_diff(ptr, begin) % size)) % size)
+    eya_ptr_add_offset_unsafe(T, begin, eya_addr_align_up(eya_ptr_diff(ptr, begin), size))
 
 /**
  * @def eya_ptr_align_up_by_type(T, ptr, begin)
@@ -300,13 +302,11 @@
  * @param T         Target pointer type.
  * @param ptr       Pointer to align.
  * @param begin     Base address for alignment calculation.
- * @param size      Alignment size in bytes.
+ * @param size      Alignment size in bytes (must be a power of two).
  * @return          Aligned pointer of type `T*`.
- *
- * @note Example: If `begin = 0x1000`, `ptr = 0x1005`, `size = 4`, result is `0x1004`.
  */
 #define eya_ptr_align_down_by_size(T, ptr, begin, size)                                            \
-    eya_ptr_sub_offset(T, ptr, (eya_ptr_diff(ptr, begin) % size))
+    eya_ptr_sub_offset_unsafe(T, ptr, eya_addr_align_offset(eya_ptr_diff(ptr, begin), size))
 
 /**
  * @def eya_ptr_align_down_by_type(T, ptr, begin)

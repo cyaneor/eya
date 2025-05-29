@@ -66,18 +66,21 @@
 
 /**
  * @def eya_addr_align_offset
- * @brief Computes the offset of an address within an alignment boundary
+ * @brief Computes the offset of an address within a power-of-two alignment boundary
  *
- * This macro calculates the remainder when the address is divided by the
- * alignment value. The result represents how many bytes the address is offset
- * from the previous aligned boundary.
+ * This macro efficiently calculates the offset of an address from the previous
+ * aligned boundary by performing a bitwise AND operation with (align-1).
+ * This method is equivalent to addr % align but only works correctly when
+ * align is a power of two.
  *
- * @note Alignment value must be a power of two for correct results.
- *       The operation is equivalent to: addr % align
+ * @note For correct results:
+ *       - Alignment must be a power of two
+ *       - Behavior is undefined if align is zero
+ *       - Works with both pointer and integer addresses
  *
- * @param addr Memory address to compute offset for
- * @param align Alignment boundary (must be power of two)
- * @return Offset of the address within the alignment block (0 to align-1)
+ * @param addr Memory address (pointer or integer) to compute offset for
+ * @param align Alignment boundary (must be power of two and > 0)
+ * @return Offset in bytes from the previous aligned address [0, align-1]
  */
 #define eya_addr_align_offset(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
 
