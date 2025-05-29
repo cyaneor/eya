@@ -65,74 +65,36 @@
 #define eya_addr_diff(addr1, addr2) eya_math_sub(addr1, addr2)
 
 /**
- * @def eya_addr_align_mask
- * @brief Computes alignment offset using bitmask operation
+ * @def eya_addr_align_offset
+ * @brief Computes the offset of an address within an alignment boundary
  *
- * This macro calculates the byte offset of a memory address from the previous
- * alignment boundary by applying a bitmask. It performs a bitwise AND between
- * the address and (alignment - 1), which is equivalent to calculating:
- * offset = addr % align, but more efficient for power-of-two alignment values.
- *
- * @note Alignment value must be a power of two for correct results.
- *       To align the address to the next boundary, subtract the result from
- *       the alignment value when offset is non-zero.
- *
- * @param addr Memory address to check (integer or pointer type)
- * @param align Alignment boundary (must be power of two)
- * @return Offset in bytes from previous aligned address (0 indicates already aligned)
- */
-#define eya_addr_align_mask(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
-
-/**
- * @def eya_addr_is_aligned_mask
- * @brief Checks if an address is aligned using bitmask comparison
- *
- * This macro checks if the specified address has its least significant bits
- * (corresponding to the alignment mask) set to zero. It is optimized for
- * powers of two alignment values.
- *
- * @note Alignment value must be a power of two for correct results
- * @param addr Memory address to check
- * @param align Alignment boundary (power of two)
- * @return true - address is aligned, false - not aligned
- */
-#define eya_addr_is_aligned_mask(addr, align) (eya_addr_align_mask(addr, align) == 0)
-
-/**
- * @def eya_addr_align_mod
- * @brief Calculates the address offset from the nearest alignment boundary
- *
- * This macro computes the remainder when the specified address is divided by
- * the alignment value. The result represents how many bytes the address needs
- * to be adjusted to reach the previous alignment boundary.
+ * This macro calculates the remainder when the address is divided by the
+ * alignment value. The result represents how many bytes the address is offset
+ * from the previous aligned boundary.
  *
  * @note Alignment value must be a power of two for correct results.
- *       For alignment to next boundary, subtract the result from alignment value.
+ *       The operation is equivalent to: addr % align
  *
- * @param addr Memory address to check
+ * @param addr Memory address to compute offset for
  * @param align Alignment boundary (must be power of two)
- * @return Offset in bytes from previous aligned address (0 indicates already aligned)
+ * @return Offset of the address within the alignment block (0 to align-1)
  */
-#define eya_addr_align_mod(addr, align) eya_math_mod(addr, align)
+#define eya_addr_align_offset(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
 
 /**
- * @def eya_addr_is_aligned_mod
- * @brief Checks if a memory address is aligned to the specified boundary
+ * @def eya_addr_is_aligned
+ * @brief Checks if an address meets the specified alignment requirement
  *
- * This macro determines whether the given address is aligned to the specified alignment
- * boundary by checking if the remainder of the address divided by the alignment is zero.
+ * This macro verifies whether the given address is aligned to the specified
+ * boundary by checking if the address offset within the alignment block is zero.
  *
- * @note The alignment value must be a power of two to ensure correct behavior.
- *       Uses ::eya_addr_align_mod internally to compute the alignment remainder.
+ * @note Alignment value must be a power of two for correct results.
  *
- * @param addr Memory address to check for alignment
- * @param align Alignment boundary (must be power of two)
- * @return `true` (non-zero) if address is aligned to the specified boundary
- *         `false` (zero) if address requires adjustment to meet alignment
- *
- * @see eya_addr_align_mod
+ * @param addr Memory address to verify
+ * @param align Alignment boundary to check against (must be power of two)
+ * @return Non-zero (true) if address is aligned, zero (false) otherwise
  */
-#define eya_addr_is_aligned_mod(addr, align) (eya_addr_align_mod(addr, align) == 0)
+#define eya_addr_is_aligned(addr, align) (eya_addr_align_offset(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up

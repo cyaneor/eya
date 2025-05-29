@@ -193,73 +193,39 @@
 #define eya_ptr_sub(T, ptr1, ptr2) eya_ptr_sub_offset(T, ptr1, eya_ptr_to_uaddr(ptr2))
 
 /**
- * @def eya_ptr_align_mask
- * @brief Computes pointer alignment offset using bitmask operation
+ * @def eya_ptr_align_offset
+ * @brief Computes the offset of a pointer within an alignment boundary
  *
- * This macro converts the pointer to an integer address via eya_ptr_to_uaddr()
- * and calculates the byte offset from the previous alignment boundary using
- * bitwise AND with (alignment - 1). Equivalent to addr % align for power-of-two
- * values, but more efficient.
+ * This macro converts a pointer to an unsigned address and calculates its
+ * offset within the specified alignment boundary. Equivalent to:
+ * `(uintptr_t)ptr % align`
  *
- * @note Alignment value must be a power of two for correct results
- * @param[in] ptr Pointer to check (will be converted to integer address)
- * @param[in] align Alignment boundary (power of two)
- * @return Offset in bytes from previous aligned address (0 = already aligned)
- */
-#define eya_ptr_align_mask(ptr, align) eya_addr_align_mask(eya_ptr_to_uaddr(ptr), align)
-
-/**
- * @def eya_ptr_is_aligned_mask
- * @brief Checks pointer alignment using bitmask comparison
+ * @note Alignment value must be a power of two for correct results.
  *
- * This macro converts the pointer to an integer address and checks alignment
- * using bitwise operations. Optimized for power-of-two alignment values.
- *
- * @note Alignment value must be a power of two for correct results
- * @param ptr Pointer to check (will be converted to integer via eya_ptr_to_uaddr)
- * @param align Alignment boundary (power of two)
- * @return Non-zero (1) if aligned, 0 if not aligned
- */
-#define eya_ptr_is_aligned_mask(ptr, align) eya_addr_is_aligned_mask(eya_ptr_to_uaddr(ptr), align)
-
-/**
- * @def eya_ptr_align_mod
- * @brief Calculates alignment remainder for a pointer's address
- *
- * This macro converts the pointer to an unsigned memory address and computes
- * the offset from the nearest lower alignment boundary using ::eya_addr_align_mod.
- *
- * @note Alignment value must be a power of two. Works with any pointer type through
- *       implicit conversion to unsigned address via eya_ptr_to_uaddr().
- *
- * @param ptr Pointer to check (any pointer type)
+ * @param ptr Pointer to compute offset for
  * @param align Alignment boundary (must be power of two)
- * @return Offset in bytes from previous aligned address (0 indicates already aligned)
+ * @return Offset of the pointer within the alignment block (0 to align-1)
  *
- * @see eya_addr_align_mod
- * @see eya_ptr_is_aligned_mod
+ * @see eya_addr_align_offset
  */
-#define eya_ptr_align_mod(ptr, align) eya_addr_align_mod(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_align_offset(ptr, align) eya_addr_align_offset(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_is_aligned_mod
- * @brief Checks if a pointer's address is aligned to specified boundary
+ * @def eya_ptr_is_aligned
+ * @brief Checks if a pointer meets the specified alignment requirement
  *
- * This macro converts the pointer to an unsigned memory address and verifies
- * alignment using ::eya_addr_is_aligned_mod.
+ * This macro verifies whether a pointer is aligned to the specified boundary
+ * by converting it to an address and checking its alignment.
  *
- * @note Alignment value must be a power of two. Uses pointer-to-address conversion
- *       internally via eya_ptr_to_uaddr().
+ * @note Alignment value must be a power of two for correct results.
  *
- * @param ptr Pointer to check (any pointer type)
- * @param align Alignment boundary (must be power of two)
- * @return `true` (non-zero) if pointer is aligned to boundary
- *         `false` (zero) if pointer requires adjustment
+ * @param ptr Pointer to verify
+ * @param align Alignment boundary to check against (must be power of two)
+ * @return Non-zero (true) if pointer is aligned, zero (false) otherwise
  *
- * @see eya_addr_is_aligned_mod
- * @see eya_ptr_align_mod
+ * @see eya_addr_is_aligned
  */
-#define eya_ptr_is_aligned_mod(ptr, align) eya_addr_is_aligned_mod(eya_ptr_to_uaddr(ptr), align)
+#define eya_ptr_is_aligned(ptr, align) eya_addr_is_aligned(eya_ptr_to_uaddr(ptr), align)
 
 /**
  * @def eya_ptr_align_up

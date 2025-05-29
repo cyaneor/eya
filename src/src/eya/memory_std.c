@@ -71,7 +71,7 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer
-    eya_usize_t align = eya_ptr_align_mask(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_usize_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -86,7 +86,7 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Source alignment
-        eya_usize_t src_align = eya_ptr_align_mask(s, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_usize_t src_align = eya_ptr_align_offset(s, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
@@ -233,7 +233,7 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer for streaming
-    eya_usize_t align = eya_ptr_align_mask(d - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+    eya_usize_t align = eya_ptr_align_offset(d - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
     if (align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -248,7 +248,7 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Source alignment
-        eya_usize_t src_align = eya_ptr_align_mask(s - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_usize_t src_align = eya_ptr_align_offset(s - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
@@ -402,7 +402,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer
-    eya_usize_t align = eya_ptr_align_mask(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_usize_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = EYA_MEMORY_STD_PTR_ALIGNMENT - align;
@@ -533,7 +533,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
     }
 
     // 2. Align left pointer to 32-byte boundary for AVX2
-    eya_usize_t align = eya_ptr_align_mask(l, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_usize_t align = eya_ptr_align_offset(l, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -553,7 +553,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Align source (right) pointer to 64-byte boundary
-        eya_usize_t src_align = eya_ptr_align_mask(r, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_usize_t src_align = eya_ptr_align_offset(r, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
