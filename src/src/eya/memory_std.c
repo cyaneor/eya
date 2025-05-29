@@ -370,12 +370,13 @@ void *
 eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
-    eya_uchar_t *d = eya_ptr_cast(eya_uchar_t, dst);
+
+    eya_uchar_t    *d      = eya_ptr_cast(eya_uchar_t, dst);
+    const eya_u64_t fill64 = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
 
     // 1. Processing of small blocks
     if (n <= EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
     {
-        const eya_u64_t fill64 = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
         while (n >= 8)
         {
             *(eya_u64_t *)d = fill64;
@@ -420,8 +421,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     // 3. Streaming instructions for large blocks
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
-        eya_usize_t     stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
-        const eya_u64_t fill64        = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        eya_usize_t stream_blocks = n / EYA_MEMORY_STD_STREAM_ALIGNMENT;
         while (stream_blocks--)
         {
 #if EYA_MEMORY_STD_SIMD_LEVEL >= 512
@@ -455,8 +455,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     // 4. SIMD optimization for medium blocks
     if (n >= EYA_MEMORY_STD_SIMD_BLOCK)
     {
-        eya_usize_t     simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
-        const eya_u64_t fill64      = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
+        eya_usize_t simd_blocks = n / EYA_MEMORY_STD_SIMD_BLOCK;
         while (simd_blocks--)
         {
 #if EYA_MEMORY_STD_SIMD_LEVEL >= 512
@@ -481,7 +480,6 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     }
 
     // 5. Residual processing
-    const eya_u64_t fill64 = eya_type_cast(eya_u64_t, val * 0x0101010101010101ULL);
     while (n >= 8)
     {
         *(eya_u64_t *)d = fill64;
