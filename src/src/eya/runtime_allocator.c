@@ -26,9 +26,11 @@
  */
 #ifdef EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 #    include <stdlib.h>
+#    include <eya/ptr_util.h>
 
 EYA_ATTRIBUTE(THREAD_LOCAL)
-eya_memory_allocator_t m_runtime_allocator = {malloc, free};
+eya_memory_allocator_t m_runtime_allocator = {eya_ptr_cast(eya_memory_allocator_alloc_fn, malloc),
+                                              eya_ptr_cast(eya_memory_allocator_dealloc_fn, free)};
 #else
 EYA_ATTRIBUTE(THREAD_LOCAL)
 eya_memory_allocator_t m_runtime_allocator = {};
