@@ -22,6 +22,7 @@
 #define EYA_RUNTIME_THROW_H
 
 #include "runtime_exception_catch_stack.h"
+#include "compound_literal.h"
 
 /**
  * @def eya_runtime_throw
@@ -48,11 +49,14 @@
  */
 #ifdef EYA_COMPILE_OPTION_DEBUG
 #    define eya_runtime_throw(...)                                                                 \
-        eya_runtime_exception_catch_stack_throw(&(eya_exception_t){                                \
-            .err = {__VA_ARGS__}, .trace = {__TIMESTAMP__, __FILE__, __FUNCTION__}})
+        eya_runtime_exception_catch_stack_throw(                                                   \
+            eya_compound_literal_make(eya_exception_t,                                             \
+                                      .err   = {__VA_ARGS__},                                      \
+                                      .trace = {__TIMESTAMP__, __FILE__, __FUNCTION__}))
 #else
 #    define eya_runtime_throw(...)                                                                 \
-        eya_runtime_exception_catch_stack_throw(&(eya_exception_t){.err = {__VA_ARGS__}})
+        eya_runtime_exception_catch_stack_throw(                                                   \
+            eya_compound_literal_make(eya_exception_t, .err = {__VA_ARGS__}))
 #endif // EYA_COMPILE_OPTION_DEBUG
 
 /**
