@@ -9,7 +9,7 @@ TEST(eya_error, get_code)
   EXPECT_EQ(eya_error_get_code(&err), 15);
 }
 
-TEST(eya_error, GetCodeNull)
+TEST(eya_error, get_code_null)
 {
   EXPECT_DEATH(eya_error_get_code(nullptr), ".*");
 }
@@ -34,7 +34,7 @@ TEST(eya_error, set)
   EXPECT_STREQ(err.desc, "Test error");
 }
 
-TEST(eya_error, SetNull)
+TEST(eya_error, set_null)
 {
   EXPECT_DEATH(eya_error_set(nullptr, EYA_ERROR_CODE_SOME_ERROR, "Test error"),
                ".*");
