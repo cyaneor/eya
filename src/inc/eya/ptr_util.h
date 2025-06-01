@@ -62,23 +62,14 @@
 #define eya_ptr_to_saddr(ptr) eya_saddr_from_ptr(ptr)
 
 /**
- * @def eya_ptr_to_diff(ptr)
- * @brief Converts a pointer to a signed integer suitable for difference calculations.
- *
- * @param ptr Pointer to convert.
- * @return Signed integer representation of the pointer.
- */
-#define eya_ptr_to_diff(ptr) eya_type_cast(eya_saddr_t, ptr)
-
-/**
- * @def eya_ptr_diff(ptr1, ptr2)
+ * @def eya_ptr_sdiff(ptr1, ptr2)
  * @brief Calculates the difference between two pointers as signed integers.
  *
  * @param ptr1 First pointer.
  * @param ptr2 Second pointer.
  * @return Signed difference between ptr1 and ptr2.
  */
-#define eya_ptr_diff(ptr1, ptr2) (eya_ptr_to_diff(ptr1) - eya_ptr_to_diff(ptr2))
+#define eya_ptr_sdiff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_saddr(ptr1), eya_ptr_to_saddr(ptr2))
 
 /**
  * @def eya_ptr_udiff(ptr1, ptr2)
@@ -89,16 +80,6 @@
  * @return Unsigned difference between ptr1 and ptr2.
  */
 #define eya_ptr_udiff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_uaddr(ptr1), eya_ptr_to_uaddr(ptr2))
-
-/**
- * @def eya_ptr_saddr_diff(ptr1, ptr2)
- * @brief Calculates the difference between two pointers as signed addresses.
- *
- * @param ptr1 First pointer.
- * @param ptr2 Second pointer.
- * @return Signed difference between ptr1 and ptr2.
- */
-#define eya_ptr_saddr_diff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_saddr(ptr1), eya_ptr_to_saddr(ptr2))
 
 /**
  * @def eya_ptr_add_offset_unsafe(T, ptr, offset)
@@ -282,7 +263,7 @@
  * @return          Aligned pointer of type `T*`.
  */
 #define eya_ptr_align_up_by_size(T, ptr, begin, size)                                              \
-    eya_ptr_add_offset_unsafe(T, begin, eya_addr_align_up(eya_ptr_diff(ptr, begin), size))
+    eya_ptr_add_offset_unsafe(T, begin, eya_addr_align_up(eya_ptr_sdiff(ptr, begin), size))
 
 /**
  * @def eya_ptr_align_up_by_type(T, ptr, begin)
@@ -306,7 +287,7 @@
  * @return          Aligned pointer of type `T*`.
  */
 #define eya_ptr_align_down_by_size(T, ptr, begin, size)                                            \
-    eya_ptr_sub_offset_unsafe(T, ptr, eya_addr_align_offset(eya_ptr_diff(ptr, begin), size))
+    eya_ptr_sub_offset_unsafe(T, ptr, eya_addr_align_offset(eya_ptr_sdiff(ptr, begin), size))
 
 /**
  * @def eya_ptr_align_down_by_type(T, ptr, begin)
@@ -330,21 +311,6 @@
  * @return Non-zero if ptr is within [begin, end], zero otherwise.
  */
 #define eya_ptr_range_contains(begin, end, ptr) eya_interval_closed_contains(begin, end, ptr)
-
-/**
- * @def eya_ptr_ranges_is_aligned(r1_begin, r1_end, r2_begin, r2_end, align)
- * @brief Checks if all pointers defining two ranges are aligned to the specified boundary.
- *
- * @param r1_begin First range start pointer.
- * @param r1_end First range end pointer.
- * @param r2_begin Second range start pointer.
- * @param r2_end Second range end pointer.
- * @param align Alignment boundary.
- * @return Non-zero if all pointers are aligned, zero otherwise.
- */
-#define eya_ptr_ranges_is_aligned(r1_begin, r1_end, r2_begin, r2_end, align)                       \
-    (eya_ptr_pair_is_aligned(r1_begin, r1_end, align) &&                                           \
-     eya_ptr_pair_is_aligned(r2_begin, r2_end, align))
 
 /**
  * @def eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end)

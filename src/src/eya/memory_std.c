@@ -71,7 +71,7 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer
-    eya_usize_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_uaddr_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -86,7 +86,7 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Source alignment
-        eya_usize_t src_align = eya_ptr_align_offset(s, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_uaddr_t src_align = eya_ptr_align_offset(s, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
@@ -233,7 +233,7 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer for streaming
-    eya_usize_t align = eya_ptr_align_offset(d - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+    eya_uaddr_t align = eya_ptr_align_offset(d - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
     if (align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -248,7 +248,7 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Source alignment
-        eya_usize_t src_align = eya_ptr_align_offset(s - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_uaddr_t src_align = eya_ptr_align_offset(s - n, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
@@ -403,7 +403,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
     }
 
     // 2. Alignment of the target buffer
-    eya_usize_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_uaddr_t align = eya_ptr_align_offset(d, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = EYA_MEMORY_STD_PTR_ALIGNMENT - align;
@@ -531,7 +531,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
     }
 
     // 2. Align left pointer to 32-byte boundary for AVX2
-    eya_usize_t align = eya_ptr_align_offset(l, EYA_MEMORY_STD_PTR_ALIGNMENT);
+    eya_uaddr_t align = eya_ptr_align_offset(l, EYA_MEMORY_STD_PTR_ALIGNMENT);
     if (align != EYA_MEMORY_STD_PTR_ALIGNMENT)
     {
         eya_usize_t head = align;
@@ -551,7 +551,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
     if (n >= EYA_MEMORY_STD_STREAM_THRESHOLD)
     {
         // Align source (right) pointer to 64-byte boundary
-        eya_usize_t src_align = eya_ptr_align_offset(r, EYA_MEMORY_STD_STREAM_ALIGNMENT);
+        eya_uaddr_t src_align = eya_ptr_align_offset(r, EYA_MEMORY_STD_STREAM_ALIGNMENT);
         if (src_align != EYA_MEMORY_STD_STREAM_ALIGNMENT)
         {
             eya_usize_t head = src_align;
@@ -579,7 +579,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
             eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_forward64(&index, ~mask);
                 return l + index;
             }
@@ -595,7 +595,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
                              ((eya_u64_t)_mm256_movemask_epi8(cmp1) << 32);
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_forward64(&index, ~mask);
                 return l + index;
             }
@@ -611,7 +611,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
             }
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_forward64(&index, ~mask);
                 return l + index;
             }
@@ -638,7 +638,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
                 eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
                 if (mask != 0xFFFFFFFFFFFFFFFFULL)
                 {
-                    unsigned long index;
+                    eya_ulong_t index;
                     eya_bit_scan_forward64(&index, ~mask);
                     return l + index;
                 }
@@ -656,7 +656,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
             eya_u32_t mask  = _mm256_movemask_epi8(cmp);
             if (mask != 0xFFFFFFFFU)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_forward32(&index, ~mask);
                 return l + index;
             }
@@ -664,13 +664,13 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
             // Fallback to SSE2: process two 16-byte chunks
             for (eya_usize_t i = 0; i < EYA_MEMORY_STD_SIMD_BLOCK; i += 16)
             {
-                __m128i left  = _mm_load_si128((__m128i *)(l + i));
-                __m128i right = _mm_load_si128((__m128i *)(r + i));
-                __m128i cmp   = _mm_cmpeq_epi8(left, right);
-                int     mask  = _mm_movemask_epi8(cmp);
+                __m128i    left  = _mm_load_si128((__m128i *)(l + i));
+                __m128i    right = _mm_load_si128((__m128i *)(r + i));
+                __m128i    cmp   = _mm_cmpeq_epi8(left, right);
+                eya_sint_t mask  = _mm_movemask_epi8(cmp);
                 if (mask != 0xFFFF)
                 {
-                    unsigned long index;
+                    eya_ulong_t index;
                     eya_bit_scan_forward32(&index, ~mask & 0xFFFF);
                     return l + i + index;
                 }
@@ -776,7 +776,7 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
             eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_reverse64(&index, ~mask);
                 return l + index;
             }
@@ -795,7 +795,7 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
                              (eya_u64_t)_mm256_movemask_epi8(cmp1);
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_reverse64(&index, ~mask);
                 return (index >= 32) ? (l + (index - 32)) : (l - 32 + index);
             }
@@ -816,7 +816,7 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
             }
             if (mask != 0xFFFFFFFFFFFFFFFFULL)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_reverse64(&index, ~mask);
                 return l + index - 63;
             }
@@ -844,7 +844,7 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
                 eya_u64_t mask = (eya_u64_t)_mm512_movemask_epi8(cmp0);
                 if (mask != 0xFFFFFFFFFFFFFFFFULL)
                 {
-                    unsigned long index;
+                    eya_ulong_t index;
                     eya_bit_scan_reverse64(&index, ~mask);
                     return l + index;
                 }
@@ -863,7 +863,7 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
             eya_u32_t mask  = _mm256_movemask_epi8(cmp);
             if (mask != 0xFFFFFFFFU)
             {
-                unsigned long index;
+                eya_ulong_t index;
                 eya_bit_scan_reverse32(&index, ~mask);
                 return l + index;
             }
@@ -874,13 +874,13 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
             {
                 l -= 15;
                 r -= 15;
-                __m128i left  = _mm_loadu_si128((__m128i *)l);
-                __m128i right = _mm_loadu_si128((__m128i *)r);
-                __m128i cmp   = _mm_cmpeq_epi8(left, right);
-                int     mask  = _mm_movemask_epi8(cmp);
+                __m128i    left  = _mm_loadu_si128((__m128i *)l);
+                __m128i    right = _mm_loadu_si128((__m128i *)r);
+                __m128i    cmp   = _mm_cmpeq_epi8(left, right);
+                eya_sint_t mask  = _mm_movemask_epi8(cmp);
                 if (mask != 0xFFFF)
                 {
-                    unsigned long index;
+                    eya_ulong_t index;
                     eya_bit_scan_reverse32(&index, ~mask & 0xFFFF);
                     return l + index;
                 }
