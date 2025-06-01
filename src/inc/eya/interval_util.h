@@ -1,21 +1,30 @@
 /**
  * @file interval_util.h
- * @brief A set of macros for interval operations.
+ * @brief Interval validation and containment utilities
  *
- * This file contains macros for validating intervals with different boundary
- * types (closed, open, left-open, right-open) and for checking if a value is
- * contained within an interval with specified boundary types.
+ * This header provides utility macros
+ * for working with mathematical intervals of different types.
  *
- * The macros provide an easy way to check whether an interval
- * is valid and whether a value is contained within an interval
- * considering boundary types.
+ * It includes functions for checking interval validity
+ * and value containment in:
+ *
+ *   - Closed intervals [a, b]
+ *   - Left-open intervals (a, b]
+ *   - Right-open intervals [a, b)
+ *   - Open intervals (a, b)
+ *
+ * All macros are implemented
+ * as efficient boolean expressions suitable for any context.
+ *
+ * @note Parameters must be comparable using relational operators
+ * @warning Arguments are evaluated multiple times - avoid side effects
  */
 
 #ifndef EYA_INTERVAL_UTIL_H
 #define EYA_INTERVAL_UTIL_H
 
 /**
- * @def eya_interval_is_valid_closed
+ * @def eya_interval_closed_is_valid
  * @brief Checks if a closed interval is valid.
  *
  * @param lower Lower bound of the interval.
@@ -24,10 +33,10 @@
  * @return Returns the value of expression `lower <= upper`,
  *         which is true if the interval is valid.
  */
-#define eya_interval_is_valid_closed(lower, upper) ((lower) <= (upper))
+#define eya_interval_closed_is_valid(lower, upper) ((lower) <= (upper))
 
 /**
- * @def eya_interval_is_valid_lopen
+ * @def eya_interval_lopen_is_valid
  * @brief Checks if a left-open interval is valid.
  *
  * @param lower Lower bound of the interval.
@@ -36,10 +45,10 @@
  * @return Returns the value of expression `lower < upper`,
  *         which is true if the interval is valid.
  */
-#define eya_interval_is_valid_lopen(lower, upper) ((lower) < (upper))
+#define eya_interval_lopen_is_valid(lower, upper) ((lower) < (upper))
 
 /**
- * @def eya_interval_is_valid_ropen
+ * @def eya_interval_ropen_is_valid
  * @brief Checks if a right-open interval is valid.
  *
  * @param lower Lower bound of the interval.
@@ -48,10 +57,10 @@
  * @return Returns the value of expression `lower <= upper`,
  *         which is true if the interval is valid.
  */
-#define eya_interval_is_valid_ropen(lower, upper) ((lower) <= (upper))
+#define eya_interval_ropen_is_valid(lower, upper) ((lower) <= (upper))
 
 /**
- * @def eya_interval_is_valid_open
+ * @def eya_interval_open_is_valid
  * @brief Checks if an open interval is valid.
  *
  * @param lower Lower bound of the interval.
@@ -60,10 +69,10 @@
  * @return Returns the value of expression `lower < upper`,
  *         which is true if the interval is valid.
  */
-#define eya_interval_is_valid_open(lower, upper) ((lower) < (upper))
+#define eya_interval_open_is_valid(lower, upper) ((lower) < (upper))
 
 /**
- * @def eya_interval_is_within_closed
+ * @def eya_interval_closed_contains
  * @brief Checks if a value is contained within a closed interval.
  *
  * @param lower Lower bound of the interval.
@@ -73,11 +82,10 @@
  * @return Returns `true` if the `value` lies within [lower, upper] interval,
  *         and `false` otherwise.
  */
-#define eya_interval_is_within_closed(lower, upper, value)                                         \
-    ((value) >= (lower) && (value) <= (upper))
+#define eya_interval_closed_contains(lower, upper, value) ((value) >= (lower) && (value) <= (upper))
 
 /**
- * @def eya_interval_is_within_lopen
+ * @def eya_interval_lopen_contains
  * @brief Checks if a value is contained within a left-open interval.
  *
  * @param lower Lower bound of the interval.
@@ -87,10 +95,10 @@
  * @return Returns `true` if the `value` lies within (lower, upper] interval,
  *         and `false` otherwise.
  */
-#define eya_interval_is_within_lopen(lower, upper, value) ((value) > (lower) && (value) <= (upper))
+#define eya_interval_lopen_contains(lower, upper, value) ((value) > (lower) && (value) <= (upper))
 
 /**
- * @def eya_interval_is_within_ropen
+ * @def eya_interval_ropen_contains
  * @brief Checks if a value is contained within a right-open interval.
  *
  * @param lower Lower bound of the interval.
@@ -100,10 +108,10 @@
  * @return Returns `true` if the `value` lies within [lower, upper) interval,
  *         and `false` otherwise.
  */
-#define eya_interval_is_within_ropen(lower, upper, value) ((value) >= (lower) && (value) < (upper))
+#define eya_interval_ropen_contains(lower, upper, value) ((value) >= (lower) && (value) < (upper))
 
 /**
- * @def eya_interval_is_within_open
+ * @def eya_interval_open_contains
  * @brief Checks if a value is contained within an open interval.
  *
  * @param lower Lower bound of the interval.
@@ -113,42 +121,6 @@
  * @return Returns `true` if the `value` lies within (lower, upper) interval,
  *         and `false` otherwise.
  */
-#define eya_interval_is_within_open(lower, upper, value) ((value) > (lower) && (value) < (upper))
-
-/**
- * @def eya_interval_contains_closed
- * @brief Checks if a second closed interval
- *        is contained within the first closed interval.
- */
-#define eya_interval_contains_closed(outer_lower, outer_upper, inner_lower, inner_upper)           \
-    (eya_interval_is_within_closed((outer_lower), (outer_upper), (inner_lower)) &&                 \
-     eya_interval_is_within_closed((outer_lower), (outer_upper), (inner_upper)))
-
-/**
- * @def eya_interval_contains_open
- * @brief Checks if a second open interval
- *        is contained within the first open interval.
- */
-#define eya_interval_contains_open(outer_lower, outer_upper, inner_lower, inner_upper)             \
-    (eya_interval_is_within_open((outer_lower), (outer_upper), (inner_lower)) &&                   \
-     eya_interval_is_within_open((outer_lower), (outer_upper), (inner_upper)))
-
-/**
- * @def eya_interval_contains_lopen
- * @brief Checks if a second left-open interval
- *        is contained within the first interval.
- */
-#define eya_interval_contains_lopen(outer_lower, outer_upper, inner_lower, inner_upper)            \
-    (eya_interval_is_within_lopen((outer_lower), (outer_upper), (inner_lower)) &&                  \
-     eya_interval_is_within_lopen((outer_lower), (outer_upper), (inner_upper)))
-
-/**
- * @def eya_interval_contains_ropen
- * @brief Checks if a second right-open interval
- *        is contained within the first interval.
- */
-#define eya_interval_contains_ropen(outer_lower, outer_upper, inner_lower, inner_upper)            \
-    (eya_interval_is_within_ropen((outer_lower), (outer_upper), (inner_lower)) &&                  \
-     eya_interval_is_within_ropen((outer_lower), (outer_upper), (inner_upper)))
+#define eya_interval_open_contains(lower, upper, value) ((value) > (lower) && (value) < (upper))
 
 #endif // EYA_INTERVAL_UTIL_H
