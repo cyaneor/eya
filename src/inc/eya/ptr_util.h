@@ -81,14 +81,14 @@
 #define eya_ptr_diff(ptr1, ptr2) (eya_ptr_to_diff(ptr1) - eya_ptr_to_diff(ptr2))
 
 /**
- * @def eya_ptr_uaddr_diff(ptr1, ptr2)
+ * @def eya_ptr_udiff(ptr1, ptr2)
  * @brief Calculates the difference between two pointers as unsigned addresses.
  *
  * @param ptr1 First pointer.
  * @param ptr2 Second pointer.
  * @return Unsigned difference between ptr1 and ptr2.
  */
-#define eya_ptr_uaddr_diff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_uaddr(ptr1), eya_ptr_to_uaddr(ptr2))
+#define eya_ptr_udiff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_uaddr(ptr1), eya_ptr_to_uaddr(ptr2))
 
 /**
  * @def eya_ptr_saddr_diff(ptr1, ptr2)
