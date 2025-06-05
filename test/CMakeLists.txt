@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}
         src/memory.cpp
         src/memory_std.cpp
         src/memory_raw.cpp
+        src/memory_view.cpp
         src/numeric_limits.cpp
 )
 

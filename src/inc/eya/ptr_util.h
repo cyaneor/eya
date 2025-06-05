@@ -30,7 +30,6 @@
 #define EYA_PTR_UTIL_H
 
 #include "addr_util.h"
-#include "interval_util.h"
 #include "nullptr.h"
 
 /**
@@ -302,17 +301,6 @@
     eya_ptr_align_down_by_size(T, ptr, begin, sizeof(T))
 
 /**
- * @def eya_ptr_range_contains(begin, end, ptr)
- * @brief Checks if a pointer lies within a closed range [begin, end].
- *
- * @param begin Range start pointer.
- * @param end Range end pointer.
- * @param ptr Pointer to check.
- * @return Non-zero if ptr is within [begin, end], zero otherwise.
- */
-#define eya_ptr_range_contains(begin, end, ptr) eya_interval_closed_contains(begin, end, ptr)
-
-/**
  * @def eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end)
  * @brief Checks if two ranges do not overlap.
  *
@@ -349,15 +337,5 @@
  */
 #define eya_ptr_range_element_count(begin, end, type_size)                                         \
     (eya_ptr_addr_diff(end, begin) / (type_size))
-
-/**
- * @def eya_ptr_range_is_valid(begin, end)
- * @brief Checks if a pointer range is valid (non-null and properly ordered).
- *
- * @param begin Range start pointer.
- * @param end Range end pointer.
- * @return Non-zero if valid, zero otherwise.
- */
-#define eya_ptr_range_is_valid(begin, end) (begin && eya_interval_closed_is_valid(begin, end))
 
 #endif // EYA_PTR_UTIL_H
