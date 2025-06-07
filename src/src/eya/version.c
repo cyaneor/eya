@@ -1,5 +1,5 @@
-#include <eya/str_util.h>
 #include <eya/version.h>
+#include <eya/stringify.h>
 
 const eya_char_t *
 eya_version(void)
