@@ -271,8 +271,12 @@ foreach (CMAKE_OPTION IN ITEMS ${CMAKE_OPTIONS})
         endif()
 
         # Add the handling for the new option
-        if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_NO_TREE_VECTORIZE")
+        if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_TREE_VECTORIZE")
             if (${CMAKE_OPTION} STREQUAL "ON")
+                if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+                    eya_add_compile_option_if_missing(-ftree-vectorize)
+                endif()
+            else()
                 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
                     eya_add_compile_option_if_missing(-fno-tree-vectorize)
                 endif()

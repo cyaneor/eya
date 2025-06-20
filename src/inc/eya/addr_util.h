@@ -28,28 +28,14 @@
 #define eya_addr_to_ptr(T, addr) eya_reinterpret_cast(T *, addr)
 
 /**
- * @def eya_uaddr_from_ptr
- * @brief Converts a pointer to an unsigned address.
- *
- * This macro uses `eya_reinterpret_cast` to convert a pointer
- * to an unsigned integer address type (`eya_uaddr_t`).
- *
- * @param ptr Pointer to convert.
- * @return Address of type `eya_uaddr_t` representing @p ptr.
+ * @def eya_addr_to_void(addr)
+ * @brief Converts an address to a void pointer.
+ * @details This is a convenience wrapper around eya_addr_to_ptr()
+ *          specifically for void pointers.
+ * @param addr Integer address to convert.
+ * @return void* pointer pointing to @p addr.
  */
-#define eya_uaddr_from_ptr(ptr) eya_reinterpret_cast(eya_uaddr_t, ptr)
-
-/**
- * @def eya_saddr_from_ptr
- * @brief Converts a pointer to a signed address.
- *
- * This macro uses `eya_reinterpret_cast` to convert a pointer
- * to a signed integer address type (`eya_saddr_t`).
- *
- * @param ptr Pointer to convert.
- * @return Address of type `eya_saddr_t` representing @p ptr.
- */
-#define eya_saddr_from_ptr(ptr) eya_reinterpret_cast(eya_saddr_t, ptr)
+#define eya_addr_to_void(addr) eya_addr_to_ptr(void, addr)
 
 /**
  * @def eya_addr_diff
@@ -65,7 +51,7 @@
 #define eya_addr_diff(addr1, addr2) eya_math_sub(addr1, addr2)
 
 /**
- * @def eya_addr_align_offset
+ * @def eya_addr_align_by_offset
  * @brief Computes the offset of an address within a power-of-two alignment boundary
  *
  * This macro efficiently calculates the offset of an address from the previous
@@ -82,7 +68,7 @@
  * @param align Alignment boundary (must be power of two and > 0)
  * @return Offset in bytes from the previous aligned address [0, align-1]
  */
-#define eya_addr_align_offset(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
+#define eya_addr_align_by_offset(addr, align) eya_bit_and(addr, eya_math_sub_one(align))
 
 /**
  * @def eya_addr_is_aligned
@@ -97,7 +83,7 @@
  * @param align Alignment boundary to check against (must be power of two)
  * @return Non-zero (true) if address is aligned, zero (false) otherwise
  */
-#define eya_addr_is_aligned(addr, align) (eya_addr_align_offset(addr, align) == 0)
+#define eya_addr_is_aligned(addr, align) (eya_addr_align_by_offset(addr, align) == 0)
 
 /**
  * @def eya_addr_align_up

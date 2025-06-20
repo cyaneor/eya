@@ -187,27 +187,28 @@ option(EYA_COMPILE_OPTION_NATIVE_TUNE
 
 # Option:
 #
-#     EYA_COMPILE_OPTION_NO_TREE_VECTORIZE
+#     EYA_COMPILE_OPTION_TREE_VECTORIZE
 #
 # Description:
 #
-#     CMake option EYA_COMPILE_OPTION_NO_TREE_VECTORIZE disables
-#     the tree vectorization optimization in the compiler.
+#     CMake option EYA_COMPILE_OPTION_TREE_VECTORIZE enables compiler
+#     auto-vectorization optimizations for loop structures.
 #
 # Usage:
 #
-#     ON: Adds -fno-tree-vectorize flag to disable tree vectorization
-#     OFF: Enables tree vectorization (default behavior)
+#     ON: Enables tree vectorization optimizations (default)
+#     OFF: Disables automatic loop vectorization
 #
 # Notes:
 #
-#     - Disabling tree vectorization may be beneficial for certain workloads
-#     - Can help avoid issues with vectorization of specific code patterns
-#     - Recommended for debugging or when vectorization leads to performance regressions
-#     - May impact performance negatively if vectorization is beneficial for the code
+#     - Improves performance by utilizing SIMD instructions
+#     - May increase code size due to vectorized loop versions
+#     - Works best with simple, data-parallel loops
+#     - Can be combined with manual vectorization intrinsics
+#     - Performance benefits depend on target architecture capabilities
 #
-option(EYA_COMPILE_OPTION_NO_TREE_VECTORIZE
-        "Disable tree vectorization" OFF)
+option(EYA_COMPILE_OPTION_TREE_VECTORIZE
+        "Enable compiler tree vectorization optimizations" ON)
 
 # Option:
 #

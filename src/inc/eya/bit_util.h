@@ -29,7 +29,7 @@
  * uint8_t result = eya_bit_and(flags, mask); // Result: 0b1000
  * @endcode
  */
-#define eya_bit_and(a, b) ((a) & (b))
+#define eya_bit_and(a, b) eya_math_bit_and(a, b)
 
 /**
  * @def eya_bit_not(x)
@@ -51,7 +51,7 @@
  * uint8_t inverted = eya_bit_not(flags); // Result: 0b11110000
  * @endcode
  */
-#define eya_bit_not(x) (~(x))
+#define eya_bit_not(x) eya_math_bit_not(x)
 
 /**
  * @def eya_bit_intersect(a, b)
@@ -139,130 +139,130 @@
 #if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
 /**
  * @def eya_bit_scan_forward64
- * @brief Находит индекс первого установленного бита
- *        (младшего разряда) в 64-битной маске (GCC/Clang).
+ * @brief Finds the index of the first set bit 
+ *        (least significant bit) in a 64-bit mask (GCC/Clang).
  *
- * Использует встроенную функцию компилятора `__builtin_ctzll`
- * для быстрого поиска индекса первого установленного бита в 64-битном числе.
+ * Uses the compiler intrinsic `__builtin_ctzll`
+ * for fast search of the first set bit index in a 64-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..63).
- * @param[in] mask 64-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..63) will be stored.
+ * @param[in] mask 64-bit mask to scan for set bits.
  *
- * @warning Если `mask` равен 0, поведение не определено.
+ * @warning Behavior is undefined if `mask` is 0.
  */
 #    define eya_bit_scan_forward64(index, mask) (*(index) = __builtin_ctzll(mask))
 
 /**
  * @def eya_bit_scan_reverse64
- * @brief Находит индекс последнего установленного бита
- *        (старшего разряда) в 64-битной маске (GCC/Clang).
+ * @brief Finds the index of the last set bit 
+ *        (most significant bit) in a 64-bit mask (GCC/Clang).
  *
- * Использует встроенную функцию компилятора `__builtin_clzll`
- * для быстрого поиска индекса последнего установленного бита в 64-битном числе.
+ * Uses the compiler intrinsic `__builtin_clzll`
+ * for fast search of the last set bit index in a 64-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..63).
- * @param[in] mask 64-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..63) will be stored.
+ * @param[in] mask 64-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, поведение не определено.
+ * @note Behavior is undefined if `mask` is 0.
  */
 #    define eya_bit_scan_reverse64(index, mask) (*(index) = 63 - __builtin_clzll(mask))
 
 /**
  * @def eya_bit_scan_forward32
- * @brief Находит индекс первого установленного бита
- *        (младшего разряда) в 32-битной маске (GCC/Clang).
+ * @brief Finds the index of the first set bit 
+ *        (least significant bit) in a 32-bit mask (GCC/Clang).
  *
- * Использует встроенную функцию компилятора `__builtin_ctz`
- * для быстрого поиска индекса первого установленного бита в 32-битном числе.
+ * Uses the compiler intrinsic `__builtin_ctz`
+ * for fast search of the first set bit index in a 32-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..31).
- * @param[in] mask 32-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..31) will be stored.
+ * @param[in] mask 32-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, поведение не определено.
+ * @note Behavior is undefined if `mask` is 0.
  */
 #    define eya_bit_scan_forward32(index, mask) (*(index) = __builtin_ctz(mask))
 
 /**
  * @def eya_bit_scan_reverse32
- * @brief Находит индекс последнего установленного бита
- *        (старшего разряда) в 32-битной маске (GCC/Clang).
+ * @brief Finds the index of the last set bit 
+ *        (most significant bit) in a 32-bit mask (GCC/Clang).
  *
- * Использует встроенную функцию компилятора `__builtin_clz` для быстрого поиска
- * индекса последнего установленного бита в 32-битном числе.
+ * Uses the compiler intrinsic `__builtin_clz` for fast search
+ * of the last set bit index in a 32-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..31).
- * @param[in] mask 32-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..31) will be stored.
+ * @param[in] mask 32-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, поведение не определено.
+ * @note Behavior is undefined if `mask` is 0.
  */
 #    define eya_bit_scan_reverse32(index, mask) (*(index) = 31 - __builtin_clz(mask))
 #elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
 
 /**
  * @def eya_bit_scan_forward64
- * @brief Находит индекс первого установленного бита
- *        (младшего разряда) в 64-битной маске (MSVC).
+ * @brief Finds the index of the first set bit 
+ *        (least significant bit) in a 64-bit mask (MSVC).
  *
- * Использует встроенную функцию MSVC `_BitScanForward64` для быстрого поиска
- * индекса первого установленного бита в 64-битном числе.
+ * Uses the MSVC intrinsic `_BitScanForward64` for fast search
+ * of the first set bit index in a 64-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..63).
- * @param[in] mask 64-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..63) will be stored.
+ * @param[in] mask 64-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, функция возвращает 0,
- *       но это не означает, что бит 0 установлен.
+ * @note If `mask` is 0, the function returns 0,
+ *       but this does not indicate that bit 0 is set.
  */
 #    define eya_bit_scan_forward64(index, mask) _BitScanForward64(index, mask)
 
 /**
  * @def eya_bit_scan_reverse64
- * @brief Находит индекс последнего установленного бита
- *        (старшего разряда) в 64-битной маске (MSVC).
+ * @brief Finds the index of the last set bit 
+ *        (most significant bit) in a 64-bit mask (MSVC).
  *
- * Использует встроенную функцию MSVC `_BitScanReverse64` для быстрого поиска
- * индекса последнего установленного бита в 64-битном числе.
+ * Uses the MSVC intrinsic `_BitScanReverse64` for fast search
+ * of the last set bit index in a 64-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..63).
- * @param[in] mask 64-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..63) will be stored.
+ * @param[in] mask 64-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, функция возвращает 0,
- *       но это не означает, что бит 0 установлен.
+ * @note If `mask` is 0, the function returns 0,
+ *       but this does not indicate that bit 0 is set.
  */
 #    define eya_bit_scan_reverse64(index, mask) _BitScanReverse64(index, mask)
 
 /**
  * @def eya_bit_scan_forward32
- * @brief Находит индекс первого установленного бита
- *        (младшего разряда) в 32-битной маске (MSVC).
+ * @brief Finds the index of the first set bit 
+ *        (least significant bit) in a 32-bit mask (MSVC).
  *
- * Использует встроенную функцию MSVC `_BitScanForward` для быстрого поиска
- * индекса первого установленного бита в 32-битном числе.
+ * Uses the MSVC intrinsic `_BitScanForward` for fast search
+ * of the first set bit index in a 32-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..31).
- * @param[in] mask 32-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..31) will be stored.
+ * @param[in] mask 32-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, функция возвращает 0,
- *       но это не означает, что бит 0 установлен.
+ * @note If `mask` is 0, the function returns 0,
+ *       but this does not indicate that bit 0 is set.
  */
 #    define eya_bit_scan_forward32(index, mask) _BitScanForward(index, mask)
 
 /**
  * @def eya_bit_scan_reverse32
- * @brief Находит индекс последнего установленного бита
- *        (старшего разряда) в 32-битной маске (MSVC).
+ * @brief Finds the index of the last set bit 
+ *        (most significant bit) in a 32-bit mask (MSVC).
  *
- * Использует встроенную функцию MSVC `_BitScanReverse` для быстрого поиска
- * индекса последнего установленного бита в 32-битном числе.
+ * Uses the MSVC intrinsic `_BitScanReverse` for fast search
+ * of the last set bit index in a 32-bit number.
  *
- * @param[out] index Указатель на переменную, в которую будет записан найденный индекс (0..31).
- * @param[in] mask 32-битная маска, в которой ищется установленный бит.
+ * @param[out] index Pointer to the variable where the found index (0..31) will be stored.
+ * @param[in] mask 32-bit mask to scan for set bits.
  *
- * @note Если `mask` равен 0, функция возвращает 0,
- *       но это не означает, что бит 0 установлен.
+ * @note If `mask` is 0, the function returns 0,
+ *       but this does not indicate that bit 0 is set.
  */
 #    define eya_bit_scan_reverse32(index, mask) _BitScanReverse(index, mask)
 #else
-#    pragma message("Warning: Compiler does not support bit scan function")
+#    pragma message("Warning: Compiler does not support bit scan functions")
 #endif
 
 #endif // EYA_BIT_UTIL_H

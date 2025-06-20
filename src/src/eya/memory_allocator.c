@@ -85,8 +85,8 @@ eya_memory_allocator_align_alloc(const eya_memory_allocator_t *self,
     void *unaligned_ptr = eya_memory_allocator_alloc(self, size + alignment_offset);
     eya_runtime_check(unaligned_ptr, EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED);
 
-    void *offset_ptr  = eya_ptr_add_offset_unsafe(void, unaligned_ptr, alignment_offset);
-    void *aligned_ptr = eya_addr_to_ptr(void, eya_ptr_align_down(offset_ptr, alignment_size));
+    void *offset_ptr           = eya_ptr_add_by_offset_unsafe(unaligned_ptr, alignment_offset);
+    void *aligned_ptr          = eya_ptr_align_down(offset_ptr, alignment_size);
     ((void **)aligned_ptr)[-1] = unaligned_ptr;
 
     return aligned_ptr;

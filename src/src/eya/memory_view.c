@@ -162,7 +162,7 @@ eya_memory_view_at_begin(const eya_memory_view_t *self, eya_uoffset_t offset)
                       EYA_RUNTIME_ERROR_OUT_OF_RANGE);
 
     const void *begin = eya_memory_view_get_begin(self);
-    return eya_ptr_add_offset_unsafe(const void, begin, offset);
+    return eya_ptr_add_by_offset_unsafe(begin, offset);
 }
 
 const void *

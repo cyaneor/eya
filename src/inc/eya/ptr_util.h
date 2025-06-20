@@ -1,31 +1,3 @@
-/**
- * @file ptr_util.h
- * @brief Utilities for pointer operations and arithmetic.
- *
- * This header provides a collection of macros to facilitate pointer manipulation,
- * including type casting, pointer arithmetic (addition, subtraction, shifting),
- * difference calculations, alignment checks, and range validations.
- *
- * The macros support both safe operations (with NULL pointer checks) and unsafe
- * operations (without checks) for performance-critical scenarios.
- *
- * Included features:
- * - Pointer type casting and conversion to address types.
- * - Calculating differences between pointers as signed or unsigned addresses.
- * - Shifting pointers by offsets, adding and subtracting pointers or offsets.
- * - Checking pointer alignment and aligning pointers up or down to a specified boundary.
- * - Validating pointer ranges and checking for overlaps or containment of ranges.
- *
- * Dependencies:
- * - addr_util.h: Address manipulation utilities.
- * - interval_util.h: Interval/range checking utilities.
- * - nullptr.h: nullptr definition.
- * - static_cast.h: Static cast macro.
- *
- * @note All macros assume pointers are convertible
- *       to integral address types and vice versa.
- */
-
 #ifndef EYA_PTR_UTIL_H
 #define EYA_PTR_UTIL_H
 
@@ -43,299 +15,317 @@
 #define eya_ptr_cast(T, ptr) eya_type_cast(T *, ptr)
 
 /**
- * @def eya_ptr_to_uaddr(ptr)
- * @brief Converts a pointer to an unsigned address representation.
- *
- * @param ptr Pointer to convert.
- * @return Unsigned address representation of the pointer.
+ * @def eya_ptr_is_null(ptr)
+ * @brief Checks if a pointer is null.
+ * @param ptr Pointer to check.
+ * @return true if pointer is nullptr, false otherwise.
  */
-#define eya_ptr_to_uaddr(ptr) eya_uaddr_from_ptr(ptr)
+#define eya_ptr_is_null(ptr) (ptr == nullptr)
 
 /**
- * @def eya_ptr_to_saddr(ptr)
- * @brief Converts a pointer to a signed address representation.
+ * @def eya_ptr_to_const_char
+ * @brief Converts a pointer to a const char pointer.
+ *
+ * This macro performs a type cast to convert any pointer type
+ * to a const char pointer type.
  *
  * @param ptr Pointer to convert.
- * @return Signed address representation of the pointer.
+ * @return Converted pointer of type const char*.
  */
-#define eya_ptr_to_saddr(ptr) eya_saddr_from_ptr(ptr)
+#define eya_ptr_to_const_char(ptr) eya_ptr_cast(const char, ptr)
 
 /**
- * @def eya_ptr_sdiff(ptr1, ptr2)
- * @brief Calculates the difference between two pointers as signed integers.
+ * @def eya_ptr_to_uaddr
+ * @brief Converts any pointer to an unsigned address type (eya_uaddr_t).
  *
+ * This macro first converts the pointer to const char* using eya_ptr_to_const_char,
+ * then performs a reinterpret cast to eya_uaddr_t.
+ *
+ * @param ptr Pointer to convert.
+ * @return Converted value of type eya_uaddr_t.
+ */
+#define eya_ptr_to_uaddr(ptr) eya_reinterpret_cast(eya_uaddr_t, eya_ptr_to_const_char(ptr))
+
+/**
+ * @def eya_ptr_to_saddr
+ * @brief Converts any pointer to a signed address type (eya_saddr_t).
+ *
+ * This macro first converts the pointer to const char* using eya_ptr_to_const_char,
+ * then performs a reinterpret cast to eya_saddr_t.
+ *
+ * @param ptr Pointer to convert.
+ * @return Converted value of type eya_saddr_t.
+ */
+#define eya_ptr_to_saddr(ptr) eya_reinterpret_cast(eya_saddr_t, eya_ptr_to_const_char(ptr))
+
+/**
+ * @def eya_ptr_sdiff
+ * @brief Calculates the signed difference between two pointers.
  * @param ptr1 First pointer.
  * @param ptr2 Second pointer.
- * @return Signed difference between ptr1 and ptr2.
+ * @return Signed difference between pointers as eya_saddr_t.
  */
 #define eya_ptr_sdiff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_saddr(ptr1), eya_ptr_to_saddr(ptr2))
 
 /**
- * @def eya_ptr_udiff(ptr1, ptr2)
- * @brief Calculates the difference between two pointers as unsigned addresses.
- *
+ * @def eya_ptr_udiff
+ * @brief Calculates the unsigned difference between two pointers.
  * @param ptr1 First pointer.
  * @param ptr2 Second pointer.
- * @return Unsigned difference between ptr1 and ptr2.
+ * @return Unsigned difference between pointers as eya_uaddr_t.
  */
 #define eya_ptr_udiff(ptr1, ptr2) eya_addr_diff(eya_ptr_to_uaddr(ptr1), eya_ptr_to_uaddr(ptr2))
 
 /**
- * @def eya_ptr_add_offset_unsafe(T, ptr, offset)
- * @brief Shifts a pointer by an offset without NULL pointer check.
- *
- * @param T Target pointer type.
- * @param ptr Pointer to shift.
- * @param offset Offset in bytes to add.
- * @return Shifted pointer of type T*.
- */
-#define eya_ptr_add_offset_unsafe(T, ptr, offset)                                                  \
-    eya_addr_to_ptr(T, (eya_ptr_to_uaddr(ptr) + offset))
-
-/**
- * @def eya_ptr_add_unsafe(T, ptr1, ptr2)
- * @brief Adds the unsigned address of ptr2 to ptr1 without NULL checks.
- *
- * @param T Target pointer type.
- * @param ptr1 Base pointer.
- * @param ptr2 Pointer whose address is added as offset.
- * @return Resulting pointer of type T*.
- */
-#define eya_ptr_add_unsafe(T, ptr1, ptr2) eya_ptr_add_offset_unsafe(T, ptr1, eya_ptr_to_uaddr(ptr2))
-
-/**
- * @def eya_ptr_add_offset(T, ptr, offset)
- * @brief Safely shifts a pointer by an offset with NULL pointer check.
- *
- * @param T Target pointer type.
- * @param ptr Pointer to shift.
- * @param offset Offset in bytes to add.
- * @return Shifted pointer of type T*, or nullptr if ptr is nullptr.
- */
-#define eya_ptr_add_offset(T, ptr, offset)                                                         \
-    (ptr == nullptr ? ptr : eya_ptr_add_offset_unsafe(T, ptr, offset))
-
-/**
- * @def eya_ptr_add(T, ptr1, ptr2)
- * @brief Safely adds the unsigned address of ptr2 to ptr1 with NULL check.
- *
- * @param T Target pointer type.
- * @param ptr1 Base pointer.
- * @param ptr2 Pointer whose address is added as offset.
- * @return Resulting pointer of type T*, or nullptr if ptr1 is nullptr.
- */
-#define eya_ptr_add(T, ptr1, ptr2) eya_ptr_add_offset(T, ptr1, eya_ptr_to_uaddr(ptr2))
-
-/**
- * @def eya_ptr_sub_offset_unsafe(T, ptr, offset)
- * @brief Subtracts an offset from a pointer without NULL pointer check.
- *
- * @param T Target pointer type.
- * @param ptr Pointer to subtract from.
- * @param offset Offset in bytes to subtract.
- * @return Resulting pointer of type T*.
- */
-#define eya_ptr_sub_offset_unsafe(T, ptr, offset)                                                  \
-    eya_addr_to_ptr(T, (eya_ptr_to_uaddr(ptr) - offset))
-
-/**
- * @def eya_ptr_sub_unsafe(T, ptr1, ptr2)
- * @brief Subtracts the address of ptr2 from ptr1 without NULL checks.
- *
- * @param T Target pointer type.
- * @param ptr1 Pointer to subtract from.
- * @param ptr2 Pointer whose address is subtracted.
- * @return Resulting pointer of type T*.
- */
-#define eya_ptr_sub_unsafe(T, ptr1, ptr2) eya_ptr_sub_offset_unsafe(T, ptr1, eya_ptr_to_uaddr(ptr2))
-
-/**
- * @def eya_ptr_sub_offset(T, ptr, offset)
- * @brief Safely subtracts an offset from a pointer with NULL pointer check.
- *
- * @param T Target pointer type.
- * @param ptr Pointer to subtract from.
- * @param offset Offset in bytes to subtract.
- * @return Resulting pointer of type T*, or nullptr if ptr is nullptr.
- */
-#define eya_ptr_sub_offset(T, ptr, offset)                                                         \
-    (ptr == nullptr ? ptr : eya_ptr_sub_offset_unsafe(T, ptr, offset))
-
-/**
- * @def eya_ptr_sub(T, ptr1, ptr2)
- * @brief Safely subtracts the address of ptr2 from ptr1 with NULL check.
- *
- * @param T Target pointer type.
- * @param ptr1 Pointer to subtract from.
- * @param ptr2 Pointer whose address is subtracted.
- * @return Resulting pointer of type T*, or nullptr if ptr1 is nullptr.
- */
-#define eya_ptr_sub(T, ptr1, ptr2) eya_ptr_sub_offset(T, ptr1, eya_ptr_to_uaddr(ptr2))
-
-/**
- * @def eya_ptr_align_offset
- * @brief Computes the offset of a pointer within an alignment boundary
- *
- * This macro calculates the offset of a pointer
- * within the specified alignment boundary using bitwise operations.
- *
- * The operation is equivalent to:
- * `(uintptr_t)ptr % align` but more efficient when align is a power of two.
- *
- * @note Alignment value must be a power of two for correct results.
- *       The implementation uses `addr & (align - 1)` which is
- *       equivalent to modulo operation for power-of-two values.
- *
- * @param ptr Pointer to compute offset for (may be any pointer type)
- * @param align Alignment boundary (must be power of two)
- * @return Offset of the pointer within the alignment block (0 to align-1)
- *
- * @see eya_addr_align_offset
- */
-#define eya_ptr_align_offset(ptr, align) eya_addr_align_offset(eya_ptr_to_uaddr(ptr), align)
-
-/**
- * @def eya_ptr_is_aligned
- * @brief Checks if a pointer meets the specified alignment requirement
- *
- * This macro verifies whether a pointer is aligned to the specified boundary
- * by converting it to an address and checking its alignment.
- *
- * @note Alignment value must be a power of two for correct results.
- *
- * @param ptr Pointer to verify
- * @param align Alignment boundary to check against (must be power of two)
- * @return Non-zero (true) if pointer is aligned, zero (false) otherwise
- *
- * @see eya_addr_is_aligned
+ * @def eya_ptr_is_aligned(ptr, align)
+ * @brief Checks if a pointer is aligned to the specified boundary.
+ * @param ptr Pointer to check.
+ * @param align Alignment boundary to check against.
+ * @return true if the pointer is aligned, false otherwise.
  */
 #define eya_ptr_is_aligned(ptr, align) eya_addr_is_aligned(eya_ptr_to_uaddr(ptr), align)
 
 /**
- * @def eya_ptr_align_up
- * @brief Aligns a pointer's address upward to the specified boundary
- *
- * This macro converts the given pointer to an integer address
- * and adjusts it to the nearest higher address that is a multiple
- * of the alignment value using the eya_addr_align_up macro.
- *
- * @warning Requires power-of-two alignment value for correct operation.
- *          Using non-power-of-two values will produce incorrect results.
- *
- * @param[in] ptr   Pointer to align (will be converted to an integer address).
- * @param[in] align Alignment boundary (must be a power of two).
- * @return Adjusted integer address aligned upward to the specified boundary.
- *
- * @note The pointer is converted to an address using eya_ptr_to_uaddr before alignment.
- *       This macro is efficient due to bitwise operations used internally.
- */
-#define eya_ptr_align_up(ptr, align) eya_addr_align_up(eya_ptr_to_uaddr(ptr), align)
-
-/**
- * @def eya_ptr_align_down
- * @brief Aligns a pointer's address downward to the specified boundary
- *
- * This macro converts the given pointer to an integer address
- * and adjusts it to the nearest lower address that is a multiple
- * of the alignment value using the eya_addr_align_down macro.
- *
- * @warning Requires power-of-two alignment value for correct operation.
- *          Using non-power-of-two values will produce incorrect results.
- *
- * @param[in] ptr   Pointer to align (will be converted to an integer address).
- * @param[in] align Alignment boundary (must be a power of two).
- * @return Adjusted integer address aligned downward to the specified boundary.
- *
- * @note The pointer is converted to an address using eya_ptr_to_uaddr before alignment.
- *       This macro is efficient due to bitwise operations used internally.
- */
-#define eya_ptr_align_down(ptr, align) eya_addr_align_down(eya_ptr_to_uaddr(ptr), align)
-
-/**
- * @def eya_ptr_align_up_by_size(T, ptr, begin, size)
- * @brief Aligns a pointer upwards to the next multiple of `size` bytes relative to `begin`.
- *
- * @param T         Target pointer type.
- * @param ptr       Pointer to align.
- * @param begin     Base address for alignment calculation.
- * @param size      Alignment size in bytes (must be a power of two).
- * @return          Aligned pointer of type `T*`.
- */
-#define eya_ptr_align_up_by_size(T, ptr, begin, size)                                              \
-    eya_ptr_add_offset_unsafe(T, begin, eya_addr_align_up(eya_ptr_sdiff(ptr, begin), size))
-
-/**
- * @def eya_ptr_align_up_by_type(T, ptr, begin)
- * @brief Aligns a pointer upwards to the next multiple of type's size relative to begin.
- *
- * @param T Target type whose size is used for alignment calculation.
- * @param ptr Pointer to be aligned.
- * @param begin Base address for alignment calculation.
- * @return Aligned pointer of type T*.
- */
-#define eya_ptr_align_up_by_type(T, ptr, begin) eya_ptr_align_up_by_size(T, ptr, begin, sizeof(T))
-
-/**
- * @def eya_ptr_align_down_by_size(T, ptr, begin, size)
- * @brief Aligns a pointer downwards to the previous multiple of `size` bytes relative to `begin`.
- *
- * @param T         Target pointer type.
- * @param ptr       Pointer to align.
- * @param begin     Base address for alignment calculation.
- * @param size      Alignment size in bytes (must be a power of two).
- * @return          Aligned pointer of type `T*`.
- */
-#define eya_ptr_align_down_by_size(T, ptr, begin, size)                                            \
-    eya_ptr_sub_offset_unsafe(T, ptr, eya_addr_align_offset(eya_ptr_sdiff(ptr, begin), size))
-
-/**
- * @def eya_ptr_align_down_by_type(T, ptr, begin)
- * @brief Aligns a pointer downwards to the previous multiple of type's size relative to begin.
- *
- * @param T Target type whose size is used for alignment calculation.
- * @param ptr Pointer to be aligned.
- * @param begin Base address for alignment calculation.
- * @return Aligned pointer of type T*.
- */
-#define eya_ptr_align_down_by_type(T, ptr, begin)                                                  \
-    eya_ptr_align_down_by_size(T, ptr, begin, sizeof(T))
-
-/**
  * @def eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end)
- * @brief Checks if two ranges do not overlap.
- *
- * @param r1_begin Start pointer of first range.
- * @param r2_begin Start pointer of second range.
- * @param r2_end End pointer of second range.
- * @return Non-zero if no overlap, zero if ranges overlap.
- *
- * @note Assumes first range ends before r2_begin or starts after r2_end.
+ * @brief Checks if two pointer ranges do not overlap.
+ * @param r1_begin Beginning of first range.
+ * @param r2_begin Beginning of second range.
+ * @param r2_end End of second range.
+ * @return true if ranges do not overlap, false otherwise.
  */
 #define eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end)                                      \
     ((r1_begin <= r2_begin) || (r2_end <= r1_begin))
 
 /**
  * @def eya_ptr_ranges_is_overlap(r1_begin, r2_begin, r2_end)
- * @brief Checks if two ranges overlap.
- *
- * @param r1_begin Start pointer of first range.
- * @param r2_begin Start pointer of second range.
- * @param r2_end End pointer of second range.
- * @return Non-zero if ranges overlap, zero otherwise.
+ * @brief Checks if two pointer ranges overlap.
+ * @param r1_begin Beginning of first range.
+ * @param r2_begin Beginning of second range.
+ * @param r2_end End of second range.
+ * @return true if ranges overlap, false otherwise.
  */
 #define eya_ptr_ranges_is_overlap(r1_begin, r2_begin, r2_end)                                      \
     (!eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end))
 
 /**
- * @def eya_ptr_range_element_count(begin, end, type_size)
- * @brief Calculates the number of elements of given size in a pointer range.
+ * @def eya_ptr_add_by_offset_unsafe(ptr, offset)
+ * @brief Adds an offset to a pointer without safety checks (unsafe operation)
+ * @details Performs pointer arithmetic by:
+ *          1. Converting the pointer to an unsigned address (eya_uaddr_t)
+ *          2. Adding the specified offset
+ *          3. Converting back to a void pointer
  *
- * @param begin Range start pointer.
- * @param end Range end pointer.
- * @param type_size Size of one element in bytes.
- * @return Number of elements in the range.
+ * @warning This is an unsafe operation that does not validate:
+ *          - Pointer validity
+ *          - Offset bounds
+ *          - Resulting address alignment
+ *          - Potential overflow conditions
+ *
+ * @param ptr Base pointer to offset from
+ * @param offset Unsigned offset to add (in bytes)
+ * @return void* pointer at the calculated address
  */
-#define eya_ptr_range_element_count(begin, end, type_size)                                         \
-    (eya_ptr_addr_diff(end, begin) / (type_size))
+#define eya_ptr_add_by_offset_unsafe(ptr, offset)                                                  \
+    eya_addr_to_void(eya_math_add(eya_ptr_to_uaddr(ptr), offset))
+
+/**
+ * @def eya_ptr_sub_by_offset_unsafe(ptr, offset)
+ * @brief Subtracts an offset from a pointer without safety checks (unsafe operation)
+ * @details Performs pointer arithmetic by:
+ *          1. Converting the pointer to an unsigned address (eya_uaddr_t)
+ *          2. Subtracting the specified offset
+ *          3. Converting back to a void pointer
+ *
+ * @warning This is an unsafe operation that does not validate:
+ *          - Pointer validity
+ *          - Offset bounds (must not be greater than original address)
+ *          - Resulting address alignment
+ *          - Potential underflow conditions
+ *          - Whether the resulting pointer is within valid memory bounds
+ *
+ * @param ptr Base pointer to offset from (must be non-null)
+ * @param offset Unsigned offset to subtract (in bytes, must be ≤ original address)
+ * @return void* pointer at the calculated address
+ */
+#define eya_ptr_sub_by_offset_unsafe(ptr, offset)                                                  \
+    eya_addr_to_void(eya_math_sub(eya_ptr_to_uaddr(ptr), offset))
+
+/**
+ * @def eya_ptr_add_by_offset(ptr, offset)
+ * @brief Safely adds an offset to a pointer with null-checking
+ * @details Performs pointer arithmetic with safety checks:
+ *          1. First validates pointer is not null (returns null if input is null)
+ *          2. Otherwise performs addition via eya_ptr_add_by_offset_unsafe()
+ *
+ *          Provides basic protection against:
+ *          - Null pointer dereferencing
+ *          - Some invalid memory access cases
+ *
+ * @warning Still requires caution about:
+ *          - Offset magnitude (potential overflow)
+ *          - Resulting address validity
+ *          - Memory region boundaries
+ *          - Alignment requirements
+ *
+ * @param ptr Base pointer to offset from (may be null)
+ * @param offset Unsigned offset to add (in bytes)
+ * @return void* pointer at the calculated address, or null if input was null
+ *
+ * @see eya_ptr_add_by_offset_unsafe() For the unsafe version without null checks
+ * @see eya_ptr_is_null() Used for the null check
+ * @note Safer than unsafe version but still doesn't validate memory bounds
+ */
+#define eya_ptr_add_by_offset(ptr, offset)                                                         \
+    (eya_ptr_is_null(ptr) ? ptr : eya_ptr_add_by_offset_unsafe(ptr, offset))
+
+/**
+ * @def eya_ptr_sub_by_offset(ptr, offset)
+ * @brief Safely subtracts an offset from a pointer with null-checking
+ * @details Performs pointer subtraction with safety checks:
+ *          1. First checks if pointer is null (returns null if true)
+ *          2. Otherwise performs subtraction via eya_ptr_sub_by_offset_unsafe()
+ *
+ *          This provides basic protection against:
+ *          - Null pointer dereferencing
+ *          - Some invalid memory access cases
+ *
+ * @warning Still requires caution about:
+ *          - Offset bounds (must not be greater than original address)
+ *          - Resulting address validity
+ *          - Potential underflow conditions
+ *          - Memory region boundaries
+ *
+ * @param ptr Base pointer to offset from (may be null)
+ * @param offset Unsigned offset to subtract (in bytes, must be ≤ original address)
+ * @return void* pointer at the calculated address, or null if input was null
+ *
+ * @see eya_ptr_sub_by_offset_unsafe() For the unsafe version without null checks
+ * @see eya_ptr_is_null() Used for the null check
+ */
+#define eya_ptr_sub_by_offset(ptr, offset)                                                         \
+    (eya_ptr_is_null(ptr) ? ptr : eya_ptr_sub_by_offset_unsafe(ptr, offset))
+
+/**
+ * @def eya_ptr_add_unsafe(ptr1, ptr2)
+ * @brief Performs unsafe pointer addition (no bounds checking)
+ * @details Adds two pointers by:
+ *          1. Converting ptr2 to numeric address
+ *          2. Adding to ptr1 as an offset
+ *
+ * @warning This is an unsafe operation that:
+ *          - Performs no null checking
+ *          - Doesn't validate resulting address
+ *          - May cause overflow
+ *          - Doesn't check alignment
+ *
+ * @param ptr1 Base pointer
+ * @param ptr2 Pointer to convert to offset
+ * @return void* result of addition
+ * @see eya_ptr_add_by_offset_unsafe()
+ */
+#define eya_ptr_add_unsafe(ptr1, ptr2) eya_ptr_add_by_offset_unsafe(ptr1, eya_ptr_to_uaddr(ptr2))
+
+/**
+ * @def eya_ptr_sub_unsafe(ptr1, ptr2)
+ * @brief Performs unsafe pointer subtraction (no bounds checking)
+ * @details Subtracts pointers by:
+ *          1. Converting ptr2 to numeric address
+ *          2. Subtracting from ptr1 as offset
+ *
+ * @warning This is an unsafe operation that:
+ *          - Performs no null checking
+ *          - May cause underflow
+ *          - Doesn't validate resulting address
+ *
+ * @param ptr1 Base pointer
+ * @param ptr2 Pointer to convert to offset
+ * @return void* result of subtraction
+ * @see eya_ptr_sub_by_offset_unsafe()
+ */
+#define eya_ptr_sub_unsafe(ptr1, ptr2) eya_ptr_sub_by_offset_unsafe(ptr1, eya_ptr_to_uaddr(ptr2))
+
+/**
+ * @def eya_ptr_add(ptr1, ptr2)
+ * @brief Safer pointer addition with null checking
+ * @details Adds pointers with null check:
+ *          1. Returns null if ptr1 is null
+ *          2. Otherwise converts ptr2 to offset and adds
+ *
+ *          Still requires caution about:
+ *          - Resulting address validity
+ *          - Potential overflow
+ *
+ * @param ptr1 Base pointer (may be null)
+ * @param ptr2 Pointer to convert to offset
+ * @return void* result or null if ptr1 was null
+ * @see eya_ptr_add_by_offset()
+ */
+#define eya_ptr_add(ptr1, ptr2) eya_ptr_add_by_offset(ptr1, eya_ptr_to_uaddr(ptr2))
+
+/**
+ * @def eya_ptr_sub(ptr1, ptr2)
+ * @brief Safer pointer subtraction with null checking
+ * @details Subtracts pointers with null check:
+ *          1. Returns null if ptr1 is null
+ *          2. Otherwise converts ptr2 to offset and subtracts
+ *
+ *          Still requires caution about:
+ *          - Resulting address validity
+ *          - Potential underflow
+ *
+ * @param ptr1 Base pointer (may be null)
+ * @param ptr2 Pointer to convert to offset
+ * @return void* result or null if ptr1 was null
+ * @see eya_ptr_sub_by_offset()
+ */
+#define eya_ptr_sub(ptr1, ptr2) eya_ptr_sub_by_offset(ptr1, eya_ptr_to_uaddr(ptr2))
+
+/**
+ * @def eya_ptr_align_up(ptr, align)
+ * @brief Aligns a pointer up to the next specified boundary
+ * @details Adjusts the pointer to the nearest higher (or equal) memory address
+ *          that matches the specified alignment boundary. The operation:
+ *          1. Converts pointer to numeric address
+ *          2. Applies eya_addr_align_up()
+ *          3. Converts back to void pointer
+ *
+ *          Example usage: Ensuring memory allocations meet alignment requirements
+ *
+ * @param ptr Pointer to align (may be unaligned)
+ * @param align Alignment boundary (must be power of two)
+ * @return void* Aligned pointer (always >= original pointer)
+ *
+ * @see eya_addr_align_up() For the underlying alignment implementation
+ * @note
+ * - Alignment must be power of two
+ * - Null pointer input returns aligned null (0)
+ * - Result always greater than or equal to input
+ */
+#define eya_ptr_align_up(ptr, align)                                                               \
+    eya_addr_to_void(eya_addr_align_up(eya_ptr_to_uaddr(ptr), align))
+
+/**
+ * @def eya_ptr_align_down(ptr, align)
+ * @brief Aligns a pointer down to the previous specified boundary
+ * @details Adjusts the pointer to the nearest lower (or equal) memory address
+ *          that matches the specified alignment boundary. The operation:
+ *          1. Converts pointer to numeric address
+ *          2. Applies eya_addr_align_down()
+ *          3. Converts back to void pointer
+ *
+ *          Example usage: Finding start of aligned memory regions
+ *
+ * @param ptr Pointer to align (may be unaligned)
+ * @param align Alignment boundary (must be power of two)
+ * @return void* Aligned pointer (always <= original pointer)
+ *
+ * @see eya_addr_align_down() For the underlying alignment implementation
+ * @note
+ * - Alignment must be power of two
+ * - Null pointer input returns aligned null (0)
+ * - Result always less than or equal to input
+ */
+#define eya_ptr_align_down(ptr, align)                                                             \
+    eya_addr_to_void(eya_addr_align_down(eya_ptr_to_uaddr(ptr), align))
 
 #endif // EYA_PTR_UTIL_H
