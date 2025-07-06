@@ -50,6 +50,7 @@ add_executable(${PROJECT_NAME}
         src/memory_raw.cpp
         src/memory_view.cpp
         src/numeric_limits.cpp
+        src/memory_allocator.cpp
 )
 
 # -------------------------------------------------------------------------------------------- #

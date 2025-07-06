@@ -23,16 +23,15 @@ eya_memory_allocator_get_dealloc_fn(const eya_memory_allocator_t *self)
 void *
 eya_memory_allocator_alloc(const eya_memory_allocator_t *self, eya_usize_t size)
 {
-    eya_runtime_check(self, EYA_RUNTIME_ERROR_ZERO_MEMORY_SIZE);
-
+    eya_runtime_check(size, EYA_RUNTIME_ERROR_ZERO_MEMORY_SIZE);
+    
     eya_memory_allocator_alloc_fn *alloc_fn = eya_memory_allocator_get_alloc_fn(self);
     eya_runtime_check(alloc_fn, EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED);
 
     void *ptr = alloc_fn(size);
+    eya_runtime_check(ptr, EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED);
 
 #if EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
-    // Если включена опция заполнения нулями после выделения памяти,
-    // заполняем выделенную память нулями от указателя ptr до конца выделенной области
     eya_memory_set(ptr, size, 0);
 #endif
 
@@ -66,8 +65,6 @@ eya_memory_allocator_realloc(const eya_memory_allocator_t *self,
     }
 
     void *new_ptr = eya_memory_allocator_alloc(self, new_size);
-    eya_runtime_check(new_ptr, EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED);
-
     eya_memory_copy(new_ptr, new_size, old_ptr, old_size);
     eya_memory_allocator_free(self, old_ptr);
 
@@ -82,7 +79,10 @@ eya_memory_allocator_align_alloc(const eya_memory_allocator_t *self,
     eya_runtime_check(eya_math_is_power_of_two(alignment_size), EYA_RUNTIME_ERROR_NOT_POWER_OF_TWO);
     eya_usize_t alignment_offset = EYA_VOID_P_SIZE + eya_math_sub_one(alignment_size);
 
-    void *unaligned_ptr = eya_memory_allocator_alloc(self, size + alignment_offset);
+    eya_usize_t total_size = size + alignment_offset;
+    eya_runtime_check(total_size >= size, EYA_RUNTIME_ERROR_OVERFLOW);
+
+    void *unaligned_ptr = eya_memory_allocator_alloc(self, total_size);
     eya_runtime_check(unaligned_ptr, EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED);
 
     void *offset_ptr           = eya_ptr_add_by_offset_unsafe(unaligned_ptr, alignment_offset);

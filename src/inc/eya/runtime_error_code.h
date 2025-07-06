@@ -33,6 +33,15 @@ typedef enum eya_runtime_error_code
     EYA_RUNTIME_ERROR_NULL_POINTER,
 
     /**
+     * @var EYA_RUNTIME_ERROR_OVERFLOW
+     * @brief Arithmetic overflow error.
+     *
+     * Indicates an arithmetic operation resulted in a value that exceeds the
+     * allowable range for the data type, causing an overflow condition.
+     */
+    EYA_RUNTIME_ERROR_OVERFLOW,
+
+    /**
      * @var EYA_RUNTIME_ERROR_INTERRUPT
      * @brief Execution interruption error.
      *
