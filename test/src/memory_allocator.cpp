@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <eya/memory_allocator.h>
 #include <gtest/gtest.h>
 
