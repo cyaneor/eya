@@ -142,7 +142,7 @@
  * 
  * Example:
  * @code
- * if (eya_math_is_positive(balance)) { /* positive * / }
+ * if (eya_math_is_positive(balance)) { positive }
  * @endcode
  */
 #define eya_math_is_positive(x) ((x) > 0)
@@ -154,7 +154,7 @@
  * 
  * Example:
  * @code
- * if (eya_math_is_negative(delta)) { /* negative * / }
+ * if (eya_math_is_negative(delta)) { negative }
  * @endcode
  */
 #define eya_math_is_negative(x) ((x) < 0)
@@ -347,7 +347,7 @@
  * 
  * Example:
  * @code
- * if (eya_math_is_even(x)) { /* even handling * / }
+ * if (eya_math_is_even(x)) { even handling }
  * @endcode
  */
 #define eya_math_is_even(n) (eya_math_mod(n, 2) == 0)
@@ -359,7 +359,7 @@
  * 
  * Example:
  * @code
- * if (eya_math_is_odd(id)) { /* odd case * / }
+ * if (eya_math_is_odd(id)) { odd case }
  * @endcode
  */
 #define eya_math_is_odd(n) (eya_math_mod(n, 2) != 0)
@@ -405,7 +405,7 @@
  * 
  * Example:
  * @code
- * if (eya_math_is_power_of_two(buffer_size)) { /* valid size * / }
+ * if (eya_math_is_power_of_two(buffer_size)) { valid size }
  * @endcode
  */
 #define eya_math_is_power_of_two(x) (eya_math_is_positive(x) && eya_math_has_single_bit(x))
