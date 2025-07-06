@@ -3,9 +3,11 @@
  * @brief Header file defining signed
  *        and unsigned size types (`eya_ssize_t` and `eya_usize_t`).
  *
- * This file provides definitions for `eya_ssize_t` and `eya_usize_t` types,
- * along with their minimum and maximum values based on the size specified
- * by the `EYA_SIZE_T_SIZE` macro.
+ * This header defines platform-appropriate size types (signed and unsigned)
+ * with their corresponding minimum and maximum values.
+ *
+ * The implementation varies depending on the platform (Windows vs others)
+ * and can be customized by defining EYA_SIZE_T_SIZE.
  */
 
 #ifndef EYA_SIZE_H
@@ -13,7 +15,85 @@
 
 #include "numeric_fixed.h"
 
-#ifdef EYA_SIZE_T_SIZE
+#ifndef EYA_SIZE_T_SIZE
+#    if EYA_COMPILER_OS_TYPE == EYA_COMPILER_OS_TYPE_WINDOWS
+#        define EYA_SIZE_T_SIZE EYA_LLONG_T_SIZE
+
+/**
+ * @def EYA_SSIZE_T_MIN
+ * @brief Minimum value for Windows signed size type
+ */
+#        define EYA_SSIZE_T_MIN EYA_SLLONG_T_MIN
+
+/**
+ * @def EYA_SSIZE_T_MAX
+ * @brief Maximum value for Windows signed size type
+ */
+#        define EYA_SSIZE_T_MAX EYA_SLLONG_T_MAX
+
+/**
+ * @typedef eya_ssize_t
+ * @brief Signed integer type for representing sizes or counts (Windows)
+ */
+typedef eya_s64_t eya_ssize_t;
+
+/**
+ * @def EYA_USIZE_T_MIN
+ * @brief Minimum value for Windows unsigned size type
+ */
+#        define EYA_USIZE_T_MIN EYA_ULLONG_T_MIN
+
+/**
+ * @def EYA_USIZE_T_MAX
+ * @brief Maximum value for Windows unsigned size type
+ */
+#        define EYA_USIZE_T_MAX EYA_ULLONG_T_MAX
+
+/**
+ * @typedef eya_usize_t
+ * @brief Unsigned integer type for representing sizes or counts (Windows)
+ */
+typedef eya_u64_t eya_usize_t;
+#    else
+#        define EYA_SIZE_T_SIZE EYA_LONG_T_SIZE
+
+/**
+ * @def EYA_SSIZE_T_MIN
+ * @brief Minimum value for platform's native signed long size type
+ */
+#        define EYA_SSIZE_T_MIN EYA_SLONG_T_MIN
+
+/**
+ * @def EYA_SSIZE_T_MAX
+ * @brief Maximum value for platform's native signed long size type
+ */
+#        define EYA_SSIZE_T_MAX EYA_SLONG_T_MAX
+
+/**
+ * @typedef eya_ssize_t
+ * @brief Platform's native signed long type for representing sizes or counts
+ */
+typedef eya_slong_t eya_ssize_t;
+
+/**
+ * @def EYA_USIZE_T_MIN
+ * @brief Minimum value for platform's native unsigned long size type
+ */
+#        define EYA_USIZE_T_MIN EYA_ULONG_T_MIN
+
+/**
+ * @def EYA_USIZE_T_MAX
+ * @brief Maximum value for platform's native unsigned long size type
+ */
+#        define EYA_USIZE_T_MAX EYA_ULONG_T_MAX
+
+/**
+ * @typedef eya_usize_t
+ * @brief Platform's native unsigned long type for representing sizes or counts
+ */
+typedef eya_ulong_t eya_usize_t;
+#    endif
+#else
 #    if EYA_SIZE_T_SIZE == 8
 #        ifndef EYA_SSIZE_T_MIN
 /**

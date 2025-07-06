@@ -1,5 +1,4 @@
 #include <eya/runtime_allocator.h>
-#include <eya/memory_allocator_initializer.h>
 
 /**
  * @brief Defines a thread-local runtime memory allocator,
@@ -30,10 +29,10 @@
 #    include <eya/ptr_util.h>
 
 EYA_ATTRIBUTE(THREAD_LOCAL)
-eya_memory_allocator_t m_runtime_allocator = eya_memory_allocator_initializer(malloc, free);
+eya_memory_allocator_t m_runtime_allocator = {malloc, free};
 #else
 EYA_ATTRIBUTE(THREAD_LOCAL)
-eya_memory_allocator_t m_runtime_allocator = eya_memory_allocator_empty_initializer();
+eya_memory_allocator_t m_runtime_allocator = {};
 #endif // EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 
 eya_memory_allocator_t *

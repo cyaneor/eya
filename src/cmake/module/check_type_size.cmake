@@ -23,7 +23,7 @@ check_type_size("long" SIZEOF_LONG)
 check_type_size("long long" SIZEOF_LLONG)
 
 # Check the size of the type "Size_t" and retain the result in the variable sizeof_size
-check_type_size("size_t" SIZEOF_SIZE)
+# check_type_size("size_t" SIZEOF_SIZE)
 
 # Check the size of the type "__int128" and retain the result in the variable sizeof_int128
 check_type_size("__int128" SIZEOF_INT128)
@@ -70,11 +70,11 @@ if (${HAVE_SIZEOF_LLONG})
     list(APPEND EYA_TARGET_PUBLIC_COMPILE_DEFINITIONS EYA_LLONG_T_SIZE=${SIZEOF_LLONG})
 endif ()
 
-# If the size of the type SIZE_T was determined, 
+# If the size of the type SIZE_T was determined,
 # add the definition for its size to the compilation list
-if (${HAVE_SIZEOF_SIZE})
-    list(APPEND EYA_TARGET_PUBLIC_COMPILE_DEFINITIONS EYA_SIZE_T_SIZE=${SIZEOF_SIZE})
-endif ()
+# if (${HAVE_SIZEOF_SIZE})
+#     list(APPEND EYA_TARGET_PUBLIC_COMPILE_DEFINITIONS EYA_SIZE_T_SIZE=${SIZEOF_SIZE})
+# endif ()
 
 # If the size of the __int128 type was determined, 
 # add the definition for its size to the compilation list
