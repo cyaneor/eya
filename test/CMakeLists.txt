@@ -2,8 +2,7 @@
 # Uses parent project name with '_test' suffix for clear identification
 # Sets C++ as the project language and specifies project version
 project(${CMAKE_PROJECT_NAME}_test
-        LANGUAGES CXX
-        VERSION 3.14)
+        LANGUAGES CXX)
 
 # -------------------------------------------------------------------------------------------- #
 # Compiler Configuration                                                                       #

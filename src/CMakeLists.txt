@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(${CMAKE_PROJECT_NAME}_lib
         VERSION ${PROJECT_VERSION}
-        DESCRIPTION "Efficient Yet Abstractive"
+        DESCRIPTION ${PROJECT_DESCRIPTION}
         LANGUAGES C)
 
 # -------------------------------------------------------------------------------------------- #

@@ -5,7 +5,8 @@ cmake_minimum_required(VERSION 3.12)
 # Initialize project named "eya"
 # Defines basic project settings and controls build targets
 project(eya
-        VERSION 1.0.0)
+        VERSION 1.0.0
+        DESCRIPTION "Efficient Yet Abstractive")
 
 # Option to control test project builds
 # Can be modified via GUI (ccmake/cmake-gui) or command line (-DEYA_BUILD_TESTS=OFF)
