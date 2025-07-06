@@ -1,9 +1,11 @@
-#include <cstdlib>
 #include <eya/memory_allocator.h>
+#include <eya/memory_allocator_initializer.h>
 #include <gtest/gtest.h>
 
 TEST(eya_memory_allocator_get_alloc_fn, returns_correct_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_memory_allocator_alloc_fn *result =
       eya_memory_allocator_get_alloc_fn(&allocator);
   EXPECT_EQ(result, malloc);
@@ -15,7 +17,9 @@ TEST(eya_memory_allocator_get_alloc_fn, handles_gracefully) {
 }
 
 TEST(eya_memory_allocator_get_dealloc_fn, returns_correct_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_memory_allocator_dealloc_fn *result =
       eya_memory_allocator_get_dealloc_fn(&allocator);
   EXPECT_EQ(result, free);
@@ -26,7 +30,9 @@ TEST(eya_memory_allocator_get_dealloc_fn, handles_null_pointer_gracefully) {
 }
 
 TEST(eya_memory_allocator_alloc, returns_valid_pointer_for_valid_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   void *ptr = eya_memory_allocator_alloc(&allocator, size);
   EXPECT_NE(ptr, nullptr) << "Allocation should return a non-null pointer";
@@ -34,7 +40,9 @@ TEST(eya_memory_allocator_alloc, returns_valid_pointer_for_valid_size) {
 }
 
 TEST(eya_memory_allocator_alloc, handles_zero_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   EXPECT_DEATH(eya_memory_allocator_alloc(&allocator, 0), ".*")
       << "Should fail on zero size allocation";
 }
@@ -45,13 +53,17 @@ TEST(eya_memory_allocator_alloc, handles_null_allocator) {
 }
 
 TEST(eya_memory_allocator_alloc, handles_uninitialized_alloc_fn) {
-  eya_memory_allocator_t allocator = {nullptr, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(nullptr, free);
+
   EXPECT_DEATH(eya_memory_allocator_alloc(&allocator, 16), ".*")
       << "Should fail when alloc_fn is not initialized";
 }
 
 TEST(eya_memory_allocator_free, handles_valid_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
 
   void *ptr = eya_memory_allocator_alloc(&allocator, size);
@@ -63,14 +75,18 @@ TEST(eya_memory_allocator_free, handles_valid_pointer) {
 }
 
 TEST(eya_memory_allocator_free, handles_null_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   // eya_runtime_return_ifn should cause early return for NULL pointer
   EXPECT_NO_FATAL_FAILURE(eya_memory_allocator_free(&allocator, nullptr))
       << "Freeing NULL pointer should not throw";
 }
 
 TEST(eya_memory_allocator_free, handles_null_allocator) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   void *ptr = eya_memory_allocator_alloc(&allocator, size);
   ASSERT_NE(ptr, nullptr) << "Allocation failed";
@@ -83,13 +99,17 @@ TEST(eya_memory_allocator_free, handles_null_allocator) {
 }
 
 TEST(eya_memory_allocator_free, handles_uninitialized_dealloc_fn) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
 
   void *ptr = eya_memory_allocator_alloc(&allocator, size);
   ASSERT_NE(ptr, nullptr) << "Allocation failed";
 
-  eya_memory_allocator_t invalid_allocator = {malloc, nullptr};
+  eya_memory_allocator_t invalid_allocator =
+      eya_memory_allocator_initializer(malloc, nullptr);
+
   EXPECT_DEATH(eya_memory_allocator_free(&invalid_allocator, ptr), ".*")
       << "Should fail when dealloc_fn is not initialized";
 
@@ -98,7 +118,9 @@ TEST(eya_memory_allocator_free, handles_uninitialized_dealloc_fn) {
 }
 
 TEST(eya_memory_allocator_realloc, returns_same_pointer_for_same_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   void *ptr = eya_memory_allocator_alloc(&allocator, size);
   ASSERT_NE(ptr, nullptr) << "Allocation failed";
@@ -111,7 +133,9 @@ TEST(eya_memory_allocator_realloc, returns_same_pointer_for_same_size) {
 }
 
 TEST(eya_memory_allocator_realloc, handles_null_old_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t new_size = 16;
   void *new_ptr =
       eya_memory_allocator_realloc(&allocator, nullptr, 0, new_size);
@@ -121,7 +145,9 @@ TEST(eya_memory_allocator_realloc, handles_null_old_pointer) {
 }
 
 TEST(eya_memory_allocator_realloc, handles_zero_new_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 16;
 
   void *ptr = eya_memory_allocator_alloc(&allocator, old_size);
@@ -133,7 +159,9 @@ TEST(eya_memory_allocator_realloc, handles_zero_new_size) {
 }
 
 TEST(eya_memory_allocator_realloc, handles_null_allocator) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 16;
 
   void *ptr = eya_memory_allocator_alloc(&allocator, old_size);
@@ -146,7 +174,8 @@ TEST(eya_memory_allocator_realloc, handles_null_allocator) {
 }
 
 TEST(eya_memory_allocator_realloc, copies_data_correctly) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
 
   eya_usize_t old_size = 8;
   eya_usize_t new_size = 16;
@@ -175,7 +204,8 @@ TEST(eya_memory_allocator_realloc, copies_data_correctly) {
 }
 
 TEST(eya_memory_allocator_align_alloc, returns_valid_aligned_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
 
   eya_usize_t size = 16;
   eya_usize_t alignment = 16; // Power of 2
@@ -192,7 +222,9 @@ TEST(eya_memory_allocator_align_alloc, returns_valid_aligned_pointer) {
 }
 
 TEST(eya_memory_allocator_align_alloc, handles_zero_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t alignment = 16;
   void *ptr = eya_memory_allocator_align_alloc(&allocator, 0, alignment);
   EXPECT_NE(ptr, nullptr)
@@ -203,7 +235,9 @@ TEST(eya_memory_allocator_align_alloc, handles_zero_size) {
 }
 
 TEST(eya_memory_allocator_align_alloc, handles_non_power_of_two_alignment) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   eya_usize_t alignment = 15; // Not a power of 2
   EXPECT_DEATH(eya_memory_allocator_align_alloc(&allocator, size, alignment),
@@ -221,8 +255,9 @@ TEST(eya_memory_allocator_align_alloc, handles_null_allocator) {
 TEST(eya_memory_allocator_align_alloc, HandlesAllocationFailure) {
   // Simulate allocation failure by using
   // a custom allocator that returns nullptr
-  eya_memory_allocator_t allocator = {[](size_t) -> void * { return nullptr; },
-                                      free};
+  eya_memory_allocator_t allocator = eya_memory_allocator_initializer(
+      [](size_t) -> void * { return nullptr; }, free);
+
   eya_usize_t size = 16;
   eya_usize_t alignment = 16;
   EXPECT_DEATH(eya_memory_allocator_align_alloc(&allocator, size, alignment),
@@ -231,7 +266,9 @@ TEST(eya_memory_allocator_align_alloc, HandlesAllocationFailure) {
 }
 
 TEST(eya_memory_allocator_align_alloc, handles_overflow) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t alignment = 16;
   eya_usize_t alignment_offset = EYA_VOID_P_SIZE + (alignment - 1);
   eya_usize_t size =
@@ -243,7 +280,9 @@ TEST(eya_memory_allocator_align_alloc, handles_overflow) {
 }
 
 TEST(eya_memory_allocator_align_free, handles_valid_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   eya_usize_t alignment = 16;
 
@@ -254,13 +293,16 @@ TEST(eya_memory_allocator_align_free, handles_valid_pointer) {
 }
 
 TEST(eya_memory_allocator_align_free, handles_null_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   EXPECT_DEATH(eya_memory_allocator_align_free(&allocator, nullptr), ".*")
       << "Should fail when freeing NULL pointer";
 }
 
 TEST(eya_memory_allocator_align_free, handles_null_allocator) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
 
   eya_usize_t size = 16;
   eya_usize_t alignment = 16;
@@ -275,7 +317,8 @@ TEST(eya_memory_allocator_align_free, handles_null_allocator) {
 }
 
 TEST(eya_memory_allocator_align_free, uses_correct_unaligned_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
 
   eya_usize_t size = 16;
   eya_usize_t alignment = 16;
@@ -293,7 +336,9 @@ TEST(eya_memory_allocator_align_free, uses_correct_unaligned_pointer) {
 
 TEST(eya_memory_allocator_align_realloc,
      returns_same_pointer_when_sizes_equal) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t size = 16;
   eya_usize_t alignment = 16;
 
@@ -308,7 +353,9 @@ TEST(eya_memory_allocator_align_realloc,
 }
 
 TEST(eya_memory_allocator_align_realloc, handles_null_old_pointer) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t new_size = 16;
   eya_usize_t alignment = 16;
 
@@ -322,7 +369,9 @@ TEST(eya_memory_allocator_align_realloc, handles_null_old_pointer) {
 }
 
 TEST(eya_memory_allocator_align_realloc, handles_zero_new_size) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 16;
   eya_usize_t alignment = 16;
 
@@ -336,7 +385,9 @@ TEST(eya_memory_allocator_align_realloc, handles_zero_new_size) {
 }
 
 TEST(eya_memory_allocator_align_realloc, reallocates_and_copies_memory) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 8;
   eya_usize_t new_size = 16;
   eya_usize_t alignment = 16;
@@ -371,7 +422,8 @@ TEST(eya_memory_allocator_align_realloc, reallocates_and_copies_memory) {
 
 TEST(eya_memory_allocator_align_realloc, handles_allocation_failure) {
   // Use valid allocator for initial allocation
-  eya_memory_allocator_t valid_allocator = {malloc, free};
+  eya_memory_allocator_t valid_allocator =
+      eya_memory_allocator_initializer(malloc, free);
 
   eya_usize_t old_size = 8;
   eya_usize_t new_size = 16;
@@ -383,9 +435,8 @@ TEST(eya_memory_allocator_align_realloc, handles_allocation_failure) {
   ASSERT_NE(old_ptr, nullptr) << "Initial allocation failed";
 
   // Use failing allocator for reallocation
-  eya_memory_allocator_t failing_allocator = {
-      [](size_t) -> void * { return nullptr; }, // Simulate allocation failure
-      free};
+  eya_memory_allocator_t failing_allocator = eya_memory_allocator_initializer(
+      [](size_t) -> void * { return nullptr; }, free);
 
   EXPECT_DEATH(eya_memory_allocator_align_realloc(
                    &failing_allocator, old_ptr, old_size, new_size, alignment),
@@ -397,7 +448,9 @@ TEST(eya_memory_allocator_align_realloc, handles_allocation_failure) {
 }
 
 TEST(eya_memory_allocator_align_realloc, handles_null_allocator) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 8;
   eya_usize_t new_size = 16;
   eya_usize_t alignment = 16;
@@ -416,7 +469,9 @@ TEST(eya_memory_allocator_align_realloc, handles_null_allocator) {
 }
 
 TEST(eya_memory_allocator_align_realloc, handles_non_power_of_two_alignment) {
-  eya_memory_allocator_t allocator = {malloc, free};
+  eya_memory_allocator_t allocator =
+      eya_memory_allocator_initializer(malloc, free);
+
   eya_usize_t old_size = 8;
   eya_usize_t new_size = 16;
   eya_usize_t alignment = 16; // Valid power of 2 for initial allocation
