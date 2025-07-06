@@ -1,19 +1,9 @@
 /**
  * @file stringify.h
- * @brief Stringification utilities for C preprocessor tokens and arguments.
+ * @brief Header file containing stringification macros for C preprocessor.
  *
- * This header provides macros for converting preprocessor tokens and variable arguments
- * into string literals. Useful for debugging, logging, and metaprogramming purposes.
- *
- * The file contains two main macros:
- * - @ref eya_stringify_token: Converts a single token to a string literal
- * - @ref eya_stringify_va: Handles variable arguments and converts them to a string
- *
- * @note These macros operate at the preprocessing stage 
- *       and work with tokens rather than runtime values.
- *
- * @warning Macros stringify their arguments verbatim 
- *          without macro expansion
+ * This file provides macros for converting tokens and expressions into string literals
+ * at preprocessing stage. Useful for debugging, logging and metaprogramming.
  */
 
 #ifndef EYA_STRINGIFY_H

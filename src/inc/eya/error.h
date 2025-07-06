@@ -17,7 +17,7 @@
 #include "error_code.h"
 
 /**
- * @typedef eya_error_t
+ * @struct eya_error_t
  * @brief Structure for storing error information.
  *
  * This structure represents errors occurring during execution.

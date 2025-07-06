@@ -1,5 +1,5 @@
 /**
- * @file eya_memory_view_state.h
+ * @file memory_view_state.h
  * @brief Defines the state enumeration for memory view validity checking.
  *
  * This header provides an enumeration that describes various states of a memory view,
@@ -12,7 +12,7 @@
 #define EYA_MEMORY_VIEW_STATE_H
 
 /**
- * @enum eya_memory_view_state
+ * @enum eya_memory_view_state_t
  * @brief Enumeration describing possible states of a memory view.
  *
  * This enumeration is used to represent and check the validity state of a memory range

@@ -4,7 +4,7 @@
 #include "error_code.h"
 
 /**
- * @enum eya_runtime_error_code
+ * @enum eya_runtime_error_code_t
  * @brief Runtime error codes enumeration
  *
  * This enumeration contains error codes that may occur
@@ -13,7 +13,7 @@
  * Each error code represents a specific problem
  * that can happen during execution.
  */
-typedef enum eya_runtime_error_code
+typedef enum eya_runtime_error_code_t
 {
     /**
      * @var EYA_RUNTIME_ERROR_OK
