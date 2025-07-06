@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(${CMAKE_PROJECT_NAME}_lib
-        VERSION 1.0.0
+        VERSION ${PROJECT_VERSION}
         DESCRIPTION "Efficient Yet Abstractive"
         LANGUAGES C)
 
@@ -16,10 +16,10 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # -------------------------------------------------------------------------------------------- #
 
 # Allow others to reduce the path if it is required
-if(NOT DEFINED EYA_LIB_ROOT_DIR)
+if (NOT DEFINED EYA_LIB_ROOT_DIR)
     # The path to the current catalog of the source files of the project
     set(EYA_LIB_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-endif()
+endif ()
 
 # -------------------------------------------------------------------------------------------- #
 # Directory Setup                                                                              #
