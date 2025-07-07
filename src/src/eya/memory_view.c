@@ -138,15 +138,19 @@ eya_memory_view_contains_ptr(const eya_memory_view_t *self, const void *ptr)
 }
 
 bool
-eya_memory_view_contains(const eya_memory_view_t *self, const eya_memory_view_t *other)
+eya_memory_view_contains_range(const eya_memory_view_t *self, const void *begin, const void *end)
 {
     const void *self_begin, *self_end;
     eya_memory_view_unpack_v(self, &self_begin, &self_end);
+    return eya_interval_ropen_contains_range(self_begin, self_end, begin, end);
+}
 
+bool
+eya_memory_view_contains(const eya_memory_view_t *self, const eya_memory_view_t *other)
+{
     const void *other_begin, *other_end;
     eya_memory_view_unpack_v(other, &other_begin, &other_end);
-
-    return eya_interval_ropen_contains_range(self_begin, self_end, other_begin, other_end);
+    return eya_memory_view_contains_range(self, other_begin, other_end);
 }
 
 bool

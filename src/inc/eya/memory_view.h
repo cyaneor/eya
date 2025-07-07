@@ -217,6 +217,30 @@ bool
 eya_memory_view_contains_ptr(const eya_memory_view_t *self, const void *ptr);
 
 /**
+ * @brief Checks if a memory range is fully contained within the memory view's range.
+ *
+ * This function verifies whether the given memory range [begin, end) lies entirely within
+ * the memory region defined by the memory view (inclusive of start, exclusive of end).
+ * The memory view is first unpacked and validated.
+ *
+ * @param self Pointer to the eya_memory_view_t structure to check against (must be valid).
+ * @param begin Pointer to the start of the range to check (inclusive).
+ * @param end Pointer to the end of the range to check (exclusive).
+ * @return true if the entire range [begin, end) is within the memory view's range,
+ *         false otherwise.
+ *
+ * @note Uses eya_memory_view_unpack_v internally,
+ *       which will raise a runtime error if the memory view is invalid.
+ * @note Both the memory view and the checked range
+ *       use right-open interval [begin, end) semantics.
+ * @note If begin == end, the range is considered empty
+ *       and will return true if within bounds.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_view_contains_range(const eya_memory_view_t *self, const void *begin, const void *end);
+
+/**
  * @brief Checks if another memory view is fully contained within this memory view.
  *
  * This function verifies whether the entire range of the 'other' memory view
