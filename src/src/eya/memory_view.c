@@ -241,3 +241,19 @@ eya_memory_view_find(const eya_memory_view_t *self, const eya_memory_view_t *oth
     eya_memory_view_unpack_v(other, &other_begin, &other_end);
     return eya_memory_view_find_range(self, other_begin, other_end);
 }
+
+const void *
+eya_memory_view_rfind_range(const eya_memory_view_t *self, const void *begin, const void *end)
+{
+    const void *self_begin, *self_end;
+    eya_memory_view_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_rfind(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_view_rfind(const eya_memory_view_t *self, const eya_memory_view_t *other)
+{
+    const void *other_begin, *other_end;
+    eya_memory_view_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_view_rfind_range(self, other_begin, other_end);
+}
