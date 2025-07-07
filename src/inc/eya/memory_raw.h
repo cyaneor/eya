@@ -1,3 +1,29 @@
+/**
+ * @file memory_raw.h
+ * @brief Low-level Memory Operations with Pointer Ranges
+ *
+ * Provides raw memory manipulation functions using pointer ranges [start, end)
+ * instead of explicit size parameters. Designed for:
+ * - Maximum performance in memory-bound operations
+ * - Direct integration with pointer-based algorithms
+ * - Working with half-open ranges common in C++ STL and system programming
+ *
+ * Key characteristics:
+ * - Uses pointer arithmetic for all size calculations
+ * - Supports both forward and reverse operations
+ * - Provides raw versions of all standard memory operations
+ * - Designed for use in performance-critical sections
+ *
+ * All functions:
+ * - Operate on [start, end) pointer ranges
+ * - Calculate sizes via pointer difference
+ * - Preserve the same safety guarantees as sized versions
+ * - Are marked with EYA_ATTRIBUTE(SYMBOL) for proper linkage
+ *
+ * @warning These are low-level operations - prefer sized versions (eya_memory_*)
+ *          when safety is more important than performance.
+ */
+
 #ifndef EYA_MEMORY_RAW_H
 #define EYA_MEMORY_RAW_H
 
@@ -148,7 +174,7 @@ eya_memory_raw_move(void *dst, const void *dst_end, const void *src, const void 
  *
  * @param[out] dst     Pointer to the start of destination memory block.
  * @param[in]  dst_end Pointer to the end of destination buffer (exclusive).
- * @param[in]  value   Value to set (interpreted as unsigned char).
+ * @param[in]  val     Value to set (interpreted as unsigned char).
  *
  * @return Pointer to the byte immediately following the filled memory block
  *         (dst_end).
@@ -294,6 +320,7 @@ eya_memory_raw_rcompare(const void *lhs, const void *lhs_end, const void *rhs, c
  *       - Uses optimized byte-scanning algorithms
  * @see eya_memory_find()
  *
+ * Example:
  * @code
  * const char data[] = "Hello amazing world";
  * const char sub[] = "amazing";
@@ -337,6 +364,7 @@ eya_memory_raw_find(const void *lhs, const void *lhs_end, const void *rhs, const
  *       - Uses reverse scanning optimization
  * @see eya_memory_rfind()
  *
+ * Example:
  * @code
  * const char data[] = "apple orange apple";
  * const char sub[] = "apple";
