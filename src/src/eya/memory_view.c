@@ -62,7 +62,7 @@ eya_memory_view_get_state(const eya_memory_view_t *self)
 }
 
 bool
-eya_memory_view_is_uninitialized(const eya_memory_view_t *self)
+eya_memory_view_is_uninit(const eya_memory_view_t *self)
 {
     const eya_memory_view_state_t state = eya_memory_view_get_state(self);
     return state == EYA_MEMORY_VIEW_UNINITIALIZED;
@@ -106,7 +106,7 @@ eya_memory_view_unpack_v(const eya_memory_view_t *self, const void **begin, cons
 }
 
 eya_uaddr_t
-eya_memory_view_udiff(const eya_memory_view_t *self)
+eya_memory_view_diff(const eya_memory_view_t *self)
 {
     const void *begin, *end;
     eya_memory_view_unpack_v(self, &begin, &end);
@@ -116,7 +116,7 @@ eya_memory_view_udiff(const eya_memory_view_t *self)
 eya_usize_t
 eya_memory_view_get_size(const eya_memory_view_t *self)
 {
-    return eya_type_cast(eya_usize_t, eya_memory_view_udiff(self));
+    return eya_type_cast(eya_usize_t, eya_memory_view_diff(self));
 }
 
 bool
@@ -138,7 +138,7 @@ eya_memory_view_contains_ptr(const eya_memory_view_t *self, const void *ptr)
 }
 
 bool
-eya_memory_view_contains_other(const eya_memory_view_t *self, const eya_memory_view_t *other)
+eya_memory_view_contains(const eya_memory_view_t *self, const eya_memory_view_t *other)
 {
     const void *self_begin, *self_end;
     eya_memory_view_unpack_v(self, &self_begin, &self_end);
@@ -191,32 +191,32 @@ eya_memory_view_at_last(const void *self)
 }
 
 bool
-eya_memory_view_is_begin_equal(const eya_memory_view_t *self, const void *ptr)
+eya_memory_view_is_equal_begin_to(const eya_memory_view_t *self, const void *ptr)
 {
     return eya_memory_view_get_begin(self) == ptr;
 }
 
 bool
-eya_memory_view_is_end_equal(const eya_memory_view_t *self, const void *ptr)
+eya_memory_view_is_equal_end_to(const eya_memory_view_t *self, const void *ptr)
 {
     return eya_memory_view_get_end(self) == ptr;
 }
 
 bool
-eya_memory_view_is_begin_equal_to(const eya_memory_view_t *self, const eya_memory_view_t *other)
+eya_memory_view_is_equal_begin(const eya_memory_view_t *self, const eya_memory_view_t *other)
 {
-    return eya_memory_view_is_begin_equal(self, eya_memory_view_get_begin(other));
+    return eya_memory_view_is_equal_begin_to(self, eya_memory_view_get_begin(other));
 }
 
 bool
-eya_memory_view_is_end_equal_to(const eya_memory_view_t *self, const eya_memory_view_t *other)
+eya_memory_view_is_equal_end(const eya_memory_view_t *self, const eya_memory_view_t *other)
 {
-    return eya_memory_view_is_end_equal(self, eya_memory_view_get_end(other));
+    return eya_memory_view_is_equal_end_to(self, eya_memory_view_get_end(other));
 }
 
 bool
 eya_memory_view_is_equal(const eya_memory_view_t *self, const eya_memory_view_t *other)
 {
-    return eya_memory_view_is_begin_equal_to(self, other) &&
-           eya_memory_view_is_end_equal_to(self, other);
+    return self == other || (eya_memory_view_is_equal_begin(self, other) &&
+                             eya_memory_view_is_equal_end(self, other));
 }

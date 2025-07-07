@@ -113,7 +113,7 @@ eya_error_clear(eya_error_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_error_is_code(const eya_error_t *self, eya_error_code_t code);
+eya_error_is_equal_code_to(const eya_error_t *self, eya_error_code_t code);
 
 /**
  * @brief Compares error codes between two objects
@@ -123,7 +123,7 @@ eya_error_is_code(const eya_error_t *self, eya_error_code_t code);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_error_is_code_equal(const eya_error_t *self, const eya_error_t *other);
+eya_error_is_equal_code(const eya_error_t *self, const eya_error_t *other);
 
 /**
  * @brief Checks if object contains specified error description
@@ -133,7 +133,7 @@ eya_error_is_code_equal(const eya_error_t *self, const eya_error_t *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_error_is_desc(const eya_error_t *self, const char *desc);
+eya_error_is_equal_desc_to(const eya_error_t *self, const char *desc);
 
 /**
  * @brief Compares descriptions between two error objects
@@ -143,7 +143,7 @@ eya_error_is_desc(const eya_error_t *self, const char *desc);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_error_is_desc_equal(const eya_error_t *self, const eya_error_t *other);
+eya_error_is_equal_desc(const eya_error_t *self, const eya_error_t *other);
 
 /**
  * @brief Compares two error objects for equality

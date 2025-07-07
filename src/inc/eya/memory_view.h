@@ -95,7 +95,7 @@ eya_memory_view_get_state(const eya_memory_view_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_is_uninitialized(const eya_memory_view_t *self);
+eya_memory_view_is_uninit(const eya_memory_view_t *self);
 
 /**
  * @brief Checks if the memory view is empty
@@ -166,13 +166,13 @@ eya_memory_view_unpack_v(const eya_memory_view_t *self, const void **begin, cons
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_uaddr_t
-eya_memory_view_udiff(const eya_memory_view_t *self);
+eya_memory_view_diff(const eya_memory_view_t *self);
 
 /**
  * @brief Gets the size in bytes of the memory view's range
  * @param self The memory view to examine
  * @return The size in bytes of the valid memory range
- * @note This is a convenience wrapper around eya_memory_view_udiff()
+ * @note This is a convenience wrapper around eya_memory_view_diff()
  *       with an explicit size-related return type
  */
 EYA_ATTRIBUTE(SYMBOL)
@@ -232,7 +232,7 @@ eya_memory_view_contains_ptr(const eya_memory_view_t *self, const void *ptr);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_contains_other(const eya_memory_view_t *self, const eya_memory_view_t *other);
+eya_memory_view_contains(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
 /**
  * @brief Checks if an offset is valid within the memory view.
@@ -358,7 +358,7 @@ eya_memory_view_at_last(const void *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_is_begin_equal(const eya_memory_view_t *self, const void *ptr);
+eya_memory_view_is_equal_begin_to(const eya_memory_view_t *self, const void *ptr);
 
 /**
  * @brief Checks if the memory view's end pointer equals the given pointer.
@@ -372,7 +372,7 @@ eya_memory_view_is_begin_equal(const eya_memory_view_t *self, const void *ptr);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_is_end_equal(const eya_memory_view_t *self, const void *ptr);
+eya_memory_view_is_equal_end_to(const eya_memory_view_t *self, const void *ptr);
 
 /**
  * @brief Checks if two memory views share the same begin address.
@@ -386,7 +386,7 @@ eya_memory_view_is_end_equal(const eya_memory_view_t *self, const void *ptr);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_is_begin_equal_to(const eya_memory_view_t *self, const eya_memory_view_t *other);
+eya_memory_view_is_equal_begin(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
 /**
  * @brief Checks if two memory views share the same end address.
@@ -400,7 +400,7 @@ eya_memory_view_is_begin_equal_to(const eya_memory_view_t *self, const eya_memor
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_view_is_end_equal_to(const eya_memory_view_t *self, const eya_memory_view_t *other);
+eya_memory_view_is_equal_end(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
 /**
  * @brief Checks if two memory views represent identical memory regions.

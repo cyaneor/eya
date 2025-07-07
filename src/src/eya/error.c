@@ -72,39 +72,39 @@ eya_error_get_code_and_clear(eya_error_t *self)
 }
 
 bool
-eya_error_is_code(const eya_error_t *self, eya_error_code_t code)
+eya_error_is_equal_code_to(const eya_error_t *self, eya_error_code_t code)
 {
     return eya_error_get_code(self) == code;
 }
 
 bool
-eya_error_is_code_equal(const eya_error_t *self, const eya_error_t *other)
+eya_error_is_equal_code(const eya_error_t *self, const eya_error_t *other)
 {
     const eya_error_code_t code = eya_error_get_code(other);
-    return eya_error_is_code(self, code);
+    return eya_error_is_equal_code_to(self, code);
 }
 
 bool
-eya_error_is_desc(const eya_error_t *self, const char *desc)
+eya_error_is_equal_desc_to(const eya_error_t *self, const char *desc)
 {
     return eya_error_get_desc(self) == desc;
 }
 
 bool
-eya_error_is_desc_equal(const eya_error_t *self, const eya_error_t *other)
+eya_error_is_equal_desc(const eya_error_t *self, const eya_error_t *other)
 {
     const char *desc = eya_error_get_desc(other);
-    return eya_error_is_desc(self, desc);
+    return eya_error_is_equal_desc_to(self, desc);
 }
 
 bool
 eya_error_is_equal(const eya_error_t *self, const eya_error_t *other)
 {
-    return eya_error_is_code_equal(self, other) && eya_error_is_desc_equal(self, other);
+    return eya_error_is_equal_code(self, other) && eya_error_is_equal_desc(self, other);
 }
 
 bool
 eya_error_is_ok(const eya_error_t *self)
 {
-    return eya_error_is_code(self, EYA_ERROR_CODE_NONE);
+    return eya_error_is_equal_code_to(self, EYA_ERROR_CODE_NONE);
 }
