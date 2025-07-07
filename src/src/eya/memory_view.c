@@ -2,6 +2,7 @@
 
 #include <eya/runtime_check_ref.h>
 #include <eya/interval_util.h>
+#include <eya/memory_raw.h>
 #include <eya/ptr_util.h>
 #include <eya/nullptr.h>
 
@@ -223,4 +224,20 @@ eya_memory_view_is_equal(const eya_memory_view_t *self, const eya_memory_view_t 
 {
     return self == other || (eya_memory_view_is_equal_begin(self, other) &&
                              eya_memory_view_is_equal_end(self, other));
+}
+
+const void *
+eya_memory_view_find_range(const eya_memory_view_t *self, const void *begin, const void *end)
+{
+    const void *self_begin, *self_end;
+    eya_memory_view_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_find(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_view_find(const eya_memory_view_t *self, const eya_memory_view_t *other)
+{
+    const void *other_begin, *other_end;
+    eya_memory_view_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_view_find_range(self, other_begin, other_end);
 }

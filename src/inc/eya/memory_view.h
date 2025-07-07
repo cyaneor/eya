@@ -440,6 +440,66 @@ EYA_ATTRIBUTE(SYMBOL)
 bool
 eya_memory_view_is_equal(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
+/**
+ * @brief Finds the first occurrence of a memory range within the memory view.
+ *
+ * Searches for the first occurrence of the range [begin, end) within the memory view's
+ * range. The search is performed byte-by-byte from the start of the memory view.
+ *
+ * @param[in] self  Pointer to the eya_memory_view_t structure to search within (must be valid).
+ * @param[in] begin Pointer to the start of the range to find (inclusive).
+ * @param[in] end   Pointer to the end of the range to find (exclusive).
+ * @return Pointer to the first occurrence of the range within the memory view,
+ *         or the memory view's end pointer if not found.
+ *         Returns the memory view's start pointer if the search range is empty.
+ *
+ * @note Uses eya_memory_view_unpack_v internally, which validates the memory view.
+ * @note Uses eya_memory_raw_find() for the actual search operation.
+ * @note Both the memory view and search range use right-open interval [begin, end) semantics.
+ * @warning Behavior is undefined if:
+ *          - The memory view is invalid
+ *          - Search range pointers are not in the same memory segment
+ *          - end < begin
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view = ...; // initialized memory view
+ * const char pattern[] = "abc";
+ * const void *found = eya_memory_view_find_range(
+ *     &view, pattern, pattern + sizeof(pattern)-1);
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_find_range(const eya_memory_view_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Finds the first occurrence of another memory view within this memory view.
+ *
+ * Searches for the first occurrence of the other memory view's range within this
+ * memory view's range. The search is performed byte-by-byte from the start.
+ *
+ * @param[in] self  Pointer to the eya_memory_view_t structure to search within (must be valid).
+ * @param[in] other Pointer to the eya_memory_view_t structure to find (must be valid).
+ * @return Pointer to the first occurrence of the other view within this view,
+ *         or this view's end pointer if not found.
+ *         Returns this view's start pointer if the other view is empty.
+ *
+ * @note Uses eya_memory_view_unpack_v internally for both memory views.
+ * @note Essentially a convenience wrapper around eya_memory_view_find_range().
+ * @warning Behavior is undefined if either memory view is invalid.
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view1 = ...; // initialized memory view
+ * eya_memory_view_t view2 = ...; // another memory view
+ * const void *found = eya_memory_view_find(&view1, &view2);
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_find(const eya_memory_view_t *self, const eya_memory_view_t *other);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_VIEW_H

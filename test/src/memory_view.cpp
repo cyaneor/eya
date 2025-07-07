@@ -898,3 +898,95 @@ TEST(eya_memory_view_is_aligned, null_view_pointer) {
   eya_memory_view_t view = {nullptr, nullptr};
   EXPECT_DEATH(eya_memory_view_is_aligned(&view, 1), ".*");
 }
+
+TEST(eya_memory_view_find_range, uninitialized_view) {
+  int data[1] = {1};
+  eya_memory_view_t view = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_view_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_find_range, invalid_null_begin) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_view_t view = {nullptr, &dummy};
+  EXPECT_DEATH(eya_memory_view_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_find_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_view_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_view_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_find_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_view_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_view_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_find_range, empty_view) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_view_find_range, empty_search_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_view_find_range, not_found) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {5};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &search[0], &search[1]), nullptr);
+}
+
+TEST(eya_memory_view_find_range, found_at_begin) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &search[0], &search[1]),
+            &data[0]);
+}
+
+TEST(eya_memory_view_find_range, found_at_middle) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {3};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &search[0], &search[1]),
+            &data[2]);
+}
+
+TEST(eya_memory_view_find_range, found_multibyte) {
+  char data[] = "hello world";
+  char search[] = "world";
+  eya_memory_view_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_view_find_range(&view, &search[0],
+                                       &search[sizeof(search) - 1]),
+            &data[6]);
+}
+
+TEST(eya_memory_view_find, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[1]};
+  eya_memory_view_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_view_find(&view, &other), ".*");
+}
+
+TEST(eya_memory_view_find, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_find(&view, &other), nullptr);
+}
+
+TEST(eya_memory_view_find, found_subview) {
+  int data[4] = {1, 2, 3, 4};
+  int subdata[2] = {2, 3};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&subdata[0], &subdata[2]};
+  EXPECT_EQ(eya_memory_view_find(&view, &other), &data[1]);
+}
