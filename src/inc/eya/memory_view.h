@@ -1,3 +1,31 @@
+/**
+ * @file memory_view.h
+ * @brief Memory view abstraction for read-only memory regions.
+ *
+ * This header defines the eya_memory_view_t structure
+ * and associated functions for working with read-only views of memory regions.
+ * The memory view abstraction provides bounds checking, state validation,
+ * and various utility operations for memory ranges defined by [begin, end) pointers.
+ *
+ * Key features include:
+ * - Memory region state checking (uninitialized, empty, valid, invalid)
+ * - Safe pointer access with boundary validation
+ * - Memory range containment checks
+ * - Searching and comparison operations
+ * - Offset-based access with validation
+ *
+ * The memory view uses right-open interval semantics [begin, end), where:
+ * - begin points to the first byte of the region
+ * - end points one byte past the last byte
+ * - An empty region has begin == end (but not nullptr)
+ *
+ * All operations validate the memory view state before proceeding.
+ * Invalid operations will trigger runtime errors.
+ *
+ * @note This is a read-only interface. For mutable memory operations,
+ *       see the corresponding mutable memory range implementation.
+ */
+
 #ifndef EYA_MEMORY_VIEW_H
 #define EYA_MEMORY_VIEW_H
 
