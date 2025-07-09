@@ -1,6 +1,7 @@
 #ifndef EYA_MEMORY_VIEW_H
 #define EYA_MEMORY_VIEW_H
 
+#include "memory_view_fields.h"
 #include "memory_view_state.h"
 #include "attribute.h"
 #include "offset.h"
@@ -16,8 +17,7 @@
  */
 typedef struct eya_memory_view
 {
-    const void *begin; /**< Pointer to the start of the memory region. */
-    const void *end;   /**< Pointer to the end of the memory region (exclusive). */
+    eya_memory_view_fields(const void);
 } eya_memory_view_t;
 
 EYA_COMPILER(EXTERN_C_BEGIN)
