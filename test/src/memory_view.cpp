@@ -1089,3 +1089,159 @@ TEST(eya_memory_view_rfind, identical_views) {
   eya_memory_view_t view = {&data[0], &data[4]};
   EXPECT_EQ(eya_memory_view_rfind(&view, &view), &data[0]);
 }
+
+TEST(eya_memory_view_compare_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_view_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_view_compare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_compare_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_view_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_view_compare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_compare_range, empty_view) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_compare_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_view_compare_range, empty_compare_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_compare_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_view_compare_range, identical_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_compare_range(&view, &compare[0], &compare[4]),
+            nullptr);
+}
+
+TEST(eya_memory_view_compare_range, different_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 0, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_compare_range(&view, &compare[0], &compare[4]),
+            &data[2]);
+}
+
+TEST(eya_memory_view_compare_range, multibyte_string) {
+  char data[] = "hello world";
+  char compare[] = "hello there";
+  eya_memory_view_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_view_compare_range(&view, &compare[0],
+                                          &compare[sizeof(compare) - 1]),
+            &data[6]);
+}
+
+TEST(eya_memory_view_compare, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[1]};
+  eya_memory_view_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_view_compare(&view, &other), ".*");
+}
+
+TEST(eya_memory_view_compare, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_compare(&view, &other), nullptr);
+}
+
+TEST(eya_memory_view_compare, identical_views) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_compare(&view, &view), nullptr);
+}
+
+TEST(eya_memory_view_compare, different_views) {
+  int data[4] = {1, 2, 3, 4};
+  int other_data[4] = {1, 2, 0, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&other_data[0], &other_data[4]};
+  EXPECT_EQ(eya_memory_view_compare(&view, &other), &data[2]);
+}
+
+TEST(eya_memory_view_rcompare_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_view_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_view_rcompare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_rcompare_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_view_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_view_rcompare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_view_rcompare_range, empty_view) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_rcompare_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_view_rcompare_range, empty_compare_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_rcompare_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_view_rcompare_range, identical_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_rcompare_range(&view, &compare[0], &compare[4]),
+            nullptr);
+}
+
+TEST(eya_memory_view_rcompare_range, different_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 0};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_rcompare_range(&view, &compare[0], &compare[4]),
+            &data[3]);
+}
+
+TEST(eya_memory_view_rcompare_range, multibyte_string) {
+  char data[] = "hello world";
+  char compare[] = "world hello";
+  eya_memory_view_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_view_rcompare_range(&view, &compare[0],
+                                           &compare[sizeof(compare) - 1]),
+            &data[10]);
+}
+
+TEST(eya_memory_view_rcompare, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_view_t view = {&data[0], &data[1]};
+  eya_memory_view_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_view_rcompare(&view, &other), ".*");
+}
+
+TEST(eya_memory_view_rcompare, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_view_rcompare(&view, &other), nullptr);
+}
+
+TEST(eya_memory_view_rcompare, identical_views) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_view_rcompare(&view, &view), nullptr);
+}
+
+TEST(eya_memory_view_rcompare, different_views) {
+  int data[4] = {1, 2, 3, 4};
+  int other_data[4] = {1, 2, 3, 0};
+  eya_memory_view_t view = {&data[0], &data[4]};
+  eya_memory_view_t other = {&other_data[0], &other_data[4]};
+  EXPECT_EQ(eya_memory_view_rcompare(&view, &other), &data[3]);
+}

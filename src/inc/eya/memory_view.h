@@ -565,6 +565,123 @@ EYA_ATTRIBUTE(SYMBOL)
 const void *
 eya_memory_view_rfind(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
+/**
+ * @brief Compares a memory view with a range [begin, end).
+ *
+ * Performs forward comparison between the memory view's contents and the specified range.
+ * The comparison stops at the first difference found or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the eya_memory_view_t structure (must be valid).
+ * @param[in] begin Pointer to the start of the range to compare (inclusive).
+ * @param[in] end   Pointer to the end of the range to compare (exclusive).
+ * @return NULL if ranges are identical,
+ *         otherwise pointer to the first differing byte in the memory view.
+ *
+ * @note Uses eya_memory_view_unpack_v internally for validation.
+ * @note Comparison follows same semantics as eya_memory_raw_compare().
+ * @warning Undefined behavior if:
+ *          - Memory view is invalid
+ *          - Range pointers are invalid (end < begin)
+ *          - Pointers span different memory segments
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view = ...; // contains "HelloWorld"
+ * const char test[] = "HelloMoon";
+ * const void *diff = eya_memory_view_compare_range(
+ *     &view, test, test + 9);
+ * // diff points to 'W' in view
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_compare_range(const eya_memory_view_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Compares two memory views contents.
+ *
+ * Performs forward comparison between two memory views' contents.
+ * The comparison stops at the first difference found or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the first eya_memory_view_t structure (must be valid).
+ * @param[in] other Pointer to the second eya_memory_view_t structure (must be valid).
+ * @return NULL if views are identical,
+ *         otherwise pointer to the first differing byte in 'self'.
+ *
+ * @note Convenience wrapper around eya_memory_view_compare_range().
+ * @note Both views are validated via eya_memory_view_unpack_v.
+ * @see eya_memory_view_compare_range()
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view1 = ...; // contains "HelloWorld"
+ * eya_memory_view_t view2 = ...; // contains "HelloThere"
+ * const void *diff = eya_memory_view_compare(&view1, &view2);
+ * // diff points to 'W' in view1
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_compare(const eya_memory_view_t *self, const eya_memory_view_t *other);
+
+/**
+ * @brief Reverse compares a memory view with a range [begin, end).
+ *
+ * Performs backward comparison between the memory view's contents and the specified range,
+ * starting from the end of both ranges. The comparison stops at the first difference found
+ * or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the eya_memory_view_t structure (must be valid).
+ * @param[in] begin Pointer to the start of the range to compare (inclusive).
+ * @param[in] end   Pointer to the end of the range to compare (exclusive).
+ * @return NULL if suffix regions are identical,
+ *         otherwise pointer to the last differing byte in the memory view.
+ *
+ * @note Uses eya_memory_raw_rcompare() for the actual comparison.
+ * @note Particularly useful for comparing checksums or footers.
+ * @warning Same undefined behavior conditions as eya_memory_view_compare_range().
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view = ...; // contains "file_v1.bin"
+ * const char test[] = "file_v2.bin";
+ * const void *diff = eya_memory_view_rcompare_range(
+ *     &view, test, test + 11);
+ * // diff points to '1' in view
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_rcompare_range(const eya_memory_view_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Reverse compares two memory views contents.
+ *
+ * Performs backward comparison between two memory views' contents,
+ * starting from the end of both views. The comparison stops at the first
+ * difference found or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the first eya_memory_view_t structure (must be valid).
+ * @param[in] other Pointer to the second eya_memory_view_t structure (must be valid).
+ * @return NULL if suffix regions are identical,
+ *         otherwise pointer to the last differing byte in 'self'.
+ *
+ * @note Convenience wrapper around eya_memory_view_rcompare_range().
+ * @note Useful for version trailers or checksum verification.
+ * @see eya_memory_view_rcompare_range()
+ *
+ * Example:
+ * @code
+ * eya_memory_view_t view1 = ...; // contains "data_2023.log"
+ * eya_memory_view_t view2 = ...; // contains "data_2024.log"
+ * const void *diff = eya_memory_view_rcompare(&view1, &view2);
+ * // diff points to '3' in view1
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_view_rcompare(const eya_memory_view_t *self, const eya_memory_view_t *other);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_VIEW_H
