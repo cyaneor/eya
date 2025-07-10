@@ -713,34 +713,6 @@ const void *
 eya_memory_view_rcompare(const eya_memory_view_t *self, const eya_memory_view_t *other);
 
 /**
- * @brief Creates a memory view from begin and end pointers.
- *
- * Constructs a read-only memory view structure from the given pointers without validation.
- * The caller must ensure the pointers form a valid [begin, end) range.
- *
- * @param[in] begin Pointer to the start of the memory region (inclusive).
- * @param[in] end Pointer to the end of the memory region (exclusive).
- * @return eya_memory_view_t Constructed memory view object.
- *
- * @note No validation is performed - the view may be invalid or empty.
- * @note For a validated version, use eya_memory_view_make_v().
- * @note The view follows [begin, end) convention (inclusive start, exclusive end).
- * @note The resulting view provides read-only access to the memory region.
- *
- * Example usage:
- * @code
- * const int array[10];
- * eya_memory_view_t view = eya_memory_view_make(array, array + 10);
- * @endcode
- *
- * @see eya_memory_view_make_v()
- * @see eya_memory_range_make()
- */
-EYA_ATTRIBUTE(SYMBOL)
-eya_memory_view_t
-eya_memory_view_make(const void *begin, const void *end);
-
-/**
  * @brief Creates and validates a memory view from begin and end pointers.
  *
  * Constructs a read-only memory view structure and verifies it represents a valid
@@ -759,7 +731,7 @@ eya_memory_view_make(const void *begin, const void *end);
  * @code
  * const int array[10];
  * // This will throw if pointers are invalid
- * eya_memory_view_t view = eya_memory_view_make_v(array, array + 10);
+ * eya_memory_view_t view = eya_memory_view_make(array, array + 10);
  * @endcode
  *
  * @see eya_memory_view_make()
@@ -768,7 +740,7 @@ eya_memory_view_make(const void *begin, const void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_view_t
-eya_memory_view_make_v(const void *begin, const void *end);
+eya_memory_view_make(const void *begin, const void *end);
 
 /**
  * @brief Creates a copy of an existing memory view.
@@ -816,7 +788,7 @@ eya_memory_view_clone(const eya_memory_view_t *self);
  * @endcode
  *
  * @see eya_memory_view_clone()
- * @see eya_memory_view_make_v()
+ * @see eya_memory_view_make()
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_view_t

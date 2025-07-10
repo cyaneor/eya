@@ -1260,32 +1260,18 @@ TEST(eya_memory_view_make, empty_range) {
   EXPECT_EQ(view.end, &data[0]);
 }
 
-TEST(eya_memory_view_make_v, valid_range) {
-  int data[4] = {1, 2, 3, 4};
-  eya_memory_view_t view = eya_memory_view_make_v(&data[0], &data[4]);
-  EXPECT_EQ(view.begin, &data[0]);
-  EXPECT_EQ(view.end, &data[4]);
+TEST(eya_memory_view_make, uninitialized_null_begin_and_end) {
+  EXPECT_DEATH(eya_memory_view_make(nullptr, nullptr), ".*");
 }
 
-TEST(eya_memory_view_make_v, empty_range) {
+TEST(eya_memory_view_make, invalid_null_begin) {
   int data[1] = {1};
-  eya_memory_view_t view = eya_memory_view_make_v(&data[0], &data[0]);
-  EXPECT_EQ(view.begin, &data[0]);
-  EXPECT_EQ(view.end, &data[0]);
+  EXPECT_DEATH(eya_memory_view_make(nullptr, &data[1]), ".*");
 }
 
-TEST(eya_memory_view_make_v, uninitialized_null_begin_and_end) {
-  EXPECT_DEATH(eya_memory_view_make_v(nullptr, nullptr), ".*");
-}
-
-TEST(eya_memory_view_make_v, invalid_null_begin) {
-  int data[1] = {1};
-  EXPECT_DEATH(eya_memory_view_make_v(nullptr, &data[1]), ".*");
-}
-
-TEST(eya_memory_view_make_v, invalid_dangling) {
+TEST(eya_memory_view_make, invalid_dangling) {
   int data[2] = {1, 2};
-  EXPECT_DEATH(eya_memory_view_make_v(&data[1], &data[0]), ".*");
+  EXPECT_DEATH(eya_memory_view_make(&data[1], &data[0]), ".*");
 }
 
 TEST(eya_memory_view_clone, valid_range) {
