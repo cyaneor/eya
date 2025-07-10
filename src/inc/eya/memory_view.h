@@ -743,31 +743,6 @@ eya_memory_view_t
 eya_memory_view_make(const void *begin, const void *end);
 
 /**
- * @brief Creates a copy of an existing memory view.
- *
- * Constructs a new memory view with the same bounds as the input view.
- * No validation is performed on the source view.
- *
- * @param[in] self Pointer to the source memory view to clone.
- * @return eya_memory_view_t New memory view with same bounds.
- *
- * @note This is a shallow copy - both views reference the same memory.
- * @note For a validated version, use eya_memory_view_clone_v().
- *
- * Example usage:
- * @code
- * eya_memory_view_t view = ...;
- * eya_memory_view_t copy = eya_memory_view_clone(&view);
- * @endcode
- *
- * @see eya_memory_view_clone_v()
- * @see eya_memory_view_make()
- */
-EYA_ATTRIBUTE(SYMBOL)
-eya_memory_view_t
-eya_memory_view_clone(const eya_memory_view_t *self);
-
-/**
  * @brief Creates and validates a copy of an existing memory view.
  *
  * Constructs a new memory view with the same bounds as the input view
@@ -784,7 +759,7 @@ eya_memory_view_clone(const eya_memory_view_t *self);
  * @code
  * eya_memory_view_t view = ...;
  * // This will throw if source view is invalid
- * eya_memory_view_t copy = eya_memory_view_clone_v(&view);
+ * eya_memory_view_t copy = eya_memory_view_clone(&view);
  * @endcode
  *
  * @see eya_memory_view_clone()
@@ -792,7 +767,7 @@ eya_memory_view_clone(const eya_memory_view_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_view_t
-eya_memory_view_clone_v(const eya_memory_view_t *self);
+eya_memory_view_clone(const eya_memory_view_t *self);
 
 /**
  * @brief Creates a sub-view of an existing memory view.

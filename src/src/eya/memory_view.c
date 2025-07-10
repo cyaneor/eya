@@ -307,14 +307,6 @@ eya_memory_view_clone(const eya_memory_view_t *self)
 }
 
 eya_memory_view_t
-eya_memory_view_clone_v(const eya_memory_view_t *self)
-{
-    const void *begin, *end;
-    eya_memory_view_unpack(self, &begin, &end);
-    return eya_memory_view_make(begin, end);
-}
-
-eya_memory_view_t
 eya_memory_view_slice(const eya_memory_view_t *self, eya_uoffset_t offset, eya_uoffset_t size)
 {
     const void *begin = eya_memory_view_at_begin(self, offset);

@@ -1290,35 +1290,19 @@ TEST(eya_memory_view_clone, empty_range) {
   EXPECT_EQ(clone.end, original.end);
 }
 
-TEST(eya_memory_view_clone_v, valid_range) {
-  int data[4] = {1, 2, 3, 4};
-  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[4]);
-  eya_memory_view_t clone = eya_memory_view_clone_v(&original);
-  EXPECT_EQ(clone.begin, original.begin);
-  EXPECT_EQ(clone.end, original.end);
-}
-
-TEST(eya_memory_view_clone_v, empty_range) {
-  int data[1] = {1};
-  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[0]);
-  eya_memory_view_t clone = eya_memory_view_clone_v(&original);
-  EXPECT_EQ(clone.begin, original.begin);
-  EXPECT_EQ(clone.end, original.end);
-}
-
-TEST(eya_memory_view_clone_v, uninitialized_null_begin_and_end) {
+TEST(eya_memory_view_clone, uninitialized_null_begin_and_end) {
   eya_memory_view_t original = {nullptr, nullptr};
-  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+  EXPECT_DEATH(eya_memory_view_clone(&original), ".*");
 }
 
-TEST(eya_memory_view_clone_v, invalid_null_begin) {
+TEST(eya_memory_view_clone, invalid_null_begin) {
   int data[1] = {1};
   eya_memory_view_t original = {nullptr, &data[1]};
-  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+  EXPECT_DEATH(eya_memory_view_clone(&original), ".*");
 }
 
-TEST(eya_memory_view_clone_v, invalid_dangling) {
+TEST(eya_memory_view_clone, invalid_dangling) {
   int data[2] = {1, 2};
   eya_memory_view_t original = {&data[1], &data[0]};
-  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+  EXPECT_DEATH(eya_memory_view_clone(&original), ".*");
 }
