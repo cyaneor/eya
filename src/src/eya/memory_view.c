@@ -289,3 +289,41 @@ eya_memory_view_rcompare(const eya_memory_view_t *self, const eya_memory_view_t 
     eya_memory_view_unpack_v(other, &other_begin, &other_end);
     return eya_memory_view_rcompare_range(self, other_begin, other_end);
 }
+
+eya_memory_view_t
+eya_memory_view_make(const void *begin, const void *end)
+{
+    return (eya_memory_view_t){begin, end};
+}
+
+eya_memory_view_t
+eya_memory_view_make_v(const void *begin, const void *end)
+{
+    eya_memory_view_t self = eya_memory_view_make(begin, end);
+    eya_runtime_check(eya_memory_view_is_valid(&self), EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE);
+    return self;
+}
+
+eya_memory_view_t
+eya_memory_view_clone(const eya_memory_view_t *self)
+{
+    const void *begin, *end;
+    eya_memory_view_unpack(self, &begin, &end);
+    return eya_memory_view_make(begin, end);
+}
+
+eya_memory_view_t
+eya_memory_view_clone_v(const eya_memory_view_t *self)
+{
+    const void *begin, *end;
+    eya_memory_view_unpack(self, &begin, &end);
+    return eya_memory_view_make_v(begin, end);
+}
+
+eya_memory_view_t
+eya_memory_view_slice(const eya_memory_view_t *self, eya_uoffset_t offset, eya_uoffset_t size)
+{
+    const void *begin = eya_memory_view_at_begin(self, offset);
+    const void *end   = eya_memory_view_at_begin(self, offset + size);
+    return eya_memory_view_make(begin, end);
+}

@@ -686,7 +686,9 @@ eya_memory_view_rcompare_range(const eya_memory_view_t *self, const void *begin,
  * @brief Reverse compares two memory views contents.
  *
  * Performs backward comparison between two memory views' contents,
- * starting from the end of both views. The comparison stops at the first
+ * starting from the end of both views.
+ *
+ * The comparison stops at the first
  * difference found or when the minimum size is reached.
  *
  * @param[in] self  Pointer to the first eya_memory_view_t structure (must be valid).
@@ -709,6 +711,145 @@ eya_memory_view_rcompare_range(const eya_memory_view_t *self, const void *begin,
 EYA_ATTRIBUTE(SYMBOL)
 const void *
 eya_memory_view_rcompare(const eya_memory_view_t *self, const eya_memory_view_t *other);
+
+/**
+ * @brief Creates a memory view from begin and end pointers.
+ *
+ * Constructs a read-only memory view structure from the given pointers without validation.
+ * The caller must ensure the pointers form a valid [begin, end) range.
+ *
+ * @param[in] begin Pointer to the start of the memory region (inclusive).
+ * @param[in] end Pointer to the end of the memory region (exclusive).
+ * @return eya_memory_view_t Constructed memory view object.
+ *
+ * @note No validation is performed - the view may be invalid or empty.
+ * @note For a validated version, use eya_memory_view_make_v().
+ * @note The view follows [begin, end) convention (inclusive start, exclusive end).
+ * @note The resulting view provides read-only access to the memory region.
+ *
+ * Example usage:
+ * @code
+ * const int array[10];
+ * eya_memory_view_t view = eya_memory_view_make(array, array + 10);
+ * @endcode
+ *
+ * @see eya_memory_view_make_v()
+ * @see eya_memory_range_make()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_view_t
+eya_memory_view_make(const void *begin, const void *end);
+
+/**
+ * @brief Creates and validates a memory view from begin and end pointers.
+ *
+ * Constructs a read-only memory view structure and verifies it represents a valid
+ * memory region before returning.
+ *
+ * @param[in] begin Pointer to the start of the memory region (inclusive).
+ * @param[in] end Pointer to the end of the memory region (exclusive).
+ * @return eya_memory_view_t Validated memory view object.
+ *
+ * @note Performs validation via eya_memory_view_is_valid().
+ * @note The view must satisfy begin <= end to be considered valid.
+ * @note This is the safe version of eya_memory_view_make().
+ * @note The resulting view provides read-only access to the memory region.
+ *
+ * Example usage:
+ * @code
+ * const int array[10];
+ * // This will throw if pointers are invalid
+ * eya_memory_view_t view = eya_memory_view_make_v(array, array + 10);
+ * @endcode
+ *
+ * @see eya_memory_view_make()
+ * @see eya_memory_view_is_valid()
+ * @see eya_memory_range_make_v()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_view_t
+eya_memory_view_make_v(const void *begin, const void *end);
+
+/**
+ * @brief Creates a copy of an existing memory view.
+ *
+ * Constructs a new memory view with the same bounds as the input view.
+ * No validation is performed on the source view.
+ *
+ * @param[in] self Pointer to the source memory view to clone.
+ * @return eya_memory_view_t New memory view with same bounds.
+ *
+ * @note This is a shallow copy - both views reference the same memory.
+ * @note For a validated version, use eya_memory_view_clone_v().
+ *
+ * Example usage:
+ * @code
+ * eya_memory_view_t view = ...;
+ * eya_memory_view_t copy = eya_memory_view_clone(&view);
+ * @endcode
+ *
+ * @see eya_memory_view_clone_v()
+ * @see eya_memory_view_make()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_view_t
+eya_memory_view_clone(const eya_memory_view_t *self);
+
+/**
+ * @brief Creates and validates a copy of an existing memory view.
+ *
+ * Constructs a new memory view with the same bounds as the input view
+ * after validating the source view.
+ *
+ * @param[in] self Pointer to the source memory view to clone.
+ * @return eya_memory_view_t New validated memory view with same bounds.
+ *
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE If the source view is invalid.
+ * @note This is a shallow copy - both views reference the same memory.
+ * @note This is the safe version of eya_memory_view_clone().
+ *
+ * Example usage:
+ * @code
+ * eya_memory_view_t view = ...;
+ * // This will throw if source view is invalid
+ * eya_memory_view_t copy = eya_memory_view_clone_v(&view);
+ * @endcode
+ *
+ * @see eya_memory_view_clone()
+ * @see eya_memory_view_make_v()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_view_t
+eya_memory_view_clone_v(const eya_memory_view_t *self);
+
+/**
+ * @brief Creates a sub-view of an existing memory view.
+ *
+ * Constructs a new memory view representing a portion of the original view,
+ * specified by offset and size. No validation is performed.
+ *
+ * @param[in] self Pointer to the source memory view.
+ * @param[in] offset Byte offset from start of original view.
+ * @param[in] size Size in bytes of the new sub-view.
+ * @return eya_memory_view_t New sub-view of the original memory.
+ *
+ * @note The sub-view must be fully contained within the original view.
+ * @note No bounds checking is performed - may create invalid views.
+ * @note For a safe version, consider checking bounds first.
+ *
+ * Example usage:
+ * @code
+ * eya_memory_view_t view = ...;
+ * // Create view of 4 bytes starting at offset 8
+ * eya_memory_view_t subview = eya_memory_view_slice(&view, 8, 4);
+ * @endcode
+ *
+ * @see eya_memory_view_at_begin()
+ * @see eya_memory_view_make()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_view_t
+eya_memory_view_slice(const eya_memory_view_t *self, eya_uoffset_t offset, eya_uoffset_t size);
 
 EYA_COMPILER(EXTERN_C_END)
 

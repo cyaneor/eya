@@ -1245,3 +1245,94 @@ TEST(eya_memory_view_rcompare, different_views) {
   eya_memory_view_t other = {&other_data[0], &other_data[4]};
   EXPECT_EQ(eya_memory_view_rcompare(&view, &other), &data[3]);
 }
+
+TEST(eya_memory_view_make, valid_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = eya_memory_view_make(&data[0], &data[4]);
+  EXPECT_EQ(view.begin, &data[0]);
+  EXPECT_EQ(view.end, &data[4]);
+}
+
+TEST(eya_memory_view_make, empty_range) {
+  int data[1] = {1};
+  eya_memory_view_t view = eya_memory_view_make(&data[0], &data[0]);
+  EXPECT_EQ(view.begin, &data[0]);
+  EXPECT_EQ(view.end, &data[0]);
+}
+
+TEST(eya_memory_view_make_v, valid_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t view = eya_memory_view_make_v(&data[0], &data[4]);
+  EXPECT_EQ(view.begin, &data[0]);
+  EXPECT_EQ(view.end, &data[4]);
+}
+
+TEST(eya_memory_view_make_v, empty_range) {
+  int data[1] = {1};
+  eya_memory_view_t view = eya_memory_view_make_v(&data[0], &data[0]);
+  EXPECT_EQ(view.begin, &data[0]);
+  EXPECT_EQ(view.end, &data[0]);
+}
+
+TEST(eya_memory_view_make_v, uninitialized_null_begin_and_end) {
+  EXPECT_DEATH(eya_memory_view_make_v(nullptr, nullptr), ".*");
+}
+
+TEST(eya_memory_view_make_v, invalid_null_begin) {
+  int data[1] = {1};
+  EXPECT_DEATH(eya_memory_view_make_v(nullptr, &data[1]), ".*");
+}
+
+TEST(eya_memory_view_make_v, invalid_dangling) {
+  int data[2] = {1, 2};
+  EXPECT_DEATH(eya_memory_view_make_v(&data[1], &data[0]), ".*");
+}
+
+TEST(eya_memory_view_clone, valid_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[4]);
+  eya_memory_view_t clone = eya_memory_view_clone(&original);
+  EXPECT_EQ(clone.begin, original.begin);
+  EXPECT_EQ(clone.end, original.end);
+}
+
+TEST(eya_memory_view_clone, empty_range) {
+  int data[1] = {1};
+  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[0]);
+  eya_memory_view_t clone = eya_memory_view_clone(&original);
+  EXPECT_EQ(clone.begin, original.begin);
+  EXPECT_EQ(clone.end, original.end);
+}
+
+TEST(eya_memory_view_clone_v, valid_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[4]);
+  eya_memory_view_t clone = eya_memory_view_clone_v(&original);
+  EXPECT_EQ(clone.begin, original.begin);
+  EXPECT_EQ(clone.end, original.end);
+}
+
+TEST(eya_memory_view_clone_v, empty_range) {
+  int data[1] = {1};
+  eya_memory_view_t original = eya_memory_view_make(&data[0], &data[0]);
+  eya_memory_view_t clone = eya_memory_view_clone_v(&original);
+  EXPECT_EQ(clone.begin, original.begin);
+  EXPECT_EQ(clone.end, original.end);
+}
+
+TEST(eya_memory_view_clone_v, uninitialized_null_begin_and_end) {
+  eya_memory_view_t original = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+}
+
+TEST(eya_memory_view_clone_v, invalid_null_begin) {
+  int data[1] = {1};
+  eya_memory_view_t original = {nullptr, &data[1]};
+  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+}
+
+TEST(eya_memory_view_clone_v, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_view_t original = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_view_clone_v(&original), ".*");
+}
