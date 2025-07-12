@@ -86,13 +86,13 @@ typedef enum eya_runtime_error_code_t
     EYA_RUNTIME_ERROR_NOT_POWER_OF_TWO,
 
     /**
-     * @var EYA_RUNTIME_ERROR_ZERO_MEMORY_SIZE
+     * @var EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE
      * @brief Zero memory size error.
      *
      * Indicates an attempt to allocate or operate
      * on a memory block with a size of zero, which is invalid.
      */
-    EYA_RUNTIME_ERROR_ZERO_MEMORY_SIZE,
+    EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE,
 
     /**
      * @var EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED

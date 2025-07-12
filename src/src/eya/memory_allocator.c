@@ -23,8 +23,8 @@ eya_memory_allocator_get_dealloc_fn(const eya_memory_allocator_t *self)
 void *
 eya_memory_allocator_alloc(const eya_memory_allocator_t *self, eya_usize_t size)
 {
-    eya_runtime_check(size, EYA_RUNTIME_ERROR_ZERO_MEMORY_SIZE);
-    
+    eya_runtime_check(size, EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE);
+
     eya_memory_allocator_alloc_fn *alloc_fn = eya_memory_allocator_get_alloc_fn(self);
     eya_runtime_check(alloc_fn, EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED);
 
