@@ -130,6 +130,79 @@ void *
 eya_memory_range_get_end(const eya_memory_range_t *self);
 
 /**
+ * @brief Checks if the memory range is uninitialized.
+ *
+ * Determines whether the memory range has been properly initialized
+ * by checking if both begin and end pointers are NULL.
+ *
+ * @param self The memory range to check (may be NULL).
+ * @return true if uninitialized (both pointers NULL), false otherwise.
+ * @note An uninitialized range is different from an empty range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_uninit(const eya_memory_range_t *self);
+
+/**
+ * @brief Checks if the memory range is empty.
+ *
+ * Verifies whether the memory range contains no data by checking
+ * if the begin and end pointers are equal (but not NULL).
+ *
+ * @param self The memory range to check (must be valid if not NULL).
+ * @return true if empty (begin equals end but not NULL), false otherwise.
+ * @note An empty range is valid but contains no accessible data.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_empty(const eya_memory_range_t *self);
+
+/**
+ * @brief Checks if the memory range contains valid data.
+ *
+ * Determines whether the memory range contains accessible data
+ * by verifying that the begin pointer is before the end pointer.
+ *
+ * @param self The memory range to check (must be valid if not NULL).
+ * @return true if contains valid data (begin < end), false otherwise.
+ * @note Returns false for both uninitialized and empty ranges.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_has_data(const eya_memory_range_t *self);
+
+/**
+ * @brief Checks if the memory range is in an invalid state.
+ *
+ * Comprehensive check for any invalid state, including:
+ * - Uninitialized (both pointers NULL)
+ * - Begin pointer greater than end pointer
+ * - Other implementation-defined invalid states
+ *
+ * @param self The memory range to check (may be NULL).
+ * @return true if invalid (uninitialized or any invalid state), false otherwise.
+ * @note More thorough than just checking initialization status.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_invalid(const eya_memory_range_t *self);
+
+/**
+ * @brief Checks if the memory range is in a valid state.
+ *
+ * Verifies the memory range is either:
+ * - Properly initialized and empty (begin == end != NULL)
+ * - Contains valid data (begin < end)
+ *
+ * @param self The memory range to check (may be NULL).
+ * @return true if valid (either empty or has data), false otherwise.
+ * @note Complementary to eya_memory_range_is_invalid().
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_valid(const eya_memory_range_t *self);
+
+/**
  * @brief Validates and unpacks a memory range into begin/end pointers.
  *
  * This function performs validation on the memory range before unpacking it.
@@ -321,6 +394,240 @@ eya_memory_range_at_first(const void *self);
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_range_at_last(const void *self);
+
+/**
+ * @brief Checks if the memory range's begin pointer equals the given pointer.
+ *
+ * This function compares the start address
+ * of the memory range with the provided pointer.
+ *
+ * @param self Pointer to the eya_memory_range_t structure to check (must be valid).
+ * @param ptr Pointer to compare with the range's begin address.
+ * @return true if the range's begin address matches ptr, false otherwise.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_equal_begin_to(const eya_memory_range_t *self, const void *ptr);
+
+/**
+ * @brief Checks if the memory range's end pointer equals the given pointer.
+ *
+ * This function compares the end address (exclusive boundary)
+ * of the memory range with the provided pointer.
+ *
+ * @param self Pointer to the eya_memory_range_t structure to check (must be valid).
+ * @param ptr Pointer to compare with the range's end address.
+ * @return true if the range's end address matches ptr, false otherwise.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_equal_end_to(const eya_memory_range_t *self, const void *ptr);
+
+/**
+ * @brief Checks if two memory ranges share the same begin address.
+ *
+ * This function compares the start addresses
+ * of two memory ranges.
+ *
+ * @param self First memory range to compare (must be valid).
+ * @param other Second memory range to compare (must be valid).
+ * @return true if both ranges start at the same address, false otherwise.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_equal_begin(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Checks if two memory ranges share the same end address.
+ *
+ * This function compares the end addresses
+ * (exclusive boundaries) of two memory ranges.
+ *
+ * @param self First memory range to compare (must be valid).
+ * @param other Second memory range to compare (must be valid).
+ * @return true if both ranges end at the same address, false otherwise.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_equal_end(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Checks if two memory ranges represent identical memory regions.
+ *
+ * This function verifies whether two memory ranges cover exactly the same range,
+ * meaning they have identical begin and end addresses.
+ *
+ * @param self First memory range to compare (must be valid).
+ * @param other Second memory range to compare (must be valid).
+ * @return true if both ranges cover identical memory ranges, false otherwise.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_memory_range_is_equal(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Finds the first occurrence of a memory range within this memory range.
+ *
+ * Searches for the first occurrence of the range [begin, end) within the memory range's range.
+ * The search is performed byte-by-byte from the start of the memory range.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure to search within (must be valid).
+ * @param[in] begin Pointer to the start of the range to find (inclusive).
+ * @param[in] end   Pointer to the end of the range to find (exclusive).
+ * @return Pointer to the first occurrence of the range within the memory range,
+ *         or the memory range's end pointer if not found.
+ *         Returns the memory range's start pointer if the search range is empty.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Finds the first occurrence of another memory range within this memory range.
+ *
+ * Searches for the first occurrence of the other memory range's range within this
+ * memory range's range. The search is performed byte-by-byte from the start.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure to search within (must be valid).
+ * @param[in] other Pointer to the eya_memory_range_t structure to find (must be valid).
+ * @return Pointer to the first occurrence of the other range within this range,
+ *         or this range's end pointer if not found.
+ *         Returns this range's start pointer if the other range is empty.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_find(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Finds the last occurrence of a memory range within this memory range.
+ *
+ * Searches backward for the last occurrence of the range [begin, end)
+ * within the memory range's range. The search is performed byte-by-byte
+ * from the end of the memory range.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure to search within (must be valid).
+ * @param[in] begin Pointer to the start of the range to find (inclusive).
+ * @param[in] end   Pointer to the end of the range to find (exclusive).
+ * @return Pointer to the start of the last occurrence of the range within the memory range,
+ *         or the memory range's end pointer if not found.
+ *         Returns the memory range's start pointer if the search range is empty.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rfind_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Finds the last occurrence of another memory range within this memory range.
+ *
+ * Searches backward for the last occurrence of the other memory range's range
+ * within this memory range's range. The search is performed byte-by-byte from the end.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure to search within (must be valid).
+ * @param[in] other Pointer to the eya_memory_range_t structure to find (must be valid).
+ * @return Pointer to the start of the last occurrence of the other range within this range,
+ *         or this range's end pointer if not found.
+ *         Returns this range's start pointer if the other range is empty.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rfind(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Compares a memory range with a range [begin, end).
+ *
+ * Performs forward comparison between the memory range's contents and the specified range.
+ * The comparison stops at the first difference found or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure (must be valid).
+ * @param[in] begin Pointer to the start of the range to compare (inclusive).
+ * @param[in] end   Pointer to the end of the range to compare (exclusive).
+ * @return NULL if ranges are identical,
+ *         otherwise pointer to the first differing byte in the memory range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_compare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Compares two memory ranges contents.
+ *
+ * Performs forward comparison between two memory ranges' contents.
+ * The comparison stops at the first difference found
+ * or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the first eya_memory_range_t structure (must be valid).
+ * @param[in] other Pointer to the second eya_memory_range_t structure (must be valid).
+ * @return NULL if ranges are identical,
+ *         otherwise pointer to the first differing byte in 'self'.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_compare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Reverse compares a memory range with a range [begin, end).
+ *
+ * Performs backward comparison between the memory range's contents and the specified range,
+ * starting from the end of both ranges. The comparison stops at the first difference found
+ * or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the eya_memory_range_t structure (must be valid).
+ * @param[in] begin Pointer to the start of the range to compare (inclusive).
+ * @param[in] end   Pointer to the end of the range to compare (exclusive).
+ * @return NULL if suffix regions are identical,
+ *         otherwise pointer to the last differing byte in the memory range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rcompare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Reverse compares two memory ranges contents.
+ *
+ * Performs backward comparison between two memory ranges' contents,
+ * starting from the end of both ranges.
+ *
+ * The comparison stops at the first difference found
+ * or when the minimum size is reached.
+ *
+ * @param[in] self  Pointer to the first eya_memory_range_t structure (must be valid).
+ * @param[in] other Pointer to the second eya_memory_range_t structure (must be valid).
+ * @return NULL if suffix regions are identical,
+ *         otherwise pointer to the last differing byte in 'self'.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rcompare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Creates and validates a new memory range structure.
+ *
+ * Constructs a memory range from the given begin and end pointers,
+ * performing runtime validation to ensure the resulting range is valid.
+ *
+ * @param[in] begin Pointer to the start of the memory range (inclusive).
+ * @param[in] end   Pointer to the end of the memory range (exclusive).
+ * @return Initialized eya_memory_range_t structure.
+ *
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE if the resulting range would be invalid
+ *         (begin > end or either pointer is NULL when the other isn't).
+ *
+ * @note Uses eya_memory_range_is_valid() for validation.
+ * @note The range follows right-open interval semantics [begin, end).
+ * @warning Aborts program execution if validation fails (in debug builds).
+ * @warning Behavior is undefined if:
+ *          - Pointers belong to different memory segments
+ *          - Pointers are misaligned for the intended use
+ *
+ * Example usage:
+ * @code
+ * char buffer[1024];
+ * eya_memory_range_t range = eya_memory_range_make(buffer, buffer + sizeof(buffer));
+ * @endcode
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_range_t
+eya_memory_range_make(void *begin, void *end);
 
 EYA_COMPILER(EXTERN_C_END)
 
