@@ -311,5 +311,5 @@ eya_memory_view_slice(const eya_memory_view_t *self, eya_uoffset_t offset, eya_u
 {
     const void *begin = eya_memory_view_at_begin(self, offset);
     const void *end   = eya_memory_view_at_begin(self, offset + size);
-    return eya_memory_view_make(begin, end);
+    return (eya_memory_view_t){begin, end};
 }
