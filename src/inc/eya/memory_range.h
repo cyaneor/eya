@@ -234,6 +234,20 @@ void
 eya_memory_range_unpack_v(const eya_memory_range_t *self, void **begin, void **end);
 
 /**
+ * @brief Gets the size in bytes of the memory range
+ *
+ * @param[in] self Pointer to the memory range object to examine
+ * @return Size in bytes of the valid memory range
+ *
+ * @note This function internally casts the memory range
+ *       to a memory view and calls eya_memory_view_get_size() on it.
+ *
+ * @see eya_memory_view_get_size()
+ */
+eya_usize_t
+eya_memory_range_get_size(const eya_memory_range_t *self);
+
+/**
  * @brief Gets a pointer to an element at a specified offset from the beginning of the memory range.
  *
  * This function calculates a pointer to an element located at the given offset from the start

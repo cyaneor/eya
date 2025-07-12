@@ -80,6 +80,13 @@ eya_memory_range_unpack_v(const eya_memory_range_t *self, void **begin, void **e
     eya_memory_range_unpack(self, begin, end);
 }
 
+eya_usize_t
+eya_memory_range_get_size(const eya_memory_range_t *self)
+{
+    const eya_memory_view_t *view = eya_ptr_cast(eya_memory_view_t, self);
+    return eya_memory_view_get_size(view);
+}
+
 void *
 eya_memory_range_at_begin(const eya_memory_range_t *self, eya_uoffset_t offset)
 {
