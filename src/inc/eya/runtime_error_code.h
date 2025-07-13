@@ -95,6 +95,15 @@ typedef enum eya_runtime_error_code_t
     EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE,
 
     /**
+     * @var EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+     * @brief Zero element size error.
+     *
+     * Indicates an attempt to perform an operation with an element
+     * size of zero, which is invalid for memory operations or array processing.
+     */
+    EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE,
+
+    /**
      * @var EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
      * @brief Memory not allocated error.
      *
