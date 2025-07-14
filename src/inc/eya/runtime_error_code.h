@@ -104,6 +104,24 @@ typedef enum eya_runtime_error_code_t
     EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE,
 
     /**
+     * @var EYA_RUNTIME_ERROR_SIZE_NOT_MULTIPLE_OF_ELEMENT_SIZE
+     * @brief Size alignment error.
+     *
+     * Indicates that the provided size is not a multiple
+     * of the element size, which is required for the operation.
+     */
+    EYA_RUNTIME_ERROR_SIZE_NOT_MULTIPLE_OF_ELEMENT_SIZE,
+
+    /**
+     * @var EYA_RUNTIME_ERROR_DIFFERENT_ELEMENT_SIZE
+     * @brief Different element size error.
+     *
+     * Indicates an attempt to perform an operation between memory ranges
+     * or typed memory structures that have different element sizes.
+     */
+    EYA_RUNTIME_ERROR_DIFFERENT_ELEMENT_SIZE,
+
+    /**
      * @var EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
      * @brief Memory not allocated error.
      *
