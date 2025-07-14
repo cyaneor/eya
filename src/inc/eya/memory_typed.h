@@ -39,15 +39,6 @@ typedef struct eya_memory_typed
 } eya_memory_typed_t;
 
 /**
- * @brief Get the underlying memory range from a typed memory range
- * @param self Pointer to typed memory range structure
- * @return Pointer to the base memory range structure
- */
-EYA_ATTRIBUTE(SYMBOL)
-eya_memory_range_t *
-eya_memory_typed_get_range(const eya_memory_typed_t *self);
-
-/**
  * @brief Unpack a typed memory range into its components
  * @param self Pointer to typed memory range structure
  * @param begin [out] Pointer to store begin address (can be NULL)
