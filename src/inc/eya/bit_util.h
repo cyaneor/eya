@@ -1,3 +1,17 @@
+/**
+ * @file bit_util.h
+ * @brief Bit manipulation utilities
+ *
+ * This header provides macros for performing various bit operations including:
+ * - Basic bitwise operations (AND, NOT)
+ * - Bit intersection checks
+ * - Sign bit manipulation
+ * - Bit scanning (forward/reverse for 32/64-bit values)
+ * - Bit rotation
+ *
+ * The implementation uses compiler intrinsics when available for optimal performance.
+ */
+
 #ifndef EYA_BIT_UTIL_H
 #define EYA_BIT_UTIL_H
 
@@ -139,7 +153,7 @@
 #if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
 /**
  * @def eya_bit_scan_forward64
- * @brief Finds the index of the first set bit 
+ * @brief Finds the index of the first set bit
  *        (least significant bit) in a 64-bit mask (GCC/Clang).
  *
  * Uses the compiler intrinsic `__builtin_ctzll`
@@ -154,7 +168,7 @@
 
 /**
  * @def eya_bit_scan_reverse64
- * @brief Finds the index of the last set bit 
+ * @brief Finds the index of the last set bit
  *        (most significant bit) in a 64-bit mask (GCC/Clang).
  *
  * Uses the compiler intrinsic `__builtin_clzll`
@@ -169,7 +183,7 @@
 
 /**
  * @def eya_bit_scan_forward32
- * @brief Finds the index of the first set bit 
+ * @brief Finds the index of the first set bit
  *        (least significant bit) in a 32-bit mask (GCC/Clang).
  *
  * Uses the compiler intrinsic `__builtin_ctz`
@@ -184,7 +198,7 @@
 
 /**
  * @def eya_bit_scan_reverse32
- * @brief Finds the index of the last set bit 
+ * @brief Finds the index of the last set bit
  *        (most significant bit) in a 32-bit mask (GCC/Clang).
  *
  * Uses the compiler intrinsic `__builtin_clz` for fast search
@@ -200,7 +214,7 @@
 
 /**
  * @def eya_bit_scan_forward64
- * @brief Finds the index of the first set bit 
+ * @brief Finds the index of the first set bit
  *        (least significant bit) in a 64-bit mask (MSVC).
  *
  * Uses the MSVC intrinsic `_BitScanForward64` for fast search
@@ -216,7 +230,7 @@
 
 /**
  * @def eya_bit_scan_reverse64
- * @brief Finds the index of the last set bit 
+ * @brief Finds the index of the last set bit
  *        (most significant bit) in a 64-bit mask (MSVC).
  *
  * Uses the MSVC intrinsic `_BitScanReverse64` for fast search
@@ -232,7 +246,7 @@
 
 /**
  * @def eya_bit_scan_forward32
- * @brief Finds the index of the first set bit 
+ * @brief Finds the index of the first set bit
  *        (least significant bit) in a 32-bit mask (MSVC).
  *
  * Uses the MSVC intrinsic `_BitScanForward` for fast search
@@ -248,7 +262,7 @@
 
 /**
  * @def eya_bit_scan_reverse32
- * @brief Finds the index of the last set bit 
+ * @brief Finds the index of the last set bit
  *        (most significant bit) in a 32-bit mask (MSVC).
  *
  * Uses the MSVC intrinsic `_BitScanReverse` for fast search
@@ -264,5 +278,20 @@
 #else
 #    pragma message("Warning: Compiler does not support bit scan functions")
 #endif
+
+/**
+ * @def eya_bit_rotl(x, n, bits)
+ * @brief Rotates bits left
+ * @param x Value to rotate
+ * @param n Number of bits
+ * @param bits Bit width (e.g., 32 for uint32_t)
+ */
+#define eya_bit_rotl(x, n, bits) (((x) << (n)) | ((x) >> ((bits) - (n))))
+
+/**
+ * @def eya_bit_rotr(x, n, bits)
+ * @brief Rotates bits right
+ */
+#define eya_bit_rotr(x, n, bits) (((x) >> (n)) | ((x) << ((bits) - (n))))
 
 #endif // EYA_BIT_UTIL_H
