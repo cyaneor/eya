@@ -14,7 +14,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  * the element size. It is typically used for type-safe memory operations and
  * provides standard begin/end pointers along with element size information.
  *
- * The structure is declared using the @ref eya_memory_typed_fields macro which
+ * The structure is declared using the @c eya_memory_typed_fields macro which
  * generates the following fields:
  * - Standard memory range fields (begin and end pointers)
  * - An additional element_size field storing sizeof(element_type)

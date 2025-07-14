@@ -29,7 +29,7 @@
 #define EYA_MEMORY_RANGE_STATE_H
 
 /**
- * @enum eya_memory_range_state
+ * @typedef eya_memory_range_state_t
  * @brief Represents the state of a memory range/view.
  *
  * This enumeration describes all possible states of a memory range,
