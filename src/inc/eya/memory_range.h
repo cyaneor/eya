@@ -1,34 +1,12 @@
 /**
  * @file memory_range.h
- * @brief Memory range manipulation utilities
+ * @brief Generic memory range operations and utilities
  *
- * This header provides a complete interface for working with contiguous memory ranges.
- * It defines the `eya_memory_range_t` structure and a comprehensive set of operations
- * for memory range manipulation, validation, and querying.
+ * This header defines a generic memory range structure
+ * and associated operations for working with contiguous memory regions.
  *
- * The memory range is represented as a half-open interval [begin, end) where:
- * - @p begin points to the first byte of the range (inclusive)
- * - @p end points to one byte past the last byte (exclusive)
- *
- * Key features include:
- * - Memory range packing/unpacking
- * - State checking (uninitialized, empty, valid, etc.)
- * - Size and alignment operations
- * - Range containment checks
- * - Offset-based pointer arithmetic
- * - Safe memory range manipulation with validation
- * - Range comparison operations
- *
- * All functions are marked with appropriate compiler attributes
- * for visibility and linkage control via the EYA_ATTRIBUTE macro.
- *
- * @note The API follows a consistent naming convention:
- * - Functions ending with `_v` perform validation and may trigger runtime errors
- * - Functions ending with `_f` are null-safe versions
- * - Directional operations use `_f` (front/forward) and `_b` (back/backward)
- *
- * @see eya_memory_range_fields.h
- * @see eya_memory_range_state.h
+ * The implementation provides functions for querying,
+ * validating, and manipulating memory ranges.
  */
 
 #ifndef EYA_MEMORY_RANGE_H
@@ -56,16 +34,6 @@ typedef struct eya_memory_range
 } eya_memory_range_t;
 
 EYA_COMPILER(EXTERN_C_BEGIN)
-
-/**
- * @brief Pack begin and end pointers into a memory range structure
- * @param self Pointer to memory range structure
- * @param begin Start of memory range
- * @param end End of memory range (exclusive)
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_memory_range_pack(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Unpack a memory range into begin and end pointers
@@ -150,22 +118,10 @@ bool
 eya_memory_range_is_valid(const eya_memory_range_t *self);
 
 /**
- * @brief Pack begin and end pointers into a memory range with validation
- * @param self Pointer to memory range structure
- * @param begin Start of memory range
- * @param end End of memory range (exclusive)
- * @note Will trigger runtime error if resulting range is invalid
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_memory_range_pack_v(eya_memory_range_t *self, void *begin, void *end);
-
-/**
  * @brief Unpack a memory range into begin and end pointers with validation
  * @param self Pointer to memory range structure
  * @param begin [out] Pointer to store begin address
  * @param end [out] Pointer to store end address
- * @note Will trigger runtime error if range is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -255,7 +211,6 @@ eya_memory_range_is_valid_offset(const eya_memory_range_t *self, eya_uoffset_t o
  * @param self Pointer to memory range structure
  * @param offset Offset from begin
  * @return Pointer at offset
- * @note Will trigger runtime error if offset is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
@@ -266,7 +221,6 @@ eya_memory_range_at_f(const eya_memory_range_t *self, eya_uoffset_t offset);
  * @param self Pointer to memory range structure
  * @param offset Offset from end
  * @return Pointer at offset
- * @note Will trigger runtime error if offset is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
@@ -352,15 +306,6 @@ bool
 eya_memory_range_is_equal(const eya_memory_range_t *self, const eya_memory_range_t *other);
 
 /**
- * @brief Assign one memory range to another
- * @param self Pointer to destination memory range
- * @param other Pointer to source memory range
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_memory_range_assign(eya_memory_range_t *self, const eya_memory_range_t *other);
-
-/**
  * @brief Clear memory range (set to uninitialized state)
  * @param self Pointer to memory range structure
  */
@@ -372,29 +317,26 @@ eya_memory_range_clear(eya_memory_range_t *self);
  * @brief Assign one memory range to another with validation
  * @param self Pointer to destination memory range
  * @param other Pointer to source memory range
- * @note Will trigger runtime error if source range is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_assign_v(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_assign(eya_memory_range_t *self, const eya_memory_range_t *other);
 
 /**
  * @brief Set memory range begin and end pointers with validation
  * @param self Pointer to memory range structure
  * @param begin New begin pointer
  * @param end New end pointer
- * @note Will trigger runtime error if resulting range is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_v(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_set(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
  * @param self Pointer to memory range structure
  * @param begin New begin pointer
  * @param size Size of range in bytes
- * @note Will trigger runtime error if begin is null
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
