@@ -1308,3 +1308,355 @@ TEST(eya_memory_range_slice, fails_on_invalid_size) {
 
   EXPECT_DEATH(eya_memory_range_slice(&range, 0, 0x1001), ".*");
 }
+
+TEST(eya_memory_range_find_range, uninitialized_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_find_range, invalid_null_begin) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {nullptr, &dummy};
+  EXPECT_DEATH(eya_memory_range_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_find_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_range_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_find_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_range_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_range_find_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_find_range, empty_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_range_find_range, empty_search_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_range_find_range, not_found) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {5};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &search[0], &search[1]),
+            nullptr);
+}
+
+TEST(eya_memory_range_find_range, found_at_begin) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &search[0], &search[1]),
+            &data[0]);
+}
+
+TEST(eya_memory_range_find_range, found_at_middle) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {3};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &search[0], &search[1]),
+            &data[2]);
+}
+
+TEST(eya_memory_range_find_range, found_multibyte) {
+  char data[] = "hello world";
+  char search[] = "world";
+  eya_memory_range_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_range_find_range(&view, &search[0],
+                                        &search[sizeof(search) - 1]),
+            &data[6]);
+}
+
+TEST(eya_memory_range_find, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[1]};
+  eya_memory_range_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_find(&view, &other), ".*");
+}
+
+TEST(eya_memory_range_find, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_find(&view, &other), nullptr);
+}
+
+TEST(eya_memory_range_find, found_subview) {
+  int data[4] = {1, 2, 3, 4};
+  int subdata[2] = {2, 3};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&subdata[0], &subdata[2]};
+  EXPECT_EQ(eya_memory_range_find(&view, &other), &data[1]);
+}
+
+TEST(eya_memory_range_rfind_range, uninitialized_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_rfind_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_rfind_range, invalid_null_begin) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {nullptr, &dummy};
+  EXPECT_DEATH(eya_memory_range_rfind_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_rfind_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_range_rfind_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_rfind_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_range_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_range_rfind_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_rfind_range, empty_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_range_rfind_range, empty_search_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_range_rfind_range, not_found) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {5};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &search[0], &search[1]),
+            nullptr);
+}
+
+TEST(eya_memory_range_rfind_range, found_at_begin) {
+  int data[4] = {1, 2, 1, 4};
+  int search[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &search[0], &search[1]),
+            &data[2]);
+}
+
+TEST(eya_memory_range_rfind_range, found_at_end) {
+  int data[4] = {1, 2, 3, 4};
+  int search[1] = {4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &search[0], &search[1]),
+            &data[3]);
+}
+
+TEST(eya_memory_range_rfind_range, found_multibyte) {
+  char data[] = "hello world world";
+  char search[] = "world";
+  eya_memory_range_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_range_rfind_range(&view, &search[0],
+                                         &search[sizeof(search) - 1]),
+            &data[12]);
+}
+
+TEST(eya_memory_range_rfind, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[1]};
+  eya_memory_range_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_rfind(&view, &other), ".*");
+}
+
+TEST(eya_memory_range_rfind, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_rfind(&view, &other), nullptr);
+}
+
+TEST(eya_memory_range_rfind, found_last_subview) {
+  int data[6] = {1, 2, 3, 2, 3, 4};
+  int subdata[2] = {2, 3};
+  eya_memory_range_t view = {&data[0], &data[6]};
+  eya_memory_range_t other = {&subdata[0], &subdata[2]};
+  EXPECT_EQ(eya_memory_range_rfind(&view, &other), &data[3]);
+}
+
+TEST(eya_memory_range_rfind, identical_ranges) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rfind(&view, &view), &data[0]);
+}
+
+TEST(eya_memory_range_compare_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_range_compare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_compare_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_range_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_range_compare_range(&view, &data[0], &data[1]), ".*");
+}
+
+TEST(eya_memory_range_compare_range, empty_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_compare_range(&view, &data[0], &data[1]), nullptr);
+}
+
+TEST(eya_memory_range_compare_range, empty_compare_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_compare_range(&view, &data[0], &data[0]), nullptr);
+}
+
+TEST(eya_memory_range_compare_range, identical_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_compare_range(&view, &compare[0], &compare[4]),
+            nullptr);
+}
+
+TEST(eya_memory_range_compare_range, different_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 0, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_compare_range(&view, &compare[0], &compare[4]),
+            &data[2]);
+}
+
+TEST(eya_memory_range_compare_range, multibyte_string) {
+  char data[] = "hello world";
+  char compare[] = "hello there";
+  eya_memory_range_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_range_compare_range(&view, &compare[0],
+                                           &compare[sizeof(compare) - 1]),
+            &data[6]);
+}
+
+TEST(eya_memory_range_compare, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[1]};
+  eya_memory_range_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_compare(&view, &other), ".*");
+}
+
+TEST(eya_memory_range_compare, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_compare(&view, &other), nullptr);
+}
+
+TEST(eya_memory_range_compare, identical_ranges) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_compare(&view, &view), nullptr);
+}
+
+TEST(eya_memory_range_compare, different_ranges) {
+  int data[4] = {1, 2, 3, 4};
+  int other_data[4] = {1, 2, 0, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&other_data[0], &other_data[4]};
+  EXPECT_EQ(eya_memory_range_compare(&view, &other), &data[2]);
+}
+
+TEST(eya_memory_range_rcompare_range, invalid_null_end) {
+  int data[1] = {1};
+  int dummy;
+  eya_memory_range_t view = {&dummy, nullptr};
+  EXPECT_DEATH(eya_memory_range_rcompare_range(&view, &data[0], &data[1]),
+               ".*");
+}
+
+TEST(eya_memory_range_rcompare_range, invalid_dangling) {
+  int data[2] = {1, 2};
+  eya_memory_range_t view = {&data[1], &data[0]};
+  EXPECT_DEATH(eya_memory_range_rcompare_range(&view, &data[0], &data[1]),
+               ".*");
+}
+
+TEST(eya_memory_range_rcompare_range, empty_range) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_rcompare_range(&view, &data[0], &data[1]),
+            nullptr);
+}
+
+TEST(eya_memory_range_rcompare_range, empty_compare_range) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rcompare_range(&view, &data[0], &data[0]),
+            nullptr);
+}
+
+TEST(eya_memory_range_rcompare_range, identical_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rcompare_range(&view, &compare[0], &compare[4]),
+            nullptr);
+}
+
+TEST(eya_memory_range_rcompare_range, different_content) {
+  int data[4] = {1, 2, 3, 4};
+  int compare[4] = {1, 2, 3, 0};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rcompare_range(&view, &compare[0], &compare[4]),
+            &data[3]);
+}
+
+TEST(eya_memory_range_rcompare_range, multibyte_string) {
+  char data[] = "hello world";
+  char compare[] = "world hello";
+  eya_memory_range_t view = {&data[0], &data[sizeof(data) - 1]};
+  EXPECT_EQ(eya_memory_range_rcompare_range(&view, &compare[0],
+                                            &compare[sizeof(compare) - 1]),
+            &data[10]);
+}
+
+TEST(eya_memory_range_rcompare, uninitialized_other) {
+  int data[1] = {1};
+  eya_memory_range_t view = {&data[0], &data[1]};
+  eya_memory_range_t other = {nullptr, nullptr};
+  EXPECT_DEATH(eya_memory_range_rcompare(&view, &other), ".*");
+}
+
+TEST(eya_memory_range_rcompare, empty_other) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&data[0], &data[0]};
+  EXPECT_EQ(eya_memory_range_rcompare(&view, &other), nullptr);
+}
+
+TEST(eya_memory_range_rcompare, identical_ranges) {
+  int data[4] = {1, 2, 3, 4};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  EXPECT_EQ(eya_memory_range_rcompare(&view, &view), nullptr);
+}
+
+TEST(eya_memory_range_rcompare, different_ranges) {
+  int data[4] = {1, 2, 3, 4};
+  int other_data[4] = {1, 2, 3, 0};
+  eya_memory_range_t view = {&data[0], &data[4]};
+  eya_memory_range_t other = {&other_data[0], &other_data[4]};
+  EXPECT_EQ(eya_memory_range_rcompare(&view, &other), &data[3]);
+}

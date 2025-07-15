@@ -3,6 +3,7 @@
 #include <eya/runtime_check_ref.h>
 #include <eya/algorithm_utils.h>
 #include <eya/interval_util.h>
+#include <eya/memory_raw.h>
 #include <eya/ptr_util.h>
 
 void
@@ -296,4 +297,68 @@ eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya
     void *begin = eya_memory_range_at(self, offset, false);
     void *end   = eya_memory_range_at(self, offset + size, false);
     return eya_memory_range_make(begin, end);
+}
+
+const void *
+eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_find(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_range_find(const eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_find_range(self, other_begin, other_end);
+}
+
+const void *
+eya_memory_range_rfind_range(const eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_rfind(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_range_rfind(const eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_rfind_range(self, other_begin, other_end);
+}
+
+const void *
+eya_memory_range_compare_range(const eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_compare(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_range_compare(const eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_compare_range(self, other_begin, other_end);
+}
+
+const void *
+eya_memory_range_rcompare_range(const eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_rcompare(self_begin, self_end, begin, end);
+}
+
+const void *
+eya_memory_range_rcompare(const eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_rcompare_range(self, other_begin, other_end);
 }

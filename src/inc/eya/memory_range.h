@@ -392,6 +392,90 @@ EYA_ATTRIBUTE(SYMBOL)
 eya_memory_range_t
 eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya_usize_t size);
 
+/**
+ * @brief Find first occurrence of a subrange within memory range
+ * @param[in] self Pointer to memory range to search in
+ * @param[in] begin Start of subrange to find
+ * @param[in] end End of subrange to find (exclusive)
+ * @return Pointer to first occurrence or NULL if not found
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Find first occurrence of another memory range within this range
+ * @param[in] self Pointer to memory range to search in
+ * @param[in] other Pointer to memory range to find
+ * @return Pointer to first occurrence or NULL if not found
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_find(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Find last occurrence of a subrange within memory range
+ * @param[in] self Pointer to memory range to search in
+ * @param[in] begin Start of subrange to find
+ * @param[in] end End of subrange to find (exclusive)
+ * @return Pointer to last occurrence or NULL if not found
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rfind_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Find last occurrence of another memory range within this range
+ * @param[in] self Pointer to memory range to search in
+ * @param[in] other Pointer to memory range to find
+ * @return Pointer to last occurrence or NULL if not found
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rfind(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Compare memory range with a subrange
+ * @param[in] self Pointer to first memory range
+ * @param[in] begin Start of subrange to compare
+ * @param[in] end End of subrange to compare (exclusive)
+ * @return Pointer to first difference or NULL if ranges are equal
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_compare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Compare two memory ranges
+ * @param[in] self Pointer to first memory range
+ * @param[in] other Pointer to second memory range
+ * @return Pointer to first difference or NULL if ranges are equal
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_compare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Compare memory range with a subrange in reverse order
+ * @param[in] self Pointer to first memory range
+ * @param[in] begin Start of subrange to compare
+ * @param[in] end End of subrange to compare (exclusive)
+ * @return Pointer to last difference or NULL if ranges are equal
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rcompare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Compare two memory ranges in reverse order
+ * @param[in] self Pointer to first memory range
+ * @param[in] other Pointer to second memory range
+ * @return Pointer to last difference or NULL if ranges are equal
+ */
+EYA_ATTRIBUTE(SYMBOL)
+const void *
+eya_memory_range_rcompare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_RANGE_H
