@@ -1,6 +1,7 @@
 #include <eya/memory_std.h>
 
 #include <eya/runtime_check_ref.h>
+#include <eya/algorithm_utils.h>
 #include <eya/ptr_util.h>
 
 /*
@@ -20,15 +21,10 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    eya_uchar_t       *d = (eya_uchar_t *)dst;
-    const eya_uchar_t *s = (const eya_uchar_t *)src;
+    void *end = eya_ptr_add_unsafe(dst, n);
+    eya_algorithm_copy(eya_uchar_t, dst, src, n);
 
-    while (n--)
-    {
-        *d++ = *s++;
-    }
-
-    return d;
+    return end;
 }
 
 void *
@@ -37,15 +33,8 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    eya_uchar_t       *d = eya_ptr_add_by_offset_unsafe(dst, n);
-    const eya_uchar_t *s = eya_ptr_add_by_offset_unsafe(src, n);
-
-    while (n--)
-    {
-        *(--d) = *(--s);
-    }
-
-    return d;
+    eya_algorithm_rcopy(eya_uchar_t, dst, src, n);
+    return dst;
 }
 
 void *
@@ -64,14 +53,10 @@ void *
 eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
-    eya_uchar_t *d = eya_ptr_cast(eya_uchar_t, dst);
 
-    while (n--)
-    {
-        *d++ = val;
-    }
-
-    return d;
+    void *end = eya_ptr_add_unsafe(dst, n);
+    eya_algorithm_set(eya_uchar_t, dst, val, n);
+    return end;
 }
 
 const void *
@@ -80,19 +65,7 @@ eya_memory_std_compare(const void *lhs, const void *rhs, eya_usize_t n)
     eya_runtime_check_ref(lhs);
     eya_runtime_check_ref(rhs);
 
-    const eya_uchar_t *l = eya_ptr_cast(const eya_uchar_t, lhs);
-    const eya_uchar_t *r = eya_ptr_cast(const eya_uchar_t, rhs);
-
-    while (n--)
-    {
-        if (*l != *r)
-        {
-            return l;
-        }
-        l++;
-        r++;
-    }
-
+    eya_algorithm_compare(eya_uchar_t, lhs, rhs, n);
     return nullptr;
 }
 
@@ -102,18 +75,6 @@ eya_memory_std_rcompare(const void *lhs, const void *rhs, eya_usize_t n)
     eya_runtime_check_ref(lhs);
     eya_runtime_check_ref(rhs);
 
-    const eya_uchar_t *l = eya_ptr_cast(const eya_uchar_t, lhs) + n - 1;
-    const eya_uchar_t *r = eya_ptr_cast(const eya_uchar_t, rhs) + n - 1;
-
-    while (n--)
-    {
-        if (*l != *r)
-        {
-            return l;
-        }
-        l--;
-        r--;
-    }
-
+    eya_algorithm_rcompare(eya_uchar_t, lhs, rhs, n);
     return nullptr;
 }
