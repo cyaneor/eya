@@ -1720,6 +1720,140 @@ TEST(eya_memory_range_copy, copy_valid_data) {
   EXPECT_EQ(data[3], 4);
 }
 
+TEST(eya_memory_range_copy_rev_range, small_range_copy) {
+  static const char src[] = "Hello, world!";
+  char dst[sizeof(src)] = {};
+  eya_memory_range_t self = {dst, dst + sizeof(src)};
+
+  void *ret = eya_memory_range_copy_rev_range(&self, src, src + sizeof(src));
+  EXPECT_EQ(ret, dst + sizeof(src));
+  for (size_t i = 0; i < sizeof(src); ++i) {
+    EXPECT_EQ(dst[i], src[sizeof(src) - 1 - i]);
+  }
+}
+
+TEST(eya_memory_range_copy_rev_range, large_range_copy) {
+  static const size_t size = 1024 * 1024;
+  static char src[size];
+  char dst[size];
+
+  memset(dst, 0, size);
+  eya_memory_range_t self = {dst, dst + size};
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+
+  void *ret = eya_memory_range_copy_rev_range(&self, src, src + size);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_range_copy_rev_range, one_byte_copy) {
+  static const char src[] = {42};
+  char dst[1] = {};
+  eya_memory_range_t self = {dst, dst + 1};
+
+  void *ret = eya_memory_range_copy_rev_range(&self, src, src + 1);
+  EXPECT_EQ(ret, dst + 1);
+  EXPECT_EQ(dst[0], src[0]);
+}
+
+TEST(eya_memory_range_copy_rev_range, nullptr_self) {
+  static const char src[] = "data";
+  EXPECT_DEATH(eya_memory_range_copy_rev_range(nullptr, src, src + sizeof(src)),
+               ".*");
+}
+
+TEST(eya_memory_range_copy_rev_range, nullptr_end) {
+  char dst[10];
+  eya_memory_range_t self = {dst, dst + 10};
+  static const char src[] = "data";
+  EXPECT_DEATH(eya_memory_range_copy_rev_range(&self, src, nullptr), ".*");
+}
+
+TEST(eya_memory_range_copy_rev_range, zero_length_range) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {};
+  eya_memory_range_t self = {dst, dst};
+
+  void *ret = eya_memory_range_copy_rev_range(&self, src, src);
+  EXPECT_EQ(ret, dst);
+}
+
+TEST(eya_memory_range_copy_rev, small_range_copy) {
+  static const char src[] = "Hello, world!";
+  char dst[sizeof(src)] = {};
+  eya_memory_range_t self = {dst, dst + sizeof(src)};
+  eya_memory_range_t other = {(void *)src, (void *)(src + sizeof(src))};
+
+  void *ret = eya_memory_range_copy_rev(&self, &other);
+  EXPECT_EQ(ret, dst + sizeof(src));
+  for (size_t i = 0; i < sizeof(src); ++i) {
+    EXPECT_EQ(dst[i], src[sizeof(src) - 1 - i]);
+  }
+}
+
+TEST(eya_memory_range_copy_rev, large_range_copy) {
+  static const size_t size = 1024 * 1024;
+  static char src[size];
+  char dst[size];
+
+  memset(dst, 0, size);
+  eya_memory_range_t self = {dst, dst + size};
+  eya_memory_range_t other = {src, src + size};
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+
+  void *ret = eya_memory_range_copy_rev(&self, &other);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_range_copy_rev, one_byte_copy) {
+  static const char src[] = {42};
+  char dst[1] = {};
+  eya_memory_range_t self = {dst, dst + 1};
+  eya_memory_range_t other = {(void *)src, (void *)(src + 1)};
+
+  void *ret = eya_memory_range_copy_rev(&self, &other);
+  EXPECT_EQ(ret, dst + 1);
+  EXPECT_EQ(dst[0], src[0]);
+}
+
+TEST(eya_memory_range_copy_rev, nullptr_other) {
+  char dst[10];
+  eya_memory_range_t self = {dst, dst + 10};
+  EXPECT_DEATH(eya_memory_range_copy_rev(&self, nullptr), ".*");
+}
+
+TEST(eya_memory_range_copy_rev, return_pointer_is_end_of_copied_range) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {};
+  eya_memory_range_t self = {dst, dst + sizeof(src)};
+  eya_memory_range_t other = {(void *)src, (void *)(src + sizeof(src))};
+
+  void *ret = eya_memory_range_copy_rev(&self, &other);
+  EXPECT_EQ(ret, dst + sizeof(src));
+}
+
+TEST(eya_memory_range_copy_rev, zero_length_range) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {};
+
+  eya_memory_range_t self = {dst, dst};
+  eya_memory_range_t other = {(void *)src, (void *)src};
+
+  void *ret = eya_memory_range_copy_rev(&self, &other);
+  EXPECT_EQ(ret, dst);
+}
+
 TEST(eya_memory_range_rcopy_range, invalid_null_end) {
   int data[1] = {1};
   int dummy;

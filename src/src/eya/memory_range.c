@@ -316,6 +316,22 @@ eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other)
 }
 
 void *
+eya_memory_range_copy_rev_range(eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_copy_rev(self_begin, self_end, begin, end);
+}
+
+void *
+eya_memory_range_copy_rev(eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_copy_rev_range(self, other_begin, other_end);
+}
+
+void *
 eya_memory_range_rcopy_range(eya_memory_range_t *self, const void *begin, const void *end)
 {
     void *self_begin, *self_end;
