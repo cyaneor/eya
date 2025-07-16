@@ -429,6 +429,36 @@ void *
 eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const void *end);
 
 /**
+ * @brief Fills a memory range with a repeating pattern from a pointer range.
+ * @param self Destination memory range to fill with pattern
+ * @param begin Start of pattern source range (inclusive)
+ * @param end End of pattern source range (exclusive)
+ * @return Pointer to the end of filled data in destination range
+ *
+ * @note The pattern will be repeated as needed to fill the entire destination range
+ * @note Uses eya_memory_raw_set_pattern internally after range unpacking
+ * @warning If source range is empty (begin == end), no operation is performed
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_set_pattern_range(eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Fills a memory range with a repeating pattern from another memory range.
+ * @param self Destination memory range to fill with pattern
+ * @param other Source memory range containing the pattern to repeat
+ * @return Pointer to the end of filled data in destination range
+ *
+ * @note The entire source range is treated as the pattern to repeat
+ * @note Internally calls eya_memory_range_set_pattern_range after unpacking ranges
+ * @warning If source range is empty, no operation is performed
+ * @see eya_memory_range_set_pattern_range For version with explicit pointers
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_set_pattern(eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
  * @brief Copy data from another memory range to this memory range
  * @param self Pointer to destination memory range
  * @param other Pointer to source memory range
