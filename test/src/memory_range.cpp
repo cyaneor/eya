@@ -1227,8 +1227,7 @@ TEST(eya_memory_range_assign_by_size, fails_on_null_begin) {
   EXPECT_DEATH(eya_memory_range_assign_by_size(&range, nullptr, 0x1000), ".*");
 }
 
-TEST(eya_memory_range_set_by_size_with_fallback,
-     sets_range_when_begin_not_null) {
+TEST(eya_memory_range_set_by_size_with_safe, sets_range_when_begin_not_null) {
   eya_memory_range_t range;
 
   eya_memory_range_set_by_size_with_safe(&range, (void *)0x1000, 0x1000);
@@ -1237,7 +1236,7 @@ TEST(eya_memory_range_set_by_size_with_fallback,
   EXPECT_EQ(range.end, (void *)0x2000);
 }
 
-TEST(eya_memory_range_set_by_size_with_fallback, clears_range_when_begin_null) {
+TEST(eya_memory_range_set_by_size_with_safe, clears_range_when_begin_null) {
   eya_memory_range_t range = {(void *)0x1000, (void *)0x2000};
 
   eya_memory_range_set_by_size_with_safe(&range, nullptr, 0x1000);
