@@ -1735,18 +1735,20 @@ TEST(eya_memory_range_copy_rev_range, small_range_copy) {
 
 TEST(eya_memory_range_copy_rev_range, large_range_copy) {
   static const size_t size = 1024 * 1024;
-  static char src[size];
-  char dst[size];
+  std::vector<char> src(size, 0); // Heap allocation
+  std::vector<char> dst(size, 0); // Heap allocation
 
-  eya_memory_range_t self = {dst, dst + size};
+  eya_memory_range_t self = {dst.data(), dst.data() + size};
   eya_memory_range_set(&self, 0);
 
   for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
 
-  void *ret = eya_memory_range_copy_rev_range(&self, src, src + size);
-  EXPECT_EQ(ret, dst + size);
+  void *ret =
+      eya_memory_range_copy_rev_range(&self, src.data(), src.data() + size);
+  EXPECT_EQ(ret, dst.data() + size);
+
   for (size_t i = 0; i < size; ++i) {
     EXPECT_EQ(dst[i], src[size - 1 - i]);
   }
@@ -1799,10 +1801,10 @@ TEST(eya_memory_range_copy_rev, small_range_copy) {
 
 TEST(eya_memory_range_copy_rev, large_range_copy) {
   static const size_t size = 1024 * 1024;
-  static char src[size];
-  char dst[size];
+  static char src[size] = {};     // Static, in data segment
+  std::vector<char> dst(size, 0); // Heap allocation
 
-  eya_memory_range_t self = {dst, dst + size};
+  eya_memory_range_t self = {dst.data(), dst.data() + size};
   eya_memory_range_set(&self, 0);
   eya_memory_range_t other = {src, src + size};
 
@@ -1811,7 +1813,7 @@ TEST(eya_memory_range_copy_rev, large_range_copy) {
   }
 
   void *ret = eya_memory_range_copy_rev(&self, &other);
-  EXPECT_EQ(ret, dst + size);
+  EXPECT_EQ(ret, dst.data() + size);
   for (size_t i = 0; i < size; ++i) {
     EXPECT_EQ(dst[i], src[size - 1 - i]);
   }
