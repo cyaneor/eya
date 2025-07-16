@@ -184,7 +184,7 @@ eya_memory_typed_back(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal_element_size_to(const void *self, eya_usize_t element_size);
+eya_memory_typed_is_equal_element_size_to(const eya_memory_typed_t *self, eya_usize_t element_size);
 
 /**
  * @brief Check if two typed memory ranges have equal element sizes
@@ -194,7 +194,8 @@ eya_memory_typed_is_equal_element_size_to(const void *self, eya_usize_t element_
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal_element_size(const void *self, const void *other);
+eya_memory_typed_is_equal_element_size(const eya_memory_typed_t *self,
+                                       const eya_memory_typed_t *other);
 
 /**
  * @brief Check if two typed memory ranges are equal
@@ -204,7 +205,7 @@ eya_memory_typed_is_equal_element_size(const void *self, const void *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal(const void *self, const void *other);
+eya_memory_typed_is_equal(const eya_memory_typed_t *self, const eya_memory_typed_t *other);
 
 EYA_COMPILER(EXTERN_C_END)
 
