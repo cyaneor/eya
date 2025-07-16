@@ -300,6 +300,15 @@ eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya
     return eya_memory_range_make(begin, end);
 }
 
+void
+eya_memory_range_set_value(eya_memory_range_t *self,
+                           eya_uoffset_t       offset,
+                           bool                reversed,
+                           eya_uchar_t         value)
+{
+    *eya_ptr_cast(eya_uchar_t, eya_memory_range_at(self, offset, reversed)) = value;
+}
+
 void *
 eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value)
 {

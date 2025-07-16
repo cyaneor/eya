@@ -393,6 +393,20 @@ eya_memory_range_t
 eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya_usize_t size);
 
 /**
+ * @brief Sets a single byte at a specified offset in a memory range
+ * @param self Pointer to the memory range structure
+ * @param offset Offset from the start of the memory range
+ * @param reversed If true, offset is calculated from the end of the range
+ * @param value The byte value to set at the specified offset
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_set_value(eya_memory_range_t *self,
+                           eya_uoffset_t       offset,
+                           bool                reversed,
+                           eya_uchar_t         value);
+
+/**
  * @brief Sets all bytes in a memory range to a specified value.
  * @param self Pointer to the memory range structure
  *             defining the destination memory range.
