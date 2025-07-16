@@ -241,6 +241,36 @@ void *
 eya_memory_raw_set(void *dst, const void *dst_end, eya_uchar_t val);
 
 /**
+ * @brief Fills a memory range [dst, dst_end)
+ *        with a repeating pattern from [src, src_end).
+ *
+ * This function safely copies the source pattern repeatedly into the destination range,
+ * using pointer arithmetic to determine buffer sizes. It provides a more intuitive interface
+ * for working with pointer-based ranges while maintaining full safety through runtime checks.
+ *
+ * @param[out] dst     Pointer to the start of the destination range (inclusive).
+ * @param[in]  dst_end Pointer to the end of the destination range (exclusive).
+ * @param[in]  src     Pointer to the start of the source pattern (inclusive).
+ * @param[in]  src_end Pointer to the end of the source pattern (exclusive).
+ *
+ * @return Returns the original destination pointer (dst) on success.
+ *         Returns NULL if the destination or source range is empty
+ *         (dst == dst_end or src == src_end).
+ *
+ * @note Both dst_end and src_end pointers are validated via eya_runtime_check_ref.
+ * @note Internally converts pointer ranges to sizes and calls eya_memory_set_pattern.
+ * @warning Returns NULL if either range is empty (zero-size operation).
+ * @warning The function assumes valid pointer ranges (dst_end >= dst and src_end >= src).
+ *
+ * @see eya_memory_set_pattern For the size-based version of this operation.
+ * @see eya_memory_raw_set     For filling a range with a single byte value.
+ * @see eya_ptr_udiff          For details on pointer difference calculation.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_raw_set_pattern(void *dst, const void *dst_end, const void *src, const void *src_end);
+
+/**
  * @brief Compares two memory blocks using end pointers instead of sizes.
  *
  * Compares the contents of two memory blocks defined by pointer ranges [lhs, lhs_end)

@@ -57,6 +57,19 @@ eya_memory_raw_set(void *dst, const void *dst_end, const eya_uchar_t value)
     return eya_memory_set(dst, n, value);
 }
 
+void *
+eya_memory_raw_set_pattern(void *dst, const void *dst_end, const void *src, const void *src_end)
+{
+
+    eya_runtime_check_ref(dst_end);
+    eya_runtime_check_ref(src_end);
+
+    eya_uaddr_t dst_size = eya_ptr_udiff(dst_end, dst);
+    eya_uaddr_t src_size = eya_ptr_udiff(src_end, src);
+
+    return eya_memory_set_pattern(dst, dst_size, src, src_size);
+}
+
 const void *
 eya_memory_raw_compare(const void *lhs, const void *lhs_end, const void *rhs, const void *rhs_end)
 {

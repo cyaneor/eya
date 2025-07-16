@@ -210,7 +210,7 @@
 #define eya_algorithm_copy_rev(T, dst, src, n)                                                     \
     do                                                                                             \
     {                                                                                              \
-        T       *d = eya_ptr_cast(T, dst) + (n);                                                   \
+        T       *d = eya_ptr_add_by_offset_unsafe(dst, n);                                         \
         const T *s = eya_ptr_cast(const T, src);                                                   \
                                                                                                    \
         while (n--)                                                                                \

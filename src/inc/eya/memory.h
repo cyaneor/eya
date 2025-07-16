@@ -167,6 +167,34 @@ void *
 eya_memory_set(void *dst, eya_usize_t size, eya_uchar_t val);
 
 /**
+ * @brief Fills a memory buffer with a repeating pattern from a source buffer.
+ *
+ * This function safely copies the source pattern repeatedly into the destination buffer,
+ * handling cases where the pattern doesn't evenly divide the destination size. It performs
+ * full runtime validation of input parameters and ensures no buffer overflows occur.
+ *
+ * @param[out] dst      Pointer to the destination buffer to fill.
+ * @param[in]  dst_size Total size of the destination buffer in bytes.
+ * @param[in]  src      Pointer to the source pattern to replicate.
+ * @param[in]  src_size Size of the source pattern in bytes.
+ *
+ * @return Returns the original destination pointer (dst) on success.
+ *         Returns NULL if either dst_size or src_size is zero.
+ *
+ * @note Both dst and src pointers are validated via eya_runtime_check_ref.
+ * @note The function handles partial pattern copies at the end of the buffer.
+ * @warning Returns NULL if either buffer size is zero (no operation performed).
+ * @warning If src_size exceeds dst_size, only the first dst_size bytes of src are used.
+ *
+ * @see eya_memory_set       For filling with a single byte value.
+ * @see eya_memory_copy      For direct buffer-to-buffer copying.
+ * @see eya_memory_move      For overlap-safe memory transfers.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_set_pattern(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size);
+
+/**
  * @brief Safely compares two memory buffers with size checking.
  *
  * This function compares the smaller of @p lhs_size or @p rhs_size bytes between

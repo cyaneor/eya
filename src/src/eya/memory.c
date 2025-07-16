@@ -40,6 +40,32 @@ eya_memory_set(void *dst, eya_usize_t size, eya_uchar_t val)
     return eya_memory_std_set(dst, val, size);
 }
 
+void *
+eya_memory_set_pattern(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size)
+{
+    eya_runtime_check_ref(dst);
+    eya_runtime_check_ref(src);
+
+    eya_runtime_return_ifn(dst_size, nullptr);
+    eya_runtime_return_ifn(src_size, nullptr);
+
+    eya_uchar_t       *d = eya_ptr_cast(eya_uchar_t, dst);
+    const eya_uchar_t *s = eya_ptr_cast(const eya_uchar_t, src);
+
+    for (eya_usize_t i = 0; i < dst_size; i += src_size)
+    {
+        eya_usize_t remaining = dst_size - i;
+        eya_usize_t copy_size = (remaining < src_size) ? remaining : src_size;
+
+        for (eya_usize_t j = 0; j < copy_size; j++)
+        {
+            d[i + j] = s[j];
+        }
+    }
+
+    return d;
+}
+
 const void *
 eya_memory_compare(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size)
 {
