@@ -27,7 +27,7 @@ endif ()
 
 if (NOT DEFINED EYA_LIB_ROOT_DIR)
     # Directory containing library components
-    set(EYA_LIB_ROOT_DIR ${EYA_ROOT_DIR}/src)
+    set(EYA_LIB_ROOT_DIR ${EYA_ROOT_DIR}/lib)
 endif ()
 
 if (NOT DEFINED EYA_TEST_ROOT_DIR)
