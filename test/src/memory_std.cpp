@@ -1,67 +1,56 @@
 #include <eya/memory_std.h>
 #include <gtest/gtest.h>
 
-TEST(eya_memory_std_set, fill_zero_length)
-{
+TEST(eya_memory_std_set, fill_zero_length) {
   static unsigned char buffer[10] = {0};
   void *ret = eya_memory_std_set(buffer, 0xAA, 0);
-  for (size_t i = 0; i < sizeof(buffer); ++i)
-  {
+  for (size_t i = 0; i < sizeof(buffer); ++i) {
     EXPECT_EQ(buffer[i], 0);
   }
   EXPECT_EQ(ret, buffer);
 }
 
-TEST(eya_memory_std_set, fill_full_buffer)
-{
+TEST(eya_memory_std_set, fill_full_buffer) {
   static unsigned char buffer[64];
   void *ret = eya_memory_std_set(buffer, 0x55, sizeof(buffer));
-  for (size_t i = 0; i < sizeof(buffer); ++i)
-  {
+  for (size_t i = 0; i < sizeof(buffer); ++i) {
     EXPECT_EQ(buffer[i], 0x55);
   }
   EXPECT_EQ(ret, buffer + sizeof(buffer));
 }
 
-TEST(eya_memory_std_set, fill_partial_buffer)
-{
+TEST(eya_memory_std_set, fill_partial_buffer) {
   static unsigned char buffer[32];
   eya_memory_std_set(buffer, 0, sizeof(buffer));
   size_t fill_size = 20;
   void *ret = eya_memory_std_set(buffer, 0xFF, fill_size);
-  for (size_t i = 0; i < fill_size; ++i)
-  {
+  for (size_t i = 0; i < fill_size; ++i) {
     EXPECT_EQ(buffer[i], 0xFF);
   }
-  for (size_t i = fill_size; i < sizeof(buffer); ++i)
-  {
+  for (size_t i = fill_size; i < sizeof(buffer); ++i) {
     EXPECT_EQ(buffer[i], 0);
   }
   EXPECT_EQ(ret, buffer + fill_size);
 }
 
-TEST(eya_memory_std_set, fill_single_byte)
-{
+TEST(eya_memory_std_set, fill_single_byte) {
   static unsigned char buffer[1] = {0};
   void *ret = eya_memory_std_set(buffer, 0x7E, 1);
   EXPECT_EQ(buffer[0], 0x7E);
   EXPECT_EQ(ret, buffer + 1);
 }
 
-TEST(eya_memory_std_set, fill_large_buffer)
-{
+TEST(eya_memory_std_set, fill_large_buffer) {
   static unsigned char buffer[128];
   eya_memory_std_set(buffer, 0, sizeof(buffer));
   void *ret = eya_memory_std_set(buffer, 0x0F, sizeof(buffer));
-  for (size_t i = 0; i < sizeof(buffer); ++i)
-  {
+  for (size_t i = 0; i < sizeof(buffer); ++i) {
     EXPECT_EQ(buffer[i], 0x0F);
   }
   EXPECT_EQ(ret, buffer + sizeof(buffer));
 }
 
-TEST(eya_memory_std_copy, small_array_copy)
-{
+TEST(eya_memory_std_copy, small_array_copy) {
   static const char src[] = "Hello, world!";
   char dst[sizeof(src)] = {0};
 
@@ -70,14 +59,12 @@ TEST(eya_memory_std_copy, small_array_copy)
   EXPECT_EQ(0, memcmp(dst, src, sizeof(src)));
 }
 
-TEST(eya_memory_std_copy, large_array_copy)
-{
+TEST(eya_memory_std_copy, large_array_copy) {
   static const size_t size = 1024 * 1024;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -87,8 +74,7 @@ TEST(eya_memory_std_copy, large_array_copy)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_copy, one_byte_copy)
-{
+TEST(eya_memory_std_copy, one_byte_copy) {
   static const char src[] = {42};
   char dst[1] = {0};
 
@@ -97,20 +83,17 @@ TEST(eya_memory_std_copy, one_byte_copy)
   EXPECT_EQ(dst[0], src[0]);
 }
 
-TEST(eya_memory_std_copy, nullptr_dst)
-{
+TEST(eya_memory_std_copy, nullptr_dst) {
   static const char src[] = "data";
   EXPECT_DEATH(eya_memory_std_copy(nullptr, src, sizeof(src)), ".*");
 }
 
-TEST(eya_memory_std_copy, nullptr_src)
-{
+TEST(eya_memory_std_copy, nullptr_src) {
   char dst[10];
   EXPECT_DEATH(eya_memory_std_copy(dst, nullptr, 10), ".*");
 }
 
-TEST(eya_memory_std_copy, return_pointer_is_end_of_copied_block)
-{
+TEST(eya_memory_std_copy, return_pointer_is_end_of_copied_block) {
   static const char src[] = "Test data";
   char dst[sizeof(src)] = {0};
 
@@ -118,8 +101,7 @@ TEST(eya_memory_std_copy, return_pointer_is_end_of_copied_block)
   EXPECT_EQ(ret, dst + sizeof(src));
 }
 
-TEST(eya_memory_std_copy, return_pointer_with_zero_length)
-{
+TEST(eya_memory_std_copy, return_pointer_with_zero_length) {
   static const char src[] = "Test data";
   char dst[sizeof(src)] = {0};
 
@@ -127,14 +109,12 @@ TEST(eya_memory_std_copy, return_pointer_with_zero_length)
   EXPECT_EQ(ret, dst);
 }
 
-TEST(eya_memory_std_copy, copy_128_bytes)
-{
+TEST(eya_memory_std_copy, copy_128_bytes) {
   static const size_t size = 128;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -144,14 +124,12 @@ TEST(eya_memory_std_copy, copy_128_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_copy, copy_256_bytes)
-{
+TEST(eya_memory_std_copy, copy_256_bytes) {
   static const size_t size = 256;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -161,14 +139,12 @@ TEST(eya_memory_std_copy, copy_256_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_copy, copy_512_bytes)
-{
+TEST(eya_memory_std_copy, copy_512_bytes) {
   static const size_t size = 512;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -178,8 +154,121 @@ TEST(eya_memory_std_copy, copy_512_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_rcopy, small_array_copy)
-{
+TEST(eya_memory_std_copy_rev, small_array_copy) {
+  static const char src[] = "Hello, world!";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy_rev(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst + sizeof(src));
+  for (size_t i = 0; i < sizeof(src); ++i) {
+    EXPECT_EQ(dst[i], src[sizeof(src) - 1 - i]);
+  }
+}
+
+TEST(eya_memory_std_copy_rev, large_array_copy) {
+  static const size_t size = 1024 * 1024;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  eya_memory_std_set(dst, 0, size);
+
+  void *ret = eya_memory_std_copy_rev(dst, src, size);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_std_copy_rev, one_byte_copy) {
+  static const char src[] = {42};
+  char dst[1] = {0};
+
+  void *ret = eya_memory_std_copy_rev(dst, src, 1);
+  EXPECT_EQ(ret, dst + 1);
+  EXPECT_EQ(dst[0], src[0]);
+}
+
+TEST(eya_memory_std_copy_rev, nullptr_dst) {
+  static const char src[] = "data";
+  EXPECT_DEATH(eya_memory_std_copy_rev(nullptr, src, sizeof(src)), ".*");
+}
+
+TEST(eya_memory_std_copy_rev, nullptr_src) {
+  char dst[10];
+  EXPECT_DEATH(eya_memory_std_copy_rev(dst, nullptr, 10), ".*");
+}
+
+TEST(eya_memory_std_copy_rev, return_pointer_is_end_of_copied_block) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy_rev(dst, src, sizeof(src));
+  EXPECT_EQ(ret, dst + sizeof(src));
+}
+
+TEST(eya_memory_std_copy_rev, return_pointer_with_zero_length) {
+  static const char src[] = "Test data";
+  char dst[sizeof(src)] = {0};
+
+  void *ret = eya_memory_std_copy_rev(dst, src, 0);
+  EXPECT_EQ(ret, dst);
+}
+
+TEST(eya_memory_std_copy_rev, copy_128_bytes) {
+  static const size_t size = 128;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  eya_memory_std_set(dst, 0, size);
+
+  void *ret = eya_memory_std_copy_rev(dst, src, size);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_std_copy_rev, copy_256_bytes) {
+  static const size_t size = 256;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  eya_memory_std_set(dst, 0, size);
+
+  void *ret = eya_memory_std_copy_rev(dst, src, size);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_std_copy_rev, copy_512_bytes) {
+  static const size_t size = 512;
+  static char src[size];
+  static char dst[size];
+
+  for (size_t i = 0; i < size; ++i) {
+    src[i] = static_cast<char>(i & 0xFF);
+  }
+  eya_memory_std_set(dst, 0, size);
+
+  void *ret = eya_memory_std_copy_rev(dst, src, size);
+  EXPECT_EQ(ret, dst + size);
+  for (size_t i = 0; i < size; ++i) {
+    EXPECT_EQ(dst[i], src[size - 1 - i]);
+  }
+}
+
+TEST(eya_memory_std_rcopy, small_array_copy) {
   static const char src[] = "Hello, world!";
   char dst[sizeof(src)] = {0};
 
@@ -188,14 +277,12 @@ TEST(eya_memory_std_rcopy, small_array_copy)
   EXPECT_EQ(0, memcmp(dst, src, sizeof(src)));
 }
 
-TEST(eya_memory_std_rcopy, large_array_copy)
-{
+TEST(eya_memory_std_rcopy, large_array_copy) {
   static const size_t size = 1024 * 1024;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -205,8 +292,7 @@ TEST(eya_memory_std_rcopy, large_array_copy)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_rcopy, one_byte_copy)
-{
+TEST(eya_memory_std_rcopy, one_byte_copy) {
   static const char src[] = {42};
   char dst[1] = {0};
 
@@ -215,34 +301,29 @@ TEST(eya_memory_std_rcopy, one_byte_copy)
   EXPECT_EQ(dst[0], src[0]);
 }
 
-TEST(eya_memory_std_rcopy, zero_length_copy)
-{
+TEST(eya_memory_std_rcopy, zero_length_copy) {
   static const char src[] = "test";
   char dst[sizeof(src)] = {0};
 
   void *ret = eya_memory_std_rcopy(dst, src, 0);
   EXPECT_EQ(ret, dst);
   // dst should remain unchanged (all zeros)
-  for (size_t i = 0; i < sizeof(src); ++i)
-  {
+  for (size_t i = 0; i < sizeof(src); ++i) {
     EXPECT_EQ(dst[i], 0);
   }
 }
 
-TEST(eya_memory_std_rcopy, nullptr_dst)
-{
+TEST(eya_memory_std_rcopy, nullptr_dst) {
   static const char src[] = "data";
   EXPECT_DEATH(eya_memory_std_rcopy(nullptr, src, sizeof(src)), ".*");
 }
 
-TEST(eya_memory_std_rcopy, nullptr_src)
-{
+TEST(eya_memory_std_rcopy, nullptr_src) {
   char dst[10];
   EXPECT_DEATH(eya_memory_std_rcopy(dst, nullptr, 10), ".*");
 }
 
-TEST(eya_memory_std_rcopy, return_pointer_is_start_of_dst)
-{
+TEST(eya_memory_std_rcopy, return_pointer_is_start_of_dst) {
   static const char src[] = "Test data";
   char dst[sizeof(src)] = {0};
 
@@ -250,8 +331,7 @@ TEST(eya_memory_std_rcopy, return_pointer_is_start_of_dst)
   EXPECT_EQ(ret, dst);
 }
 
-TEST(eya_memory_std_rcopy, return_pointer_with_zero_length)
-{
+TEST(eya_memory_std_rcopy, return_pointer_with_zero_length) {
   static const char src[] = "Test data";
   char dst[sizeof(src)] = {0};
 
@@ -259,14 +339,12 @@ TEST(eya_memory_std_rcopy, return_pointer_with_zero_length)
   EXPECT_EQ(ret, dst);
 }
 
-TEST(eya_memory_std_rcopy, rcopy_128_bytes)
-{
+TEST(eya_memory_std_rcopy, rcopy_128_bytes) {
   static const size_t size = 128;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -276,14 +354,12 @@ TEST(eya_memory_std_rcopy, rcopy_128_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_rcopy, rcopy_256_bytes)
-{
+TEST(eya_memory_std_rcopy, rcopy_256_bytes) {
   static const size_t size = 256;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -293,14 +369,12 @@ TEST(eya_memory_std_rcopy, rcopy_256_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_rcopy, rcopy_512_bytes)
-{
+TEST(eya_memory_std_rcopy, rcopy_512_bytes) {
   static const size_t size = 512;
   static char src[size];
   static char dst[size];
 
-  for (size_t i = 0; i < size; ++i)
-  {
+  for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
   }
   eya_memory_std_set(dst, 0, size);
@@ -310,8 +384,7 @@ TEST(eya_memory_std_rcopy, rcopy_512_bytes)
   EXPECT_EQ(0, memcmp(dst, src, size));
 }
 
-TEST(eya_memory_std_move, non_overlapping_regions)
-{
+TEST(eya_memory_std_move, non_overlapping_regions) {
   const char src[] = "test data";
   char dst[sizeof(src)] = {0};
 
@@ -324,8 +397,7 @@ TEST(eya_memory_std_move, non_overlapping_regions)
   EXPECT_EQ(static_cast<char *>(result), dst + sizeof(src));
 }
 
-TEST(eya_memory_std_move, overlapping_regions_src_before_dst)
-{
+TEST(eya_memory_std_move, overlapping_regions_src_before_dst) {
   char buffer[] = "abcdefghij";
   const size_t move_size = 5;
   const char *src = buffer;
@@ -340,8 +412,7 @@ TEST(eya_memory_std_move, overlapping_regions_src_before_dst)
   EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
 }
 
-TEST(eya_memory_std_move, overlapping_regions_dst_before_src)
-{
+TEST(eya_memory_std_move, overlapping_regions_dst_before_src) {
   char buffer[] = "abcdefghij";
   const size_t move_size = 5;
   void *dst = buffer;
@@ -356,8 +427,7 @@ TEST(eya_memory_std_move, overlapping_regions_dst_before_src)
   EXPECT_EQ(static_cast<char *>(result), static_cast<char *>(dst) + move_size);
 }
 
-TEST(eya_memory_std_move, zero_byte_move)
-{
+TEST(eya_memory_std_move, zero_byte_move) {
   char src[] = "source";
   char dst[] = "destination";
 
@@ -368,15 +438,13 @@ TEST(eya_memory_std_move, zero_byte_move)
   EXPECT_EQ(result, dst);
 }
 
-TEST(eya_memory_std_move, null_pointers)
-{
+TEST(eya_memory_std_move, null_pointers) {
   // This test assumes the function handles null pointers gracefully
   // Note: In real code, we might want to add assertions for this case
   EXPECT_DEATH(eya_memory_std_move(nullptr, nullptr, 10), ".*");
 }
 
-TEST(eya_memory_std_move, full_overlap_same_pointer)
-{
+TEST(eya_memory_std_move, full_overlap_same_pointer) {
   char buffer[] = "test data";
   const char *original = "test data";
 
@@ -387,8 +455,7 @@ TEST(eya_memory_std_move, full_overlap_same_pointer)
   EXPECT_EQ(static_cast<char *>(result), buffer + sizeof(buffer));
 }
 
-TEST(eya_memory_std_move, partial_overlap_small_buffer)
-{
+TEST(eya_memory_std_move, partial_overlap_small_buffer) {
   char buffer[5] = {1, 2, 3, 4, 5};
   void *result = eya_memory_std_move(buffer + 1, buffer, 3);
 
@@ -401,8 +468,7 @@ TEST(eya_memory_std_move, partial_overlap_small_buffer)
   EXPECT_EQ(static_cast<char *>(result), buffer + 1 + 3);
 }
 
-TEST(eya_memory_std_compare, equal_buffers)
-{
+TEST(eya_memory_std_compare, equal_buffers) {
   // Small buffer (within EYA_MEMORY_STD_SMALL_BLOCK_THRESHOLD)
   char buf1[] = "abcdefghijklmnop";
   char buf2[] = "abcdefghijklmnop";
@@ -427,8 +493,7 @@ TEST(eya_memory_std_compare, equal_buffers)
 }
 
 // Test unequal buffers with difference at various positions
-TEST(eya_memory_std_compare, unequal_buffers)
-{
+TEST(eya_memory_std_compare, unequal_buffers) {
   // Difference in first byte
   char buf1[] = "Xbcdefgh";
   char buf2[] = "Ybcdefgh";
@@ -460,8 +525,7 @@ TEST(eya_memory_std_compare, unequal_buffers)
 }
 
 // Test unaligned buffers
-TEST(eya_memory_std_compare, unaligned_buffers)
-{
+TEST(eya_memory_std_compare, unaligned_buffers) {
   char buf1[] = "abcdefghijklmnopqrst";
   char buf2[] = "abcdefghijklmnopqrst";
   // Offset lhs by 1 to make it unaligned
@@ -474,8 +538,7 @@ TEST(eya_memory_std_compare, unaligned_buffers)
 }
 
 // Test partial block sizes
-TEST(eya_memory_std_compare, partial_blocks)
-{
+TEST(eya_memory_std_compare, partial_blocks) {
   char buf1[] = "abcdefg";
   char buf2[] = "abcdefg";
   EXPECT_EQ(nullptr, eya_memory_std_compare(buf1, buf2, 7));
@@ -494,36 +557,31 @@ TEST(eya_memory_std_compare, partial_blocks)
   EXPECT_EQ(buf7, eya_memory_std_compare(buf7, buf8, 1));
 }
 
-TEST(eya_memory_std_rcompare, empty_input)
-{
+TEST(eya_memory_std_rcompare, empty_input) {
   uint8_t lhs[1] = {0};
   uint8_t rhs[1] = {0};
   EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 0));
 }
 
-TEST(eya_memory_std_rcompare, small_block_identical)
-{
+TEST(eya_memory_std_rcompare, small_block_identical) {
   uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
   uint8_t rhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
   EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 16));
 }
 
-TEST(eya_memory_std_rcompare, small_block_mismatch_last)
-{
+TEST(eya_memory_std_rcompare, small_block_mismatch_last) {
   uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
   uint8_t rhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 99};
   EXPECT_EQ(lhs + 15, eya_memory_std_rcompare(lhs, rhs, 16));
 }
 
-TEST(eya_memory_std_rcompare, small_block_mismatch_first)
-{
+TEST(eya_memory_std_rcompare, small_block_mismatch_first) {
   uint8_t lhs[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
   uint8_t rhs[16] = {99, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
   EXPECT_EQ(lhs + 0, eya_memory_std_rcompare(lhs, rhs, 16));
 }
 
-TEST(eya_memory_std_rcompare, medium_block_identical)
-{
+TEST(eya_memory_std_rcompare, medium_block_identical) {
   uint8_t lhs[32];
   uint8_t rhs[32];
   eya_memory_std_set(lhs, 0xAA, 32);
@@ -531,8 +589,7 @@ TEST(eya_memory_std_rcompare, medium_block_identical)
   EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 32));
 }
 
-TEST(eya_memory_std_rcompare, medium_block_mismatch_middle)
-{
+TEST(eya_memory_std_rcompare, medium_block_mismatch_middle) {
   uint8_t lhs[32];
   uint8_t rhs[32];
   eya_memory_std_set(lhs, 0xAA, 32);
@@ -541,8 +598,7 @@ TEST(eya_memory_std_rcompare, medium_block_mismatch_middle)
   EXPECT_EQ(lhs + 16, eya_memory_std_rcompare(lhs, rhs, 32));
 }
 
-TEST(eya_memory_std_rcompare, large_block_identical)
-{
+TEST(eya_memory_std_rcompare, large_block_identical) {
   uint8_t lhs[128];
   uint8_t rhs[128];
   eya_memory_std_set(lhs, 0x55, 128);
@@ -550,8 +606,7 @@ TEST(eya_memory_std_rcompare, large_block_identical)
   EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs, rhs, 128));
 }
 
-TEST(eya_memory_std_rcompare, large_block_mismatch_end)
-{
+TEST(eya_memory_std_rcompare, large_block_mismatch_end) {
   uint8_t lhs[128];
   uint8_t rhs[128];
   eya_memory_std_set(lhs, 0x55, 128);
@@ -560,8 +615,7 @@ TEST(eya_memory_std_rcompare, large_block_mismatch_end)
   EXPECT_EQ(lhs + 127, eya_memory_std_rcompare(lhs, rhs, 128));
 }
 
-TEST(eya_memory_std_rcompare, large_block_mismatch_start)
-{
+TEST(eya_memory_std_rcompare, large_block_mismatch_start) {
   uint8_t lhs[128];
   uint8_t rhs[128];
   eya_memory_std_set(lhs, 0x55, 128);
@@ -570,8 +624,7 @@ TEST(eya_memory_std_rcompare, large_block_mismatch_start)
   EXPECT_EQ(lhs + 0, eya_memory_std_rcompare(lhs, rhs, 128));
 }
 
-TEST(eya_memory_std_rcompare, unaligned_input)
-{
+TEST(eya_memory_std_rcompare, unaligned_input) {
   alignas(64) uint8_t lhs[135];
   alignas(64) uint8_t rhs[135];
   eya_memory_std_set(lhs, 0x33, 135);
@@ -580,8 +633,7 @@ TEST(eya_memory_std_rcompare, unaligned_input)
   EXPECT_EQ(nullptr, eya_memory_std_rcompare(lhs + 1, rhs + 1, 134));
 }
 
-TEST(eya_memory_std_rcompare, unaligned_mismatch)
-{
+TEST(eya_memory_std_rcompare, unaligned_mismatch) {
   alignas(64) uint8_t lhs[135];
   alignas(64) uint8_t rhs[135];
   eya_memory_std_set(lhs, 0x33, 135);

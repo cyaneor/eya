@@ -14,6 +14,13 @@ eya_memory_copy(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t sr
 }
 
 void *
+eya_memory_copy_rev(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size)
+{
+    const eya_usize_t n = eya_math_min(dst_size, src_size);
+    return eya_memory_std_copy_rev(dst, src, n);
+}
+
+void *
 eya_memory_rcopy(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size)
 {
     const eya_usize_t n = eya_math_min(dst_size, src_size);

@@ -195,4 +195,28 @@
         }                                                                                          \
     } while (0)
 
+/**
+ * @def eya_algorithm_copy_rev(T, dst, src, n)
+ * @brief Copies elements from source to destination in reversed order
+ * @param T Data type of elements
+ * @param dst Destination pointer
+ * @param src Source pointer
+ * @param n Number of elements to copy
+ * @note Both pointers must be valid and have enough space for n elements
+ * @details Copies elements from source to destination such that the first element
+ *          of src becomes the last element of dst, the second element of src
+ *          becomes the second-to-last element of dst, and so on.
+ */
+#define eya_algorithm_copy_rev(T, dst, src, n)                                                     \
+    do                                                                                             \
+    {                                                                                              \
+        T       *d = eya_ptr_cast(T, dst) + (n);                                                   \
+        const T *s = eya_ptr_cast(const T, src);                                                   \
+                                                                                                   \
+        while (n--)                                                                                \
+        {                                                                                          \
+            *--d = *s++;                                                                           \
+        }                                                                                          \
+    } while (0)
+
 #endif // EYA_ALGORITHM_UTILS_H

@@ -50,6 +50,35 @@ void *
 eya_memory_std_copy(void *dst, const void *src, eya_usize_t n);
 
 /**
+ * @brief Copies bytes from source to destination in reversed order.
+ *
+ * This function copies @p n bytes from the memory area pointed to by @p src
+ * to the memory area pointed to by @p dst, reversing the order of bytes.
+ *
+ * The first byte of @p src becomes the last byte of @p dst, the second byte
+ * of @p src becomes the second-to-last byte of @p dst, and so on.
+ * The memory areas must be valid and accessible, and should not overlap.
+ *
+ * @param[out] dst Pointer to the destination memory location.
+ * @param[in]  src Pointer to the source memory location to copy from.
+ * @param[in]  n   Number of bytes to copy.
+ *
+ * @return Returns a pointer to the end of the destination memory location
+ *         (@p dst + @p n).
+ *
+ * @note Both @p dst and @p src pointers are checked for validity using
+ *       eya_runtime_check_ref before performing the copy operation.
+ *
+ * @warning The behavior is undefined if the source and destination buffers overlap.
+ *
+ * @see eya_memory_std_copy   For non-overlapping forward copy.
+ * @see eya_memory_std_rcopy  For backward copy without reversing content.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_std_copy_rev(void *dst, const void *src, eya_usize_t n);
+
+/**
  * @brief Copies bytes from source to destination in reverse order (backward copy).
  *
  * This function copies @p n bytes from @p src to @p dst, starting from the end

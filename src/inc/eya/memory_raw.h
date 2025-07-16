@@ -78,6 +78,42 @@ void *
 eya_memory_raw_copy(void *dst, const void *dst_end, const void *src, const void *src_end);
 
 /**
+ * @brief Copies bytes from source to destination in reversed order using pointer ranges.
+ *
+ * This function copies bytes from the source range [@p src, @p src_end) to the destination
+ * range [@p dst, @p dst_end) in reversed order. The number of bytes copied is the minimum
+ * of the destination and source range sizes.
+ *
+ * The copy operation reverses the byte order - the first byte of the source range becomes
+ * the last byte of the destination range, and so on. The ranges must be valid and should
+ * not overlap.
+ *
+ * @param[out] dst     Pointer to the start of the destination memory range.
+ * @param[in]  dst_end Pointer to the end of the destination memory range (exclusive).
+ * @param[in]  src     Pointer to the start of the source memory range.
+ * @param[in]  src_end Pointer to the end of the source memory range (exclusive).
+ *
+ * @return Returns a pointer to the destination memory location (@p dst).
+ *
+ * @note The function calculates the sizes using @p eya_ptr_udiff and delegates to
+ *       @p eya_memory_copy_rev which performs the actual copy with size checking.
+ * @note The ranges are half-open intervals: [start, end).
+ *
+ * @warning The behavior is undefined if:
+ *          - The ranges overlap
+ *          - @p dst_end comes before @p dst
+ *          - @p src_end comes before @p src
+ *          - Any pointer is NULL
+ *
+ * @see eya_memory_copy_rev      For the size-checked version of reverse copy.
+ * @see eya_memory_std_copy_rev  For the low-level reverse copy implementation.
+ * @see eya_ptr_udiff            For the pointer difference calculation.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_raw_copy_rev(void *dst, const void *dst_end, const void *src, const void *src_end);
+
+/**
  * @brief Performs reverse memory copy using end pointers instead of sizes.
  *
  * Copies data from source to destination buffers in reverse order (from end to start)

@@ -12,6 +12,14 @@ eya_memory_raw_copy(void *dst, const void *dst_end, const void *src, const void 
 }
 
 void *
+eya_memory_raw_copy_rev(void *dst, const void *dst_end, const void *src, const void *src_end)
+{
+    eya_uaddr_t dst_size = eya_ptr_udiff(dst_end, dst);
+    eya_uaddr_t src_size = eya_ptr_udiff(src_end, src);
+    return eya_memory_copy_rev(dst, dst_size, src, src_size);
+}
+
+void *
 eya_memory_raw_rcopy(void *dst, const void *dst_end, const void *src, const void *src_end)
 {
     eya_uaddr_t dst_size = eya_ptr_udiff(dst_end, dst);

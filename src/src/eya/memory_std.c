@@ -28,6 +28,18 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
 }
 
 void *
+eya_memory_std_copy_rev(void *dst, const void *src, eya_usize_t n)
+{
+    eya_runtime_check_ref(dst);
+    eya_runtime_check_ref(src);
+
+    void *end = eya_ptr_add_unsafe(dst, n);
+    eya_algorithm_copy_rev(eya_uchar_t, dst, src, n);
+
+    return end;
+}
+
+void *
 eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);

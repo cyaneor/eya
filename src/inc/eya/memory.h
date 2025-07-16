@@ -54,6 +54,39 @@ void *
 eya_memory_copy(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size);
 
 /**
+ * @brief Copies bytes from source to destination
+ *        in reversed order with size checking.
+ *
+ * This function copies bytes from the memory area pointed to by @p src
+ * to the memory area pointed to by @p dst, reversing the order of bytes.
+ * The number of bytes copied is the minimum of @p dst_size and @p src_size.
+ *
+ * The first byte of @p src becomes the last byte of @p dst,
+ * the second byte of @p src becomes the second-to-last byte of @p dst, and so on.
+ * The memory areas must be valid and accessible, and should not overlap.
+ *
+ * @param[out] dst       Pointer to the destination memory location.
+ * @param[in]  dst_size  Size of the destination buffer in bytes.
+ * @param[in]  src       Pointer to the source memory location to copy from.
+ * @param[in]  src_size  Size of the source buffer in bytes.
+ *
+ * @return Returns a pointer to the destination memory location (@p dst).
+ *
+ * @note The actual number of bytes copied is the minimum of @p dst_size and @p src_size.
+ *       This provides basic protection against buffer overflows.
+ *
+ * @warning The behavior is undefined if the source and destination buffers overlap.
+ * @warning If either @p dst_size or @p src_size is zero, no bytes are copied.
+ *
+ * @see eya_memory_std_copy_rev  For the underlying implementation without size checking.
+ * @see eya_memory_std_copy      For non-overlapping forward copy.
+ * @see eya_memory_std_rcopy     For backward copy without reversing content.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_copy_rev(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size);
+
+/**
  * @brief Safely copies memory between buffers in reverse order with size checking.
  *
  * This function copies the smaller of @p dst_size or @p src_size bytes from @p src
