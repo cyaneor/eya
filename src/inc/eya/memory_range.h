@@ -414,39 +414,22 @@ void *
 eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
 
 /**
+ * @brief Sets all bytes in a memory range to a specified value.
+ * @param self Pointer to the memory range structure
+ *             defining the destination memory range.
+ * @param value The byte value to set in the memory range.
+ * @return Returns a pointer to the end of the memory range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value);
+
+/**
  * @brief Copies data from a pointer range to a memory range in reverse order.
- *
- * Copies bytes from the source range [@p begin, @p end) to the destination range
- * stored in @p self, reversing the byte order. The copy length is the minimum of
- * the two range sizes.
- *
- * @param[in,out] self  Destination memory range (will receive reversed copy)
- * @param[in]     begin Start of source memory range (inclusive)
- * @param[in]     end   End of source memory range (exclusive)
- *
- * @return Pointer to the beginning of the destination range (@p self->begin)
- *
- * @note Uses eya_memory_range_unpack_v to extract destination bounds
- * @note Delegates to eya_memory_raw_copy_rev for the actual copy operation
- * @note Both ranges must be valid and non-overlapping
- *
- * @warning Undefined behavior if:
- *          - Any parameter is NULL
- *          - Source or destination range is invalid (end <= begin)
- *          - Ranges overlap
- *          - Ranges contain NULL pointers
- *
- * Example usage:
- * @code
- * eya_memory_range_t dst;
- * char src[4] = {'A','B','C','D'};
- * eya_memory_range_copy_rev_range(&dst, src, src+4);
- * // dst now contains {'D','C','B','A'}
- * @endcode
- *
- * @see eya_memory_range_t
- * @see eya_memory_raw_copy_rev
- * @see eya_memory_range_unpack_v
+ * @param self Destination memory range (will receive reversed copy)
+ * @param begin Start of source memory range (inclusive)
+ * @param end End of source memory range (exclusive)
+ * @return Pointer to the beginning of the destination range.
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
@@ -454,35 +437,9 @@ eya_memory_range_copy_rev_range(eya_memory_range_t *self, const void *begin, con
 
 /**
  * @brief Copies data between two memory ranges in reverse order.
- *
- * Copies bytes from the source range @p other to the destination range @p self,
- * reversing the byte order. The copy length is the minimum of the two range sizes.
- *
- * @param[in,out] self  Destination memory range (will receive reversed copy)
- * @param[in]     other Source memory range to copy from
- *
- * @return Pointer to the beginning of the destination range (@p self->begin)
- *
- * @note Convenience wrapper around eya_memory_range_copy_rev_range
- * @note Unpacks both ranges using eya_memory_range_unpack_v
- * @note Preserves the reversed byte order during copy
- *
- * @warning Undefined behavior if:
- *          - Either range parameter is NULL
- *          - Any range is invalid (end <= begin)
- *          - Ranges overlap
- *          - Ranges contain NULL pointers
- *
- * Example usage:
- * @code
- * eya_memory_range_t dst, src;
- * // initialize ranges...
- * eya_memory_range_copy_rev(&dst, &src);
- * @endcode
- *
- * @see eya_memory_range_t
- * @see eya_memory_range_copy_rev_range
- * @see eya_memory_range_unpack_v
+ * @param self Destination memory range (will receive reversed copy)
+ * @param other Source memory range to copy from
+ * @return Pointer to the beginning of the destination range.
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *

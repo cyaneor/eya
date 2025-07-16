@@ -316,6 +316,14 @@ eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other)
 }
 
 void *
+eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value)
+{
+    void *begin, *end;
+    eya_memory_range_unpack_v(self, &begin, &end);
+    return eya_memory_raw_set(begin, end, value);
+}
+
+void *
 eya_memory_range_copy_rev_range(eya_memory_range_t *self, const void *begin, const void *end)
 {
     void *self_begin, *self_end;
