@@ -393,6 +393,71 @@ eya_memory_range_t
 eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya_usize_t size);
 
 /**
+ * @brief Copy data from external range to this memory range
+ * @param self Pointer to destination memory range
+ * @param begin Start of source data range
+ * @param end End of source data range (exclusive)
+ * @return Pointer to end of copied data in destination range
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Copy data from another memory range to this memory range
+ * @param self Pointer to destination memory range
+ * @param other Pointer to source memory range
+ * @return Pointer to end of copied data in destination range
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Copy data from external range to this memory range in reverse order
+ * @param self Pointer to destination memory range
+ * @param begin Start of source data range
+ * @param end End of source data range (exclusive)
+ * @return Pointer to end of copied data in destination range
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_rcopy_range(eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Copy data from another memory range to this memory range in reverse order
+ * @param self Pointer to destination memory range
+ * @param other Pointer to source memory range
+ * @return Pointer to end of copied data in destination range
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_rcopy(eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
+ * @brief Move data from external range to this memory range
+ * @param self Pointer to destination memory range
+ * @param begin Start of source data range
+ * @param end End of source data range (exclusive)
+ * @return Pointer to end of moved data in destination range
+ * @note Source and destination ranges may overlap
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_move_range(eya_memory_range_t *self, const void *begin, const void *end);
+
+/**
+ * @brief Move data from another memory range to this memory range
+ * @param self Pointer to destination memory range
+ * @param other Pointer to source memory range
+ * @return Pointer to end of moved data in destination range
+ * @note Source and destination ranges may overlap
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_move(eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
  * @brief Find first occurrence of a subrange within memory range
  * @param[in] self Pointer to memory range to search in
  * @param[in] begin Start of subrange to find

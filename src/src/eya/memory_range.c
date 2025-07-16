@@ -299,6 +299,54 @@ eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya
     return eya_memory_range_make(begin, end);
 }
 
+void *
+eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_copy(self_begin, self_end, begin, end);
+}
+
+void *
+eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_copy_range(self, other_begin, other_end);
+}
+
+void *
+eya_memory_range_rcopy_range(eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_rcopy(self_begin, self_end, begin, end);
+}
+
+void *
+eya_memory_range_rcopy(eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_rcopy_range(self, other_begin, other_end);
+}
+
+void *
+eya_memory_range_move_range(eya_memory_range_t *self, const void *begin, const void *end)
+{
+    void *self_begin, *self_end;
+    eya_memory_range_unpack_v(self, &self_begin, &self_end);
+    return eya_memory_raw_move(self_begin, self_end, begin, end);
+}
+
+void *
+eya_memory_range_move(eya_memory_range_t *self, const eya_memory_range_t *other)
+{
+    void *other_begin, *other_end;
+    eya_memory_range_unpack_v(other, &other_begin, &other_end);
+    return eya_memory_range_move_range(self, other_begin, other_end);
+}
+
 const void *
 eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, const void *end)
 {
