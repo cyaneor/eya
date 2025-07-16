@@ -8,31 +8,43 @@
 
 include(CheckCCompilerFlag)
 
+# Helper function for safely adding compile flags
+function(eya_add_compile_option_if_missing OPTION_VALUE)
+    if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_COMPILE_OPTIONS)
+        list(APPEND EYA_TARGET_PRIVATE_COMPILE_OPTIONS ${OPTION_VALUE})
+        set(EYA_TARGET_PRIVATE_COMPILE_OPTIONS "${EYA_TARGET_PRIVATE_COMPILE_OPTIONS}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+function(eya_add_link_option_if_missing OPTION_VALUE)
+    if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_LINK_OPTIONS)
+        list(APPEND EYA_TARGET_PRIVATE_LINK_OPTIONS ${OPTION_VALUE})
+        set(EYA_TARGET_PRIVATE_LINK_OPTIONS "${EYA_TARGET_PRIVATE_LINK_OPTIONS}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+function(eya_add_link_library_if_missing OPTION_VALUE)
+    if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_LINK_LIBRARIES)
+        list(APPEND EYA_TARGET_PRIVATE_LINK_LIBRARIES ${OPTION_VALUE})
+        set(EYA_TARGET_PRIVATE_LINK_LIBRARIES "${EYA_TARGET_PRIVATE_LINK_LIBRARIES}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+# Instruction set hierarchy handling:
+# AVX512 includes all AVX2 features, and AVX2 includes all SSE2 features.
+# When a higher-level instruction set is enabled, we disable the lower ones
+# to prevent redundant/conflicting compiler flags and ensure optimal performance.
+if (EYA_COMPILE_OPTION_AVX512 STREQUAL "ON")
+    set(EYA_COMPILE_OPTION_AVX2 OFF)
+    set(EYA_COMPILE_OPTION_SSE2 OFF)
+elseif(EYA_COMPILE_OPTION_AVX2 STREQUAL "ON")
+    set(EYA_COMPILE_OPTION_SSE2 OFF)
+endif()
+
 # Retrieve all variables in current CMake directory
 get_property(CMAKE_OPTIONS DIRECTORY PROPERTY VARIABLES)
 foreach (CMAKE_OPTION IN ITEMS ${CMAKE_OPTIONS})
-    if (CMAKE_OPTION MATCHES "^EYA_COMPILE_OPTION_.*")
-        # Helper function for safely adding compile flags
-        function(eya_add_compile_option_if_missing OPTION_VALUE)
-            if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_COMPILE_OPTIONS)
-                list(APPEND EYA_TARGET_PRIVATE_COMPILE_OPTIONS ${OPTION_VALUE})
-                set(EYA_TARGET_PRIVATE_COMPILE_OPTIONS "${EYA_TARGET_PRIVATE_COMPILE_OPTIONS}" PARENT_SCOPE)
-            endif()
-        endfunction()
-
-        function(eya_add_link_option_if_missing OPTION_VALUE)
-            if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_LINK_OPTIONS)
-                list(APPEND EYA_TARGET_PRIVATE_LINK_OPTIONS ${OPTION_VALUE})
-                set(EYA_TARGET_PRIVATE_LINK_OPTIONS "${EYA_TARGET_PRIVATE_LINK_OPTIONS}" PARENT_SCOPE)
-            endif()
-        endfunction()
-
-        function(eya_add_link_library_if_missing OPTION_VALUE)
-            if (NOT "${OPTION_VALUE}" IN_LIST EYA_TARGET_PRIVATE_LINK_LIBRARIES)
-                list(APPEND EYA_TARGET_PRIVATE_LINK_LIBRARIES ${OPTION_VALUE})
-                set(EYA_TARGET_PRIVATE_LINK_LIBRARIES "${EYA_TARGET_PRIVATE_LINK_LIBRARIES}" PARENT_SCOPE)
-            endif()
-        endfunction()
+    if (CMAKE_OPTION MATCHES "^EYA_COMPILE_OPTION_.*")    
 
         # Optimization Level Handling
         if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_OPTIMIZATION")
