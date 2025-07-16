@@ -214,7 +214,7 @@ eya_memory_range_is_valid_offset(const eya_memory_range_t *self, eya_uoffset_t o
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_f(const eya_memory_range_t *self, eya_uoffset_t offset);
+eya_memory_range_at_from_front(const eya_memory_range_t *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from end
@@ -224,7 +224,7 @@ eya_memory_range_at_f(const eya_memory_range_t *self, eya_uoffset_t offset);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_b(const eya_memory_range_t *self, eya_uoffset_t offset);
+eya_memory_range_at_from_back(const eya_memory_range_t *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset (direction specified)
@@ -330,7 +330,7 @@ eya_memory_range_assign(eya_memory_range_t *self, const eya_memory_range_t *othe
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_assign_range(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
@@ -340,7 +340,7 @@ eya_memory_range_set(eya_memory_range_t *self, void *begin, void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_s(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_assign_by_size(eya_memory_range_t *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Set memory range from begin pointer and size (null-safe)
@@ -350,7 +350,7 @@ eya_memory_range_set_s(eya_memory_range_t *self, void *begin, eya_usize_t size);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_f(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_set_by_size_with_fallback(eya_memory_range_t *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges
@@ -401,7 +401,7 @@ eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_fill(eya_memory_range_t *self, eya_uchar_t value);
+eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value);
 
 /**
  * @brief Copy data from external range to this memory range

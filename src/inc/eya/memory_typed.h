@@ -135,7 +135,7 @@ eya_memory_typed_get_offset_by_index(const eya_memory_typed_t *self, eya_usize_t
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_f(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_typed_at_from_front(const eya_memory_typed_t *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (back-to-front order)
@@ -145,7 +145,7 @@ eya_memory_typed_at_f(const eya_memory_typed_t *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_b(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_typed_at_from_back(const eya_memory_typed_t *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index with direction control
