@@ -62,7 +62,7 @@ eya_memory_typed_swap(eya_memory_typed_t *self, const eya_memory_typed_t *other)
     eya_memory_range_t *self_range  = eya_ptr_cast(eya_memory_range_t, self);
     eya_memory_range_t *other_range = eya_ptr_cast(eya_memory_range_t, other);
 
-    return eya_memory_range_swap(self_range, other_range);
+    eya_memory_range_swap(self_range, other_range);
 }
 
 void
@@ -74,7 +74,7 @@ eya_memory_typed_exchange(eya_memory_typed_t *self, const eya_memory_typed_t *ot
     eya_memory_range_t *self_range  = eya_ptr_cast(eya_memory_range_t, self);
     eya_memory_range_t *other_range = eya_ptr_cast(eya_memory_range_t, other);
 
-    return eya_memory_range_exchange(self_range, other_range);
+    eya_memory_range_exchange(self_range, other_range);
 }
 
 bool
