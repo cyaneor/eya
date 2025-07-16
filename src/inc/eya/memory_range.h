@@ -393,6 +393,17 @@ eya_memory_range_t
 eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya_usize_t size);
 
 /**
+ * @brief Sets all bytes in a memory range to a specified value.
+ * @param self Pointer to the memory range structure
+ *             defining the destination memory range.
+ * @param value The byte value to set in the memory range.
+ * @return Returns a pointer to the end of the memory range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_fill(eya_memory_range_t *self, eya_uchar_t value);
+
+/**
  * @brief Copy data from external range to this memory range
  * @param self Pointer to destination memory range
  * @param begin Start of source data range
@@ -412,17 +423,6 @@ eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const v
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
-
-/**
- * @brief Sets all bytes in a memory range to a specified value.
- * @param self Pointer to the memory range structure
- *             defining the destination memory range.
- * @param value The byte value to set in the memory range.
- * @return Returns a pointer to the end of the memory range.
- */
-EYA_ATTRIBUTE(SYMBOL)
-void *
-eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value);
 
 /**
  * @brief Copies data from a pointer range to a memory range in reverse order.

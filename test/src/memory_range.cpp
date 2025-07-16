@@ -1737,8 +1737,8 @@ TEST(eya_memory_range_copy_rev_range, large_range_copy) {
   static char src[size];
   char dst[size];
 
-  memset(dst, 0, size);
   eya_memory_range_t self = {dst, dst + size};
+  eya_memory_range_fill(&self, 0);
 
   for (size_t i = 0; i < size; ++i) {
     src[i] = static_cast<char>(i & 0xFF);
@@ -1801,8 +1801,8 @@ TEST(eya_memory_range_copy_rev, large_range_copy) {
   static char src[size];
   char dst[size];
 
-  memset(dst, 0, size);
   eya_memory_range_t self = {dst, dst + size};
+  eya_memory_range_fill(&self, 0);
   eya_memory_range_t other = {src, src + size};
 
   for (size_t i = 0; i < size; ++i) {
