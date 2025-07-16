@@ -350,7 +350,7 @@ eya_memory_range_assign_by_size(eya_memory_range_t *self, void *begin, eya_usize
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size_with_fallback(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_set_by_size_with_safe(eya_memory_range_t *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges

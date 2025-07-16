@@ -1231,7 +1231,7 @@ TEST(eya_memory_range_set_by_size_with_fallback,
      sets_range_when_begin_not_null) {
   eya_memory_range_t range;
 
-  eya_memory_range_set_by_size_with_fallback(&range, (void *)0x1000, 0x1000);
+  eya_memory_range_set_by_size_with_safe(&range, (void *)0x1000, 0x1000);
 
   EXPECT_EQ(range.begin, (void *)0x1000);
   EXPECT_EQ(range.end, (void *)0x2000);
@@ -1240,7 +1240,7 @@ TEST(eya_memory_range_set_by_size_with_fallback,
 TEST(eya_memory_range_set_by_size_with_fallback, clears_range_when_begin_null) {
   eya_memory_range_t range = {(void *)0x1000, (void *)0x2000};
 
-  eya_memory_range_set_by_size_with_fallback(&range, nullptr, 0x1000);
+  eya_memory_range_set_by_size_with_safe(&range, nullptr, 0x1000);
 
   EXPECT_EQ(range.begin, nullptr);
   EXPECT_EQ(range.end, nullptr);

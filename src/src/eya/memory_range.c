@@ -264,7 +264,7 @@ eya_memory_range_assign_by_size(eya_memory_range_t *self, void *begin, eya_usize
 }
 
 void
-eya_memory_range_set_by_size_with_fallback(eya_memory_range_t *self, void *begin, eya_usize_t size)
+eya_memory_range_set_by_size_with_safe(eya_memory_range_t *self, void *begin, eya_usize_t size)
 {
     begin ? eya_memory_range_assign_by_size(self, begin, size) : eya_memory_range_clear(self);
 }
