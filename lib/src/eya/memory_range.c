@@ -6,36 +6,33 @@
 #include <eya/memory_raw.h>
 #include <eya/ptr_util.h>
 
-void
-eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end)
-{
-    eya_runtime_check_ref(self);
-
-    if (begin)
-    {
-        *begin = self->begin;
-    }
-
-    if (end)
-    {
-        *end = self->end;
-    }
-}
-
 void *
 eya_memory_range_get_begin(const eya_memory_range_t *self)
 {
-    void *begin;
-    eya_memory_range_unpack(self, &begin, nullptr);
-    return begin;
+    eya_runtime_check_ref(self);
+    return self->begin;
 }
 
 void *
 eya_memory_range_get_end(const eya_memory_range_t *self)
 {
-    void *end;
-    eya_memory_range_unpack(self, nullptr, &end);
-    return end;
+    eya_runtime_check_ref(self);
+    return self->end;
+}
+
+void
+eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end)
+{
+
+    if (begin)
+    {
+        *begin = eya_memory_range_get_begin(self);
+    }
+
+    if (end)
+    {
+        *end = eya_memory_range_get_end(self);
+    }
 }
 
 eya_memory_range_state_t

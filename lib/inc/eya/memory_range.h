@@ -41,16 +41,6 @@ typedef struct eya_memory_range
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @brief Unpack a memory range into begin and end pointers
- * @param self Pointer to memory range structure
- * @param begin [out] Pointer to store begin address (can be NULL)
- * @param end [out] Pointer to store end address (can be NULL)
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end);
-
-/**
  * @brief Get the begin pointer of a memory range
  * @param self Pointer to memory range structure
  * @return Begin pointer
@@ -67,6 +57,16 @@ eya_memory_range_get_begin(const eya_memory_range_t *self);
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_range_get_end(const eya_memory_range_t *self);
+
+/**
+ * @brief Unpack a memory range into begin and end pointers
+ * @param self Pointer to memory range structure
+ * @param begin [out] Pointer to store begin address (can be NULL)
+ * @param end [out] Pointer to store end address (can be NULL)
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end);
 
 /**
  * @brief Get the state of a memory range
