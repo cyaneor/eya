@@ -16,35 +16,21 @@
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @struct eya_memory_typed_t
- * @brief Typed memory range structure with built-in type size information
+ * @typedef eya_memory_typed_t
+ * @brief Represents a typed memory range with element size information.
  *
- * This structure represents a typed memory range with additional information about
- * the element size. It is typically used for type-safe memory operations and
- * provides standard begin/end pointers along with element size information.
+ * This structure extends the basic memory range (eya_memory_range_t) by adding
+ * information about the size of individual elements stored in the memory block.
+ * This enables type-aware operations on the memory range.
  *
- * The structure is declared using the @c eya_memory_typed_fields macro which
- * generates the following fields:
- * - Standard memory range fields (begin and end pointers)
- * - An additional element_size field storing sizeof(element_type)
- *
- * @see eya_memory_typed_fields
- * @see eya_memory_range_fields
- *
- * Example usage:
- * @code
- * eya_memory_typed_t float_buffer;
- * float_buffer.begin = (float*)malloc(100 * sizeof(float));
- * float_buffer.end = float_buffer.begin + 100;
- * float_buffer.element_size = sizeof(float);  // Ensures type safety
- * @endcode
- *
- * @note The memory region follows [begin, end) semantics (inclusive begin, exclusive end)
- * @note The element_size field should match the actual size of the elements being stored
+ * @note The structure is valid only when:
+ *       - The underlying range is valid (begin <= end, non-NULL)
+ *       - element_size > 0
+ *       - (end - begin) is divisible by element_size
  */
 typedef struct eya_memory_typed
 {
-    eya_memory_typed_fields(void);
+    eya_memory_typed_fields(eya_memory_range_t);
 } eya_memory_typed_t;
 
 /**

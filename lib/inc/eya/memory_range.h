@@ -21,12 +21,17 @@
 #include "bool.h"
 
 /**
- * @struct eya_memory_range
- * @brief A generic memory range structure for contiguous byte regions.
+ * @typedef eya_memory_range_t
+ * @brief Represents a memory range with start and end pointers.
  *
- * This structure provides a generic way to represent a contiguous memory range
- * using start and end pointers. The void pointer type allows it to work with
- * any memory region regardless of the underlying data type.
+ * This structure defines a contiguous block of memory by storing its starting
+ * and ending addresses. The end pointer typically points to the first byte
+ * after the allocated memory block (similar to STL end iterators).
+ *
+ * @note The memory range is considered valid only if:
+ *       - Both begin and end are non-NULL
+ *       - begin <= end
+ *       - The pointers point to the same memory segment/allocation
  */
 typedef struct eya_memory_range
 {
