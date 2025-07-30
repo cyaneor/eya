@@ -15,6 +15,30 @@
 #define eya_ptr_cast(T, ptr) eya_type_cast(T *, ptr)
 
 /**
+ * @def eya_ptr_deref(T, ptr)
+ * @brief Dereferences a pointer cast to type T*.
+ *
+ * Safely casts the pointer to a pointer of type T and dereferences it,
+ * resulting in an lvalue of type T.
+ *
+ * @param T   Target type (without pointer).
+ * @param ptr Pointer to cast and dereference.
+ * @return    Lvalue reference of type T.
+ *
+ * @note This is essentially a type-safe combination of pointer cast and dereference.
+ * @warning The caller must ensure the pointer is valid and properly aligned.
+ *
+ * Example usage:
+ * @code
+ * void* data = ...;
+ * int value = eya_ptr_deref(int, data);  // Equivalent to: *(int*)data
+ * @endcode
+ *
+ * @see eya_ptr_cast()
+ */
+#define eya_ptr_deref(T, ptr) (*eya_ptr_cast(T, ptr))
+
+/**
  * @def eya_ptr_is_null(ptr)
  * @brief Checks if a pointer is null.
  * @param ptr Pointer to check.
