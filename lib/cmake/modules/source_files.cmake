@@ -22,6 +22,7 @@ list(APPEND EYA_TARGET_SOURCE_FILES
         ${EYA_LIB_SOURCE_DIR}/eya/memory_raw.c
         ${EYA_LIB_SOURCE_DIR}/eya/memory_range.c
         ${EYA_LIB_SOURCE_DIR}/eya/memory_typed.c
+        ${EYA_LIB_SOURCE_DIR}/eya/allocated_array.c
         ${EYA_LIB_SOURCE_DIR}/eya/allocated_range.c
         ${EYA_LIB_SOURCE_DIR}/eya/memory_allocator.c
         ${EYA_LIB_SOURCE_DIR}/eya/numeric_fixed_types.c
