@@ -139,6 +139,18 @@ typedef enum eya_runtime_error_code_t
     EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED,
 
     /**
+     * @var EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
+     * @brief Maximum size exceeded error.
+     *
+     * Indicates that an attempt was made to resize an array
+     * or memory range beyond its maximum allowed capacity.
+     *
+     * This error occurs when the requested
+     * number of elements exceeds the predefined maximum size limit.
+     */
+    EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE,
+
+    /**
      * @var EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
      * @brief Allocator function not initialized error.
      *
