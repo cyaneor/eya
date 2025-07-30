@@ -62,7 +62,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_allocated_range_clear(eya_allocated_range_t *self);
+eya_allocated_range_clear(void *self);
 
 /**
  * @brief Exchanges the contents of two allocated memory ranges.
@@ -87,7 +87,7 @@ eya_allocated_range_clear(eya_allocated_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_allocated_range_exchange(eya_allocated_range_t *self, eya_allocated_range_t *other);
+eya_allocated_range_exchange(void *self, void *other);
 
 /**
  * @brief Resizes an allocated memory range to a new size.
@@ -114,7 +114,7 @@ eya_allocated_range_exchange(eya_allocated_range_t *self, eya_allocated_range_t 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_allocated_range_resize(eya_allocated_range_t *self, eya_usize_t size);
+eya_allocated_range_resize(void *self, eya_usize_t size);
 
 EYA_COMPILER(EXTERN_C_END)
 

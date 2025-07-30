@@ -4,7 +4,7 @@
 #include <eya/memory_range.h>
 
 void
-eya_allocated_range_clear(eya_allocated_range_t *self)
+eya_allocated_range_clear(void *self)
 {
     eya_memory_allocator_t *allocator = eya_runtime_allocator();
 
@@ -14,14 +14,14 @@ eya_allocated_range_clear(eya_allocated_range_t *self)
 }
 
 void
-eya_allocated_range_exchange(eya_allocated_range_t *self, eya_allocated_range_t *other)
+eya_allocated_range_exchange(void *self, void *other)
 {
     eya_allocated_range_clear(self);
     eya_memory_range_swap(self, other);
 }
 
 void
-eya_allocated_range_resize(eya_allocated_range_t *self, eya_usize_t size)
+eya_allocated_range_resize(void *self, eya_usize_t size)
 {
     void                   *old_ptr   = eya_memory_range_get_begin(self);
     const eya_usize_t       cur_size  = eya_memory_range_get_size(self);
