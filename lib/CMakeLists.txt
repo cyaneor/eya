@@ -52,7 +52,6 @@ include(${EYA_CMAKE_EXTENSION_OPTIONS_DIR}/build_options.cmake) # Compiler setti
 
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_cmake_options.cmake)     # Option aggregation
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_compile_options.cmake)   # Flags parsing
-include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/compile_definitions.cmake)       # Platform defines
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/parse_version.cmake)             # Version parsing
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/get_type_size.cmake)             # Get type sizes
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/source_files.cmake)              # Source management
