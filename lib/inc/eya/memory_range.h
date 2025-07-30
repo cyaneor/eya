@@ -41,13 +41,23 @@ typedef struct eya_memory_range
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
+ * @brief Unpack a memory range into begin and end pointers
+ * @param self Pointer to memory range structure
+ * @param begin [out] Pointer to store begin address (can be NULL)
+ * @param end [out] Pointer to store end address (can be NULL)
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_unpack(const void *self, void **begin, void **end);
+
+/**
  * @brief Get the begin pointer of a memory range
  * @param self Pointer to memory range structure
  * @return Begin pointer
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_get_begin(const eya_memory_range_t *self);
+eya_memory_range_get_begin(const void *self);
 
 /**
  * @brief Get the end pointer of a memory range
@@ -56,17 +66,7 @@ eya_memory_range_get_begin(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_get_end(const eya_memory_range_t *self);
-
-/**
- * @brief Unpack a memory range into begin and end pointers
- * @param self Pointer to memory range structure
- * @param begin [out] Pointer to store begin address (can be NULL)
- * @param end [out] Pointer to store end address (can be NULL)
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end);
+eya_memory_range_get_end(const void *self);
 
 /**
  * @brief Get the state of a memory range
@@ -75,7 +75,7 @@ eya_memory_range_unpack(const eya_memory_range_t *self, void **begin, void **end
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_range_state_t
-eya_memory_range_get_state(const eya_memory_range_t *self);
+eya_memory_range_get_state(const void *self);
 
 /**
  * @brief Check if memory range is uninitialized
@@ -84,7 +84,7 @@ eya_memory_range_get_state(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_uninit(const eya_memory_range_t *self);
+eya_memory_range_is_uninit(const void *self);
 
 /**
  * @brief Check if memory range is empty
@@ -93,7 +93,7 @@ eya_memory_range_is_uninit(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_empty(const eya_memory_range_t *self);
+eya_memory_range_is_empty(const void *self);
 
 /**
  * @brief Check if memory range contains data
@@ -102,7 +102,7 @@ eya_memory_range_is_empty(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_has_data(const eya_memory_range_t *self);
+eya_memory_range_has_data(const void *self);
 
 /**
  * @brief Check if memory range is invalid
@@ -111,7 +111,7 @@ eya_memory_range_has_data(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_invalid(const eya_memory_range_t *self);
+eya_memory_range_is_invalid(const void *self);
 
 /**
  * @brief Check if memory range is valid
@@ -120,7 +120,7 @@ eya_memory_range_is_invalid(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_valid(const eya_memory_range_t *self);
+eya_memory_range_is_valid(const void *self);
 
 /**
  * @brief Unpack a memory range into begin and end pointers with validation
@@ -130,7 +130,7 @@ eya_memory_range_is_valid(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_unpack_v(const eya_memory_range_t *self, void **begin, void **end);
+eya_memory_range_unpack_v(const void *self, void **begin, void **end);
 
 /**
  * @brief Calculate the difference between begin and end pointers
@@ -139,7 +139,7 @@ eya_memory_range_unpack_v(const eya_memory_range_t *self, void **begin, void **e
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_uaddr_t
-eya_memory_range_diff(const eya_memory_range_t *self);
+eya_memory_range_diff(const void *self);
 
 /**
  * @brief Get the size of the memory range in bytes
@@ -148,7 +148,7 @@ eya_memory_range_diff(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
-eya_memory_range_get_size(const eya_memory_range_t *self);
+eya_memory_range_get_size(const void *self);
 
 /**
  * @brief Check if memory range is aligned
@@ -158,7 +158,7 @@ eya_memory_range_get_size(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_aligned(const eya_memory_range_t *self, eya_usize_t align);
+eya_memory_range_is_aligned(const void *self, eya_usize_t align);
 
 /**
  * @brief Check if memory range size is multiple of element size
@@ -168,7 +168,7 @@ eya_memory_range_is_aligned(const eya_memory_range_t *self, eya_usize_t align);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_multiple_of_size(const eya_memory_range_t *self, eya_usize_t element_size);
+eya_memory_range_is_multiple_of_size(const void *self, eya_usize_t element_size);
 
 /**
  * @brief Check if memory range contains a pointer
@@ -178,7 +178,7 @@ eya_memory_range_is_multiple_of_size(const eya_memory_range_t *self, eya_usize_t
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_contains_ptr(const eya_memory_range_t *self, const void *ptr);
+eya_memory_range_contains_ptr(const void *self, const void *ptr);
 
 /**
  * @brief Check if memory range contains another range
@@ -189,7 +189,7 @@ eya_memory_range_contains_ptr(const eya_memory_range_t *self, const void *ptr);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_contains_range(const eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_contains_range(const void *self, const void *begin, const void *end);
 
 /**
  * @brief Check if memory range contains another memory range
@@ -199,7 +199,7 @@ eya_memory_range_contains_range(const eya_memory_range_t *self, const void *begi
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_contains(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_contains(const void *self, const void *other);
 
 /**
  * @brief Check if offset is valid for this memory range
@@ -209,7 +209,7 @@ eya_memory_range_contains(const eya_memory_range_t *self, const eya_memory_range
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_valid_offset(const eya_memory_range_t *self, eya_uoffset_t offset);
+eya_memory_range_is_valid_offset(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from begin
@@ -219,7 +219,7 @@ eya_memory_range_is_valid_offset(const eya_memory_range_t *self, eya_uoffset_t o
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_from_front(const eya_memory_range_t *self, eya_uoffset_t offset);
+eya_memory_range_at_from_front(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from end
@@ -229,7 +229,7 @@ eya_memory_range_at_from_front(const eya_memory_range_t *self, eya_uoffset_t off
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_from_back(const eya_memory_range_t *self, eya_uoffset_t offset);
+eya_memory_range_at_from_back(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset (direction specified)
@@ -240,7 +240,7 @@ eya_memory_range_at_from_back(const eya_memory_range_t *self, eya_uoffset_t offs
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at(const eya_memory_range_t *self, eya_uoffset_t offset, bool reversed);
+eya_memory_range_at(const void *self, eya_uoffset_t offset, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
@@ -249,7 +249,7 @@ eya_memory_range_at(const eya_memory_range_t *self, eya_uoffset_t offset, bool r
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_front(const eya_memory_range_t *self);
+eya_memory_range_front(const void *self);
 
 /**
  * @brief Get pointer to last element in range
@@ -258,7 +258,7 @@ eya_memory_range_front(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_back(const eya_memory_range_t *self);
+eya_memory_range_back(const void *self);
 
 /**
  * @brief Check if range begin equals pointer
@@ -268,7 +268,7 @@ eya_memory_range_back(const eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_equal_begin_to(const eya_memory_range_t *self, const void *ptr);
+eya_memory_range_is_equal_begin_to(const void *self, const void *ptr);
 
 /**
  * @brief Check if range end equals pointer
@@ -278,7 +278,7 @@ eya_memory_range_is_equal_begin_to(const eya_memory_range_t *self, const void *p
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_equal_end_to(const eya_memory_range_t *self, const void *ptr);
+eya_memory_range_is_equal_end_to(const void *self, const void *ptr);
 
 /**
  * @brief Check if two ranges have equal begin pointers
@@ -288,7 +288,7 @@ eya_memory_range_is_equal_end_to(const eya_memory_range_t *self, const void *ptr
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_equal_begin(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_is_equal_begin(const void *self, const void *other);
 
 /**
  * @brief Check if two ranges have equal end pointers
@@ -298,7 +298,7 @@ eya_memory_range_is_equal_begin(const eya_memory_range_t *self, const eya_memory
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_equal_end(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_is_equal_end(const void *self, const void *other);
 
 /**
  * @brief Check if two ranges are equal
@@ -308,7 +308,7 @@ eya_memory_range_is_equal_end(const eya_memory_range_t *self, const eya_memory_r
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_equal(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_is_equal(const void *self, const void *other);
 
 /**
  * @brief Clear memory range (set to uninitialized state)
@@ -316,7 +316,7 @@ eya_memory_range_is_equal(const eya_memory_range_t *self, const eya_memory_range
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_clear(eya_memory_range_t *self);
+eya_memory_range_clear(void *self);
 
 /**
  * @brief Assign one memory range to another with validation
@@ -325,7 +325,7 @@ eya_memory_range_clear(eya_memory_range_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_assign(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_assign(void *self, const void *other);
 
 /**
  * @brief Set memory range begin and end pointers with validation
@@ -335,7 +335,7 @@ eya_memory_range_assign(eya_memory_range_t *self, const eya_memory_range_t *othe
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_range(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_set_range(void *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
@@ -345,7 +345,7 @@ eya_memory_range_set_range(eya_memory_range_t *self, void *begin, void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_set_by_size(void *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Set memory range from begin pointer and size (null-safe)
@@ -355,7 +355,7 @@ eya_memory_range_set_by_size(eya_memory_range_t *self, void *begin, eya_usize_t 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size_v(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_set_by_size_v(void *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges
@@ -364,7 +364,7 @@ eya_memory_range_set_by_size_v(eya_memory_range_t *self, void *begin, eya_usize_
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_swap(eya_memory_range_t *self, eya_memory_range_t *other);
+eya_memory_range_swap(void *self, void *other);
 
 /**
  * @brief Exchange two memory ranges (clear self and swap)
@@ -373,7 +373,7 @@ eya_memory_range_swap(eya_memory_range_t *self, eya_memory_range_t *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_exchange(eya_memory_range_t *self, eya_memory_range_t *other);
+eya_memory_range_exchange(void *self, void *other);
 
 /**
  * @brief Create a new memory range from begin and end pointers
@@ -395,7 +395,7 @@ eya_memory_range_make(void *begin, void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_range_t
-eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya_usize_t size);
+eya_memory_range_slice(const void *self, eya_uoffset_t offset, eya_usize_t size);
 
 /**
  * @brief Sets all bytes in a memory range to a specified value.
@@ -406,7 +406,7 @@ eya_memory_range_slice(const eya_memory_range_t *self, eya_uoffset_t offset, eya
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value);
+eya_memory_range_set(void *self, eya_uchar_t value);
 
 /**
  * @brief Sets a single byte at a specified offset in a memory range
@@ -417,10 +417,7 @@ eya_memory_range_set(eya_memory_range_t *self, eya_uchar_t value);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_value(eya_memory_range_t *self,
-                           eya_uoffset_t       offset,
-                           bool                reversed,
-                           eya_uchar_t         value);
+eya_memory_range_set_value(void *self, eya_uoffset_t offset, bool reversed, eya_uchar_t value);
 
 /**
  * @brief Copy data from external range to this memory range
@@ -431,7 +428,7 @@ eya_memory_range_set_value(eya_memory_range_t *self,
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_copy_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Fills a memory range with a repeating pattern from a pointer range.
@@ -446,7 +443,7 @@ eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const v
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_set_pattern_range(eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_set_pattern_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Fills a memory range with a repeating pattern from another memory range.
@@ -461,7 +458,7 @@ eya_memory_range_set_pattern_range(eya_memory_range_t *self, const void *begin, 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_set_pattern(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_set_pattern(void *self, const eya_memory_range_t *other);
 
 /**
  * @brief Copy data from another memory range to this memory range
@@ -471,7 +468,7 @@ eya_memory_range_set_pattern(eya_memory_range_t *self, const eya_memory_range_t 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_copy(void *self, const void *other);
 
 /**
  * @brief Copies data from a pointer range to a memory range in reverse order.
@@ -482,7 +479,7 @@ eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other)
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_copy_rev_range(eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_copy_rev_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Copies data between two memory ranges in reverse order.
@@ -492,7 +489,7 @@ eya_memory_range_copy_rev_range(eya_memory_range_t *self, const void *begin, con
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_copy_rev(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_copy_rev(void *self, const void *other);
 
 /**
  * @brief Copy data from external range to this memory range in reverse order
@@ -503,7 +500,7 @@ eya_memory_range_copy_rev(eya_memory_range_t *self, const eya_memory_range_t *ot
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_rcopy_range(eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_rcopy_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Copy data from another memory range to this memory range in reverse order
@@ -513,7 +510,7 @@ eya_memory_range_rcopy_range(eya_memory_range_t *self, const void *begin, const 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_rcopy(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_rcopy(void *self, const void *other);
 
 /**
  * @brief Move data from external range to this memory range
@@ -525,7 +522,7 @@ eya_memory_range_rcopy(eya_memory_range_t *self, const eya_memory_range_t *other
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_move_range(eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_move_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Move data from another memory range to this memory range
@@ -536,7 +533,7 @@ eya_memory_range_move_range(eya_memory_range_t *self, const void *begin, const v
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_move(eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_move(void *self, const void *other);
 
 /**
  * @brief Find first occurrence of a subrange within memory range
@@ -547,7 +544,7 @@ eya_memory_range_move(eya_memory_range_t *self, const eya_memory_range_t *other)
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_find_range(const void *self, const void *begin, const void *end);
 
 /**
  * @brief Find first occurrence of another memory range within this range
@@ -557,7 +554,7 @@ eya_memory_range_find_range(const eya_memory_range_t *self, const void *begin, c
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_find(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_find(const void *self, const void *other);
 
 /**
  * @brief Find last occurrence of a subrange within memory range
@@ -568,7 +565,7 @@ eya_memory_range_find(const eya_memory_range_t *self, const eya_memory_range_t *
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_rfind_range(const eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_rfind_range(const void *self, const void *begin, const void *end);
 
 /**
  * @brief Find last occurrence of another memory range within this range
@@ -578,7 +575,7 @@ eya_memory_range_rfind_range(const eya_memory_range_t *self, const void *begin, 
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_rfind(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_rfind(const void *self, const void *other);
 
 /**
  * @brief Compare memory range with a subrange
@@ -589,7 +586,7 @@ eya_memory_range_rfind(const eya_memory_range_t *self, const eya_memory_range_t 
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_compare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_compare_range(const void *self, const void *begin, const void *end);
 
 /**
  * @brief Compare two memory ranges
@@ -599,7 +596,7 @@ eya_memory_range_compare_range(const eya_memory_range_t *self, const void *begin
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_compare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_compare(const void *self, const void *other);
 
 /**
  * @brief Compare memory range with a subrange in reverse order
@@ -610,7 +607,7 @@ eya_memory_range_compare(const eya_memory_range_t *self, const eya_memory_range_
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_rcompare_range(const eya_memory_range_t *self, const void *begin, const void *end);
+eya_memory_range_rcompare_range(const void *self, const void *begin, const void *end);
 
 /**
  * @brief Compare two memory ranges in reverse order
@@ -620,7 +617,7 @@ eya_memory_range_rcompare_range(const eya_memory_range_t *self, const void *begi
  */
 EYA_ATTRIBUTE(SYMBOL)
 const void *
-eya_memory_range_rcompare(const eya_memory_range_t *self, const eya_memory_range_t *other);
+eya_memory_range_rcompare(const void *self, const void *other);
 
 EYA_COMPILER(EXTERN_C_END)
 
