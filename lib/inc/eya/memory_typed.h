@@ -34,40 +34,6 @@ typedef struct eya_memory_typed
 } eya_memory_typed_t;
 
 /**
- * @brief Gets a mutable memory range from a typed memory object.
- *
- * This function performs a type cast to convert a typed memory pointer
- * into a generic memory range structure pointer. The returned range
- * provides access to the raw memory region with begin/end pointers.
- *
- * @param self Pointer to the typed memory object to convert.
- * @return Pointer to the generic memory range structure (mutable version).
- *
- * @see eya_memory_range_t
- * @see eya_ptr_cast
- */
-EYA_ATTRIBUTE(SYMBOL)
-eya_memory_range_t *
-eya_memory_typed_get_range(eya_memory_typed_t *self);
-
-/**
- * @brief Gets a const memory range from a typed memory object.
- *
- * This function performs a type cast to convert a const typed memory pointer
- * into a const generic memory range structure pointer. The returned range
- * provides read-only access to the raw memory region with begin/end pointers.
- *
- * @param self Pointer to the const typed memory object to convert.
- * @return Pointer to the generic memory range structure (const version).
- *
- * @see eya_memory_range_t
- * @see eya_ptr_cast
- */
-EYA_ATTRIBUTE(SYMBOL)
-const eya_memory_range_t *
-eya_memory_typed_get_crange(const eya_memory_typed_t *self);
-
-/**
  * @brief Unpack a typed memory range into its components
  * @param self Pointer to typed memory range structure
  * @param begin [out] Pointer to store begin address (can be NULL)
@@ -76,10 +42,7 @@ eya_memory_typed_get_crange(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_typed_unpack(const eya_memory_typed_t *self,
-                        void                    **begin,
-                        void                    **end,
-                        eya_usize_t              *element_size);
+eya_memory_typed_unpack(const void *self, void **begin, void **end, eya_usize_t *element_size);
 
 /**
  * @brief Get the element size of a typed memory range
@@ -88,7 +51,7 @@ eya_memory_typed_unpack(const eya_memory_typed_t *self,
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
-eya_memory_typed_get_element_size(const eya_memory_typed_t *self);
+eya_memory_typed_get_element_size(const void *self);
 
 /**
  * @brief Check if a typed memory range is valid
@@ -97,7 +60,7 @@ eya_memory_typed_get_element_size(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_valid(const eya_memory_typed_t *self);
+eya_memory_typed_is_valid(const void *self);
 
 /**
  * @brief Get the number of elements in a typed memory range
@@ -107,7 +70,7 @@ eya_memory_typed_is_valid(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
-eya_memory_typed_get_size(const eya_memory_typed_t *self);
+eya_memory_typed_get_size(const void *self);
 
 /**
  * @brief Check if a typed memory range is empty
@@ -116,7 +79,7 @@ eya_memory_typed_get_size(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_empty(const eya_memory_typed_t *self);
+eya_memory_typed_is_empty(const void *self);
 
 /**
  * @brief Swap contents of two typed memory ranges
@@ -125,7 +88,7 @@ eya_memory_typed_is_empty(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_typed_swap(eya_memory_typed_t *self, eya_memory_typed_t *other);
+eya_memory_typed_swap(void *self, void *other);
 
 /**
  * @brief Exchange contents of two typed memory ranges
@@ -134,7 +97,7 @@ eya_memory_typed_swap(eya_memory_typed_t *self, eya_memory_typed_t *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_typed_exchange(eya_memory_typed_t *self, eya_memory_typed_t *other);
+eya_memory_typed_exchange(void *self, void *other);
 
 /**
  * @brief Check if index is valid for a typed memory range
@@ -144,7 +107,7 @@ eya_memory_typed_exchange(eya_memory_typed_t *self, eya_memory_typed_t *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_range_is_valid_index(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_range_is_valid_index(const void *self, eya_usize_t index);
 
 /**
  * @brief Get byte offset for a given element index
@@ -154,7 +117,7 @@ eya_memory_range_is_valid_index(const eya_memory_typed_t *self, eya_usize_t inde
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_uoffset_t
-eya_memory_typed_get_offset_by_index(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_typed_get_offset_by_index(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (front-to-back order)
@@ -164,7 +127,7 @@ eya_memory_typed_get_offset_by_index(const eya_memory_typed_t *self, eya_usize_t
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_from_front(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_typed_at_from_front(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (back-to-front order)
@@ -174,7 +137,7 @@ eya_memory_typed_at_from_front(const eya_memory_typed_t *self, eya_usize_t index
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_from_back(const eya_memory_typed_t *self, eya_usize_t index);
+eya_memory_typed_at_from_back(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index with direction control
@@ -185,7 +148,7 @@ eya_memory_typed_at_from_back(const eya_memory_typed_t *self, eya_usize_t index)
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at(const eya_memory_typed_t *self, eya_usize_t index, bool reversed);
+eya_memory_typed_at(const void *self, eya_usize_t index, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
@@ -194,7 +157,7 @@ eya_memory_typed_at(const eya_memory_typed_t *self, eya_usize_t index, bool reve
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_front(const eya_memory_typed_t *self);
+eya_memory_typed_front(const void *self);
 
 /**
  * @brief Get pointer to last element in range
@@ -203,7 +166,7 @@ eya_memory_typed_front(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_back(const eya_memory_typed_t *self);
+eya_memory_typed_back(const void *self);
 
 /**
  * @brief Check if element size matches given value
@@ -213,7 +176,7 @@ eya_memory_typed_back(const eya_memory_typed_t *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal_element_size_to(const eya_memory_typed_t *self, eya_usize_t element_size);
+eya_memory_typed_is_equal_element_size_to(const void *self, eya_usize_t element_size);
 
 /**
  * @brief Check if two typed memory ranges have equal element sizes
@@ -223,8 +186,7 @@ eya_memory_typed_is_equal_element_size_to(const eya_memory_typed_t *self, eya_us
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal_element_size(const eya_memory_typed_t *self,
-                                       const eya_memory_typed_t *other);
+eya_memory_typed_is_equal_element_size(const void *self, const void *other);
 
 /**
  * @brief Check if two typed memory ranges are equal
@@ -234,7 +196,7 @@ eya_memory_typed_is_equal_element_size(const eya_memory_typed_t *self,
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
-eya_memory_typed_is_equal(const eya_memory_typed_t *self, const eya_memory_typed_t *other);
+eya_memory_typed_is_equal(const void *self, const void *other);
 
 EYA_COMPILER(EXTERN_C_END)
 
