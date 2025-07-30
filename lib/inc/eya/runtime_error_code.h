@@ -1,3 +1,11 @@
+/**
+ * @file runtime_error_code.h
+ * @brief Runtime error codes definitions
+ *
+ * This header file defines the enumeration of runtime error codes used throughout the application.
+ * These codes represent various error conditions that may occur during program execution.
+ */
+
 #ifndef EYA_RUNTIME_ERROR_CODE_H
 #define EYA_RUNTIME_ERROR_CODE_H
 
