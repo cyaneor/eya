@@ -1,4 +1,4 @@
-# Set the minimum required version of CMake to 3.12
+# Set the minimum required version of CMake to 3.5
 cmake_minimum_required(VERSION 3.12)
 
 # Define the project with variables for name, version, description, and using C language
@@ -15,6 +15,8 @@ project(${CMAKE_PROJECT_NAME}
 set(CMAKE_C_STANDARD 11)
 # Require C11 standard (fail if compiler doesn't support it)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+# Turning on or disconnecting of the output data of compilation commands during creation.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # -------------------------------------------------------------------------------------------- #
 # Global Configuration                                                                         #
