@@ -2,7 +2,6 @@
 
 #include <eya/runtime_check_ref.h>
 #include <eya/runtime_return_if.h>
-#include <eya/ptr_util.h>
 #include <eya/nullptr.h>
 #include <eya/memory.h>
 

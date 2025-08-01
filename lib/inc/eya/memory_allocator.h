@@ -27,89 +27,98 @@
  */
 typedef struct eya_memory_allocator
 {
-    eya_memory_allocator_alloc_fn   *alloc_fn;   /**< Pointer to the allocation function. */
-    eya_memory_allocator_dealloc_fn *dealloc_fn; /**< Pointer to the deallocation function. */
+    eya_memory_allocator_alloc_fn   *alloc_fn;   /**< Pointer to the allocation function */
+    eya_memory_allocator_dealloc_fn *dealloc_fn; /**< Pointer to the deallocation function */
 } eya_memory_allocator_t;
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @brief Retrieves the allocation function pointer from a memory allocator.
+ * @brief Retrieves the allocation function pointer
+ * @param self Pointer to the memory allocator structure
+ * @return The allocation function pointer
  *
- * This function returns the function pointer to the allocation function stored in the given
- * memory allocator structure. It performs a runtime check to ensure the allocator is valid.
- *
- * @param self Pointer to the memory allocator structure.
- * @return The allocation function pointer, or NULL if the allocator is invalid.
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_allocator_alloc_fn *
 eya_memory_allocator_get_alloc_fn(const eya_memory_allocator_t *self);
 
 /**
- * @brief Retrieves the deallocation function pointer from a memory allocator.
+ * @brief Retrieves the deallocation function pointer
+ * @param self Pointer to the memory allocator structure
+ * @return The deallocation function pointer
  *
- * This function returns the function pointer to the deallocation function stored in the given
- * memory allocator structure. It performs a runtime check to ensure the allocator is valid.
- *
- * @param self Pointer to the memory allocator structure.
- * @return The deallocation function pointer, or NULL if the allocator is invalid.
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_allocator_dealloc_fn *
 eya_memory_allocator_get_dealloc_fn(const eya_memory_allocator_t *self);
 
 /**
- * @brief Allocates memory using the provided memory allocator.
+ * @brief Allocates memory using the allocator
+ * @param self Pointer to the memory allocator structure
+ * @param size Size of memory to allocate in bytes
+ * @return Pointer to allocated memory
  *
- * This function allocates a block of memory of the specified size
- * using the allocation function stored in the given memory allocator structure.
- * It performs runtime checks to ensure the allocator and allocation function are valid.
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE
+ *         If size is zero
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If alloc_fn is NULL
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
+ *         If allocation fails
  *
- * If the `EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE` option is enabled,
- * the allocated memory is initialized to zero.
- *
- * @param self Pointer to the memory allocator structure.
- * @param size The size of the memory block to allocate, in bytes.
- * @return A pointer to the allocated memory, or NULL if allocation fails or inputs are invalid.
+ * @note When EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE is enabled,
+ *       allocated memory will be zero-initialized
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_allocator_alloc(const eya_memory_allocator_t *self, eya_usize_t size);
 
 /**
- * @brief Frees memory using the provided memory allocator.
+ * @brief Frees memory using the allocator
+ * @param self Pointer to the memory allocator structure
+ * @param ptr Pointer to memory to free
  *
- * This function deallocates a block of memory pointed to by `ptr`
- * using the deallocation function stored in the given memory allocator structure.
- * It performs runtime checks to ensure the pointer and deallocation function
- * are valid before proceeding with the deallocation.
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If dealloc_fn is NULL
  *
- * @param self Pointer to the memory allocator structure.
- * @param ptr Pointer to the memory block to deallocate.
+ * @note Does nothing if ptr is NULL
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
 eya_memory_allocator_free(const eya_memory_allocator_t *self, void *ptr);
 
 /**
- * @brief Reallocates memory using the provided memory allocator.
+ * @brief Reallocates memory using the allocator
+ * @param self Pointer to the memory allocator structure
+ * @param old_ptr Pointer to previously allocated memory
+ * @param old_size Size of previously allocated memory
+ * @param new_size New desired size
+ * @return Pointer to reallocated memory
  *
- * This function reallocates a block of memory pointed to by `old_ptr`
- * from `old_size` to `new_size` using the provided memory allocator.
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_MEMORY_ALLOCATE
+ *         If new_size is zero during allocation
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If alloc_fn is NULL
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If dealloc_fn is NULL during free
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
+ *         If reallocation fails
  *
- * - If the new size equals the old size, the original pointer is returned.
- * - If the old pointer is NULL, it behaves like `eya_memory_allocator_alloc`.
- * - If the new size is zero, it frees the old memory and returns NULL.
- * - Otherwise, it allocates a new block, copies the data from the old block,
- *   and frees the old block.
- *
- * @param self Pointer to the memory allocator structure.
- * @param old_ptr Pointer to the previously allocated memory block.
- * @param old_size Size of the old memory block, in bytes.
- * @param new_size Desired size of the new memory block, in bytes.
- * @return A pointer to the reallocated memory,
- *         or NULL if the new size is zero or allocation fails.
+ * @note Behavior details:
+ *       - Returns old_ptr if old_size == new_size
+ *       - Allocates new memory if old_ptr is NULL
+ *       - Frees memory and returns NULL if new_size is zero
+ *       - Otherwise allocates new block, copies data, and frees old block
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *

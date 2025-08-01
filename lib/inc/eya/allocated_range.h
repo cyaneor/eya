@@ -54,7 +54,12 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  *       The caller is responsible for managing the range structure's lifetime.
  *
  * @param self Pointer to the allocated range structure to clear.
- *             Must be a valid, non-NULL pointer.
+ *             Must be a valid, non-nullptr pointer.
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         If the memory range is invalid
  *
  * @see eya_memory_range_get_begin()
  * @see eya_memory_allocator_free()
@@ -82,6 +87,11 @@ eya_allocated_range_clear(void *self);
  * @param other Pointer to the source range that provides new memory.
  *              Will be left empty after the operation.
  *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self or other is nullptr
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         If either memory range is invalid
+ *
  * @see eya_allocated_range_clear()
  * @see eya_memory_range_swap()
  */
@@ -102,9 +112,16 @@ eya_allocated_range_exchange(void *self, void *other);
  * @warning The new size must be a valid, non-zero value that the allocator can handle.
  *
  * @param self Pointer to the allocated range structure to resize.
- *             Must be a valid, non-NULL pointer to an initialized range.
+ *             Must be a valid, non-nullptr pointer to an initialized range.
  * @param size The new desired size in bytes for the memory range.
  *             Must be a valid size supported by the allocator.
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         If the memory range is invalid
+ * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ *         If memory reallocation fails
  *
  * @see eya_memory_range_get_begin()
  * @see eya_memory_range_get_size()

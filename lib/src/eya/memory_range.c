@@ -169,7 +169,7 @@ eya_memory_range_is_valid_offset(const void *self, eya_uoffset_t offset)
 }
 
 void *
-eya_memory_range_at_from_front(const void *self, eya_uoffset_t offset)
+eya_memory_range_at_from_front(void *self, eya_uoffset_t offset)
 {
     eya_runtime_check(eya_memory_range_is_valid_offset(self, offset),
                       EYA_RUNTIME_ERROR_OUT_OF_RANGE);
@@ -179,27 +179,27 @@ eya_memory_range_at_from_front(const void *self, eya_uoffset_t offset)
 }
 
 void *
-eya_memory_range_at_from_back(const void *self, eya_uoffset_t offset)
+eya_memory_range_at_from_back(void *self, eya_uoffset_t offset)
 {
     const eya_usize_t size = eya_memory_range_get_size(self);
     return eya_memory_range_at_from_front(self, size - (offset + 1));
 }
 
 void *
-eya_memory_range_at(const void *self, eya_uoffset_t offset, bool reversed)
+eya_memory_range_at(void *self, eya_uoffset_t offset, bool reversed)
 {
     return reversed ? eya_memory_range_at_from_back(self, offset)
                     : eya_memory_range_at_from_front(self, offset);
 }
 
 void *
-eya_memory_range_front(const void *self)
+eya_memory_range_front(void *self)
 {
     return eya_memory_range_at(self, 0, false);
 }
 
 void *
-eya_memory_range_back(const void *self)
+eya_memory_range_back(void *self)
 {
     return eya_memory_range_at(self, 0, true);
 }

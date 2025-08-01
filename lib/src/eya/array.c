@@ -64,6 +64,26 @@ eya_array_is_valid_index(const void *self, eya_usize_t index)
     return index < size;
 }
 
+void *
+eya_array_at_from_front(void *self, eya_usize_t index)
+{
+    eya_runtime_check(eya_array_is_valid_index(self, index), EYA_RUNTIME_ERROR_OUT_OF_RANGE);
+    return eya_memory_typed_at_from_front(self, index);
+}
+
+void *
+eya_array_at_from_back(void *self, eya_usize_t index)
+{
+    const eya_usize_t size = eya_array_get_size(self);
+    return eya_array_at_from_front(self, size - (index + 1));
+}
+
+void *
+eya_array_at(void *self, eya_usize_t index, bool reversed)
+{
+    return reversed ? eya_array_at_from_back(self, index) : eya_array_at_from_front(self, index);
+}
+
 bool
 eya_array_is_empty(const void *self)
 {

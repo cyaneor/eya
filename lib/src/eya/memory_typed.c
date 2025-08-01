@@ -80,34 +80,34 @@ eya_memory_typed_get_offset_by_index(const void *self, eya_usize_t index)
 }
 
 void *
-eya_memory_typed_at_from_front(const void *self, eya_usize_t index)
+eya_memory_typed_at_from_front(void *self, eya_usize_t index)
 {
     const eya_uoffset_t offset = eya_memory_typed_get_offset_by_index(self, index);
     return eya_memory_range_at_from_front(self, offset);
 }
 
 void *
-eya_memory_typed_at_from_back(const void *self, eya_usize_t index)
+eya_memory_typed_at_from_back(void *self, eya_usize_t index)
 {
     const eya_usize_t size = eya_memory_typed_get_size(self);
     return eya_memory_typed_at_from_front(self, size - (index + 1));
 }
 
 void *
-eya_memory_typed_at(const void *self, eya_usize_t index, bool reversed)
+eya_memory_typed_at(void *self, eya_usize_t index, bool reversed)
 {
     return reversed ? eya_memory_typed_at_from_back(self, index)
                     : eya_memory_typed_at_from_front(self, index);
 }
 
 void *
-eya_memory_typed_front(const void *self)
+eya_memory_typed_front(void *self)
 {
     return eya_memory_typed_at(self, 0, false);
 }
 
 void *
-eya_memory_typed_back(const void *self)
+eya_memory_typed_back(void *self)
 {
     return eya_memory_typed_at(self, 0, true);
 }

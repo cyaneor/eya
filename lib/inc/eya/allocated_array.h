@@ -76,6 +76,13 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  *
  * @param self Pointer to the first array
  * @param other Pointer to the second array
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self or other is nullptr
+ * @throws EYA_RUNTIME_ERROR_DIFFERENT_ELEMENT_SIZE
+ *         If arrays have different element sizes
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         If either array contains an invalid range
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -89,6 +96,11 @@ eya_allocated_array_exchange(void *self, void *other);
  *
  * @param self Pointer to the array
  * @return Maximum number of elements array can hold
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
@@ -103,6 +115,11 @@ eya_allocated_array_get_max_size(const void *self);
  * @param self Pointer to the array
  * @param size Requested number of elements
  * @return true if requested size exceeds maximum, false otherwise
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
@@ -116,6 +133,17 @@ eya_allocated_array_is_max_size_exceeds(const void *self, eya_usize_t size);
  *
  * @param self Pointer to the array
  * @param size New number of elements
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
+ * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
+ *         If requested size exceeds maximum capacity
+ * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ *         If memory allocation fails
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         If array contains an invalid range
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
