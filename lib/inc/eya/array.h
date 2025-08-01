@@ -5,7 +5,7 @@
 #include "array_fields.h"
 
 /**
- * @typedef eya_array_t
+ * @struct eya_array
  * @brief Array of dynamically allocated arrays.
  *
  * This structure represents an array where each element
@@ -80,6 +80,22 @@ eya_array_unpack(const void  *self,
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
 eya_array_get_size(const void *self);
+
+/**
+ * @brief Checks if an index is valid for the array.
+ *
+ * This function verifies whether the given index is within the valid bounds
+ * of the array (index is less than the array size).
+ *
+ * @param[in] self Pointer to the array.
+ * @param[in] index Index to be validated.
+ *
+ * @return true if the index is valid (index < array size),
+ * @return false if the index is out of bounds.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_array_is_valid_index(const void *self, eya_usize_t index);
 
 /**
  * @brief Checks if the array is empty

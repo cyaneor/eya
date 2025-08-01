@@ -24,7 +24,7 @@
 #include "memory_typed_fields.h"
 
 /**
- * @typedef eya_allocated_array_t
+ * @struct eya_allocated_array
  * @brief Typed array structure for managing dynamically
  *        allocated arrays with element size tracking
  *

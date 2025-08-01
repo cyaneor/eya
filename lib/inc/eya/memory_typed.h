@@ -16,7 +16,7 @@
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @typedef eya_memory_typed_t
+ * @struct eya_memory_typed
  * @brief Represents a typed memory range with element size information.
  *
  * This structure extends the basic memory range (eya_memory_range_t) by adding

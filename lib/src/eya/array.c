@@ -58,6 +58,13 @@ eya_array_get_size(const void *self)
 }
 
 bool
+eya_array_is_valid_index(const void *self, eya_usize_t index)
+{
+    const eya_usize_t size = eya_array_get_size(self);
+    return index < size;
+}
+
+bool
 eya_array_is_empty(const void *self)
 {
     return eya_array_get_size(self) == 0;

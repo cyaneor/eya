@@ -21,7 +21,7 @@
 #include "bool.h"
 
 /**
- * @typedef eya_memory_range_t
+ * @struct eya_memory_range
  * @brief Represents a memory range with start and end pointers.
  *
  * This structure defines a contiguous block of memory by storing its starting
