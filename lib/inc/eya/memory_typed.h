@@ -35,10 +35,10 @@ typedef struct eya_memory_typed
 
 /**
  * @brief Unpack a typed memory range into its components
- * @param self Pointer to typed memory range structure
- * @param begin [out] Pointer to store begin address (can be nullptr)
- * @param end [out] Pointer to store end address (can be nullptr)
- * @param element_size [out] Pointer to store element size (can be nullptr)
+ * @param[in] self Pointer to typed memory range structure
+ * @param[out] begin Pointer to store begin address (can be nullptr)
+ * @param[out] end Pointer to store end address (can be nullptr)
+ * @param[out] element_size Pointer to store element size (can be nullptr)
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -49,7 +49,7 @@ eya_memory_typed_unpack(const void *self, void **begin, void **end, eya_usize_t 
 
 /**
  * @brief Get the element size of a typed memory range
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return Size of individual elements in bytes
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -61,7 +61,7 @@ eya_memory_typed_get_element_size(const void *self);
 
 /**
  * @brief Check if a typed memory range is valid
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return true if valid (memory range is multiple of element size), false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -73,7 +73,7 @@ eya_memory_typed_is_valid(const void *self);
 
 /**
  * @brief Get the number of elements in a typed memory range
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return Number of elements in the range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -87,7 +87,7 @@ eya_memory_typed_get_size(const void *self);
 
 /**
  * @brief Check if a typed memory range is empty
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return true if empty (contains 0 elements), false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -101,8 +101,8 @@ eya_memory_typed_is_empty(const void *self);
 
 /**
  * @brief Swap contents of two typed memory ranges
- * @param self First typed memory range
- * @param other Second typed memory range
+ * @param[in,out] self First typed memory range
+ * @param[in,out] other Second typed memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -115,8 +115,8 @@ eya_memory_typed_swap(void *self, void *other);
 
 /**
  * @brief Exchange contents of two typed memory ranges
- * @param self First typed memory range
- * @param other Second typed memory range
+ * @param[in,out] self First typed memory range
+ * @param[in,out] other Second typed memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -129,8 +129,8 @@ eya_memory_typed_exchange(void *self, void *other);
 
 /**
  * @brief Check if index is valid for a typed memory range
- * @param self Pointer to typed memory range structure
- * @param index Index to check
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] index Index to check
  * @return true if index is valid, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -144,8 +144,8 @@ eya_memory_range_is_valid_index(const void *self, eya_usize_t index);
 
 /**
  * @brief Get byte offset for a given element index
- * @param self Pointer to typed memory range structure
- * @param index Element index
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] index Element index
  * @return Byte offset from start of range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -161,8 +161,8 @@ eya_memory_typed_get_offset_by_index(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (front-to-back order)
- * @param self Pointer to typed memory range structure
- * @param index Element index
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] index Element index
  * @return Pointer to element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -178,8 +178,8 @@ eya_memory_typed_at_from_front(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (back-to-front order)
- * @param self Pointer to typed memory range structure
- * @param index Reverse element index
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] index Reverse element index
  * @return Pointer to element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -195,9 +195,9 @@ eya_memory_typed_at_from_back(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index with direction control
- * @param self Pointer to typed memory range structure
- * @param index Element index
- * @param reversed If true, uses back-to-front indexing
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] index Element index
+ * @param[in] reversed If true, uses back-to-front indexing
  * @return Pointer to element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -213,7 +213,7 @@ eya_memory_typed_at(const void *self, eya_usize_t index, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return Pointer to first element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -227,7 +227,7 @@ eya_memory_typed_front(void *self);
 
 /**
  * @brief Get pointer to last element in range
- * @param self Pointer to typed memory range structure
+ * @param[in] self Pointer to typed memory range structure
  * @return Pointer to last element
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -240,8 +240,8 @@ eya_memory_typed_back(void *self);
 
 /**
  * @brief Check if element size matches given value
- * @param self Pointer to typed memory range structure
- * @param element_size Size to compare against
+ * @param[in] self Pointer to typed memory range structure
+ * @param[in] element_size Size to compare against
  * @return true if sizes match, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -253,8 +253,8 @@ eya_memory_typed_is_equal_element_size_to(const void *self, eya_usize_t element_
 
 /**
  * @brief Check if two typed memory ranges have equal element sizes
- * @param self First typed memory range
- * @param other Second typed memory range
+ * @param[in] self First typed memory range
+ * @param[in] other Second typed memory range
  * @return true if element sizes match, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -266,8 +266,8 @@ eya_memory_typed_is_equal_element_size(const void *self, const void *other);
 
 /**
  * @brief Check if two typed memory ranges are equal
- * @param self First typed memory range
- * @param other Second typed memory range
+ * @param[in] self First typed memory range
+ * @param[in] other Second typed memory range
  * @return true if both ranges have same element size and memory contents, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER

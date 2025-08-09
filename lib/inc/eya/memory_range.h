@@ -42,9 +42,9 @@ EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
  * @brief Unpack a memory range into begin and end pointers
- * @param self Pointer to memory range structure
- * @param begin [out] Pointer to store begin address (can be nullptr)
- * @param end [out] Pointer to store end address (can be nullptr)
+ * @param[in] self Pointer to memory range structure
+ * @param[out] begin Pointer to store begin address (can be nullptr)
+ * @param[out] end Pointer to store end address (can be nullptr)
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -55,8 +55,8 @@ eya_memory_range_unpack(const void *self, void **begin, void **end);
 
 /**
  * @brief Get the begin pointer of a memory range
- * @param self Pointer to memory range structure
- * @return Begin pointer
+ * @param[in] self Pointer to memory range structure
+ * @return[out] Begin pointer
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -67,8 +67,8 @@ eya_memory_range_get_begin(const void *self);
 
 /**
  * @brief Get the end pointer of a memory range
- * @param self Pointer to memory range structure
- * @return End pointer
+ * @param[in] self Pointer to memory range structure
+ * @return[out] End pointer
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -79,8 +79,8 @@ eya_memory_range_get_end(const void *self);
 
 /**
  * @brief Get the state of a memory range
- * @param self Pointer to memory range structure
- * @return State of the memory range
+ * @param[in] self Pointer to memory range structure
+ * @return[out] State of the memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -91,8 +91,8 @@ eya_memory_range_get_state(const void *self);
 
 /**
  * @brief Check if memory range is uninitialized
- * @param self Pointer to memory range structure
- * @return true if uninitialized, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @return[out] true if uninitialized, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -103,8 +103,8 @@ eya_memory_range_is_uninit(const void *self);
 
 /**
  * @brief Check if memory range is empty
- * @param self Pointer to memory range structure
- * @return true if empty, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @return[out] true if empty, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -115,8 +115,8 @@ eya_memory_range_is_empty(const void *self);
 
 /**
  * @brief Check if memory range contains data
- * @param self Pointer to memory range structure
- * @return true if contains data, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @return[out] true if contains data, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -127,8 +127,8 @@ eya_memory_range_has_data(const void *self);
 
 /**
  * @brief Check if memory range is invalid
- * @param self Pointer to memory range structure
- * @return true if invalid, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @return[out] true if invalid, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -139,8 +139,8 @@ eya_memory_range_is_invalid(const void *self);
 
 /**
  * @brief Check if memory range is valid
- * @param self Pointer to memory range structure
- * @return true if valid, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @return[out] true if valid, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -151,9 +151,9 @@ eya_memory_range_is_valid(const void *self);
 
 /**
  * @brief Unpack a memory range into begin and end pointers with validation
- * @param self Pointer to memory range structure
- * @param begin [out] Pointer to store begin address
- * @param end [out] Pointer to store end address
+ * @param[in] self Pointer to memory range structure
+ * @param[out] begin Pointer to store begin address
+ * @param[out] end Pointer to store end address
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -166,8 +166,8 @@ eya_memory_range_unpack_v(const void *self, void **begin, void **end);
 
 /**
  * @brief Calculate the difference between begin and end pointers
- * @param self Pointer to memory range structure
- * @return Difference between end and begin pointers
+ * @param[in] self Pointer to memory range structure
+ * @return[out] Difference between end and begin pointers
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -180,8 +180,8 @@ eya_memory_range_diff(const void *self);
 
 /**
  * @brief Get the size of the memory range in bytes
- * @param self Pointer to memory range structure
- * @return Size of memory range in bytes
+ * @param[in] self Pointer to memory range structure
+ * @return[out] Size of memory range in bytes
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -194,9 +194,9 @@ eya_memory_range_get_size(const void *self);
 
 /**
  * @brief Check if memory range is aligned
- * @param self Pointer to memory range structure
- * @param align Alignment to check (must be power of two)
- * @return true if aligned, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] align Alignment to check (must be power of two)
+ * @return[out] true if aligned, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -211,9 +211,9 @@ eya_memory_range_is_aligned(const void *self, eya_usize_t align);
 
 /**
  * @brief Check if memory range size is multiple of element size
- * @param self Pointer to memory range structure
- * @param element_size Size of element
- * @return true if size is multiple, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] element_size Size of element
+ * @return[out] true if size is multiple, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -228,9 +228,9 @@ eya_memory_range_is_multiple_of_size(const void *self, eya_usize_t element_size)
 
 /**
  * @brief Check if memory range contains a pointer
- * @param self Pointer to memory range structure
- * @param ptr Pointer to check
- * @return true if pointer is within range, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] ptr Pointer to check
+ * @return[out] true if pointer is within range, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -243,10 +243,10 @@ eya_memory_range_contains_ptr(const void *self, const void *ptr);
 
 /**
  * @brief Check if memory range contains another range
- * @param self Pointer to memory range structure
- * @param begin Start of range to check
- * @param end End of range to check (exclusive)
- * @return true if range is contained, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] begin Start of range to check
+ * @param[in] end End of range to check (exclusive)
+ * @return[out] true if range is contained, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -259,9 +259,9 @@ eya_memory_range_contains_range(const void *self, const void *begin, const void 
 
 /**
  * @brief Check if memory range contains another memory range
- * @param self Pointer to memory range structure
- * @param other Pointer to another memory range
- * @return true if range is contained, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] other Pointer to another memory range
+ * @return[out] true if range is contained, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -274,9 +274,9 @@ eya_memory_range_contains(const void *self, const void *other);
 
 /**
  * @brief Check if offset is valid for this memory range
- * @param self Pointer to memory range structure
- * @param offset Offset to check
- * @return true if offset is valid, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] offset Offset to check
+ * @return[out] true if offset is valid, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -289,9 +289,9 @@ eya_memory_range_is_valid_offset(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from begin
- * @param self Pointer to memory range structure
- * @param offset Offset from begin
- * @return Pointer at offset
+ * @param[in] self Pointer to memory range structure
+ * @param[in] offset Offset from begin
+ * @return[out] Pointer at offset
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -306,9 +306,9 @@ eya_memory_range_at_from_front(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from end
- * @param self Pointer to memory range structure
- * @param offset Offset from end
- * @return Pointer at offset
+ * @param[in] self Pointer to memory range structure
+ * @param[in] offset Offset from end
+ * @return[out] Pointer at offset
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -323,10 +323,10 @@ eya_memory_range_at_from_back(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset (direction specified)
- * @param self Pointer to memory range structure
- * @param offset Offset from begin or end
- * @param reversed If true, offset from end; if false, offset from begin
- * @return Pointer at offset
+ * @param[in] self Pointer to memory range structure
+ * @param[in] offset Offset from begin or end
+ * @param[in] reversed If true, offset from end; if false, offset from begin
+ * @return[out] Pointer at offset
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -341,8 +341,8 @@ eya_memory_range_at(const void *self, eya_uoffset_t offset, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
- * @param self Pointer to memory range structure
- * @return Pointer to first element
+ * @param[in] self Pointer to memory range structure
+ * @return[out] Pointer to first element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -355,8 +355,8 @@ eya_memory_range_front(const void *self);
 
 /**
  * @brief Get pointer to last element in range
- * @param self Pointer to memory range structure
- * @return Pointer to last element
+ * @param[in] self Pointer to memory range structure
+ * @return[out] Pointer to last element
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -369,9 +369,9 @@ eya_memory_range_back(const void *self);
 
 /**
  * @brief Check if range begin equals pointer
- * @param self Pointer to memory range structure
- * @param ptr Pointer to compare
- * @return true if equal, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] ptr Pointer to compare
+ * @return[out] true if equal, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -382,9 +382,9 @@ eya_memory_range_is_equal_begin_to(const void *self, const void *ptr);
 
 /**
  * @brief Check if range end equals pointer
- * @param self Pointer to memory range structure
- * @param ptr Pointer to compare
- * @return true if equal, false otherwise
+ * @param[in] self Pointer to memory range structure
+ * @param[in] ptr Pointer to compare
+ * @return[out] true if equal, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -395,9 +395,9 @@ eya_memory_range_is_equal_end_to(const void *self, const void *ptr);
 
 /**
  * @brief Check if two ranges have equal begin pointers
- * @param self Pointer to first memory range
- * @param other Pointer to second memory range
- * @return true if begins are equal, false otherwise
+ * @param[in] self Pointer to first memory range
+ * @param[in] other Pointer to second memory range
+ * @return[out] true if begins are equal, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -408,9 +408,9 @@ eya_memory_range_is_equal_begin(const void *self, const void *other);
 
 /**
  * @brief Check if two ranges have equal end pointers
- * @param self Pointer to first memory range
- * @param other Pointer to second memory range
- * @return true if ends are equal, false otherwise
+ * @param[in] self Pointer to first memory range
+ * @param[in] other Pointer to second memory range
+ * @return[out] true if ends are equal, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -421,9 +421,9 @@ eya_memory_range_is_equal_end(const void *self, const void *other);
 
 /**
  * @brief Check if two ranges are equal
- * @param self Pointer to first memory range
- * @param other Pointer to second memory range
- * @return true if ranges are equal, false otherwise
+ * @param[in] self Pointer to first memory range
+ * @param[in] other Pointer to second memory range
+ * @return[out] true if ranges are equal, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -434,7 +434,7 @@ eya_memory_range_is_equal(const void *self, const void *other);
 
 /**
  * @brief Clear memory range (set to uninitialized state)
- * @param self Pointer to memory range structure
+ * @param[in,out] self Pointer to memory range structure
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -445,8 +445,8 @@ eya_memory_range_clear(void *self);
 
 /**
  * @brief Assign one memory range to another with validation
- * @param self Pointer to destination memory range
- * @param other Pointer to source memory range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -459,9 +459,9 @@ eya_memory_range_assign(void *self, const void *other);
 
 /**
  * @brief Set memory range begin and end pointers with validation
- * @param self Pointer to memory range structure
- * @param begin New begin pointer
- * @param end New end pointer
+ * @param[in,out] self Pointer to memory range structure
+ * @param[in] begin New begin pointer
+ * @param[in] end New end pointer
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -474,9 +474,9 @@ eya_memory_range_set_range(void *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
- * @param self Pointer to memory range structure
- * @param begin New begin pointer
- * @param size Size of range in bytes
+ * @param[in,out] self Pointer to memory range structure
+ * @param[in] begin New begin pointer
+ * @param[in] size Size of range in bytes
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -491,9 +491,9 @@ eya_memory_range_set_by_size(void *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Set memory range from begin pointer and size (null-safe)
- * @param self Pointer to memory range structure
- * @param begin New begin pointer (can be null)
- * @param size Size of range in bytes
+ * @param[in,out] self Pointer to memory range structure
+ * @param[in] begin New begin pointer (can be null)
+ * @param[in] size Size of range in bytes
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -506,8 +506,8 @@ eya_memory_range_set_by_size_v(void *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges
- * @param self Pointer to first memory range
- * @param other Pointer to second memory range
+ * @param[in,out] self Pointer to first memory range
+ * @param[in,out] other Pointer to second memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -518,8 +518,8 @@ eya_memory_range_swap(void *self, void *other);
 
 /**
  * @brief Exchange two memory ranges (clear self and swap)
- * @param self Pointer to first memory range
- * @param other Pointer to second memory range
+ * @param[in,out] self Pointer to first memory range
+ * @param[in,out] other Pointer to second memory range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -530,9 +530,9 @@ eya_memory_range_exchange(void *self, void *other);
 
 /**
  * @brief Create a new memory range from begin and end pointers
- * @param begin Start of memory range
- * @param end End of memory range (exclusive)
- * @return New memory range
+ * @param[in] begin Start of memory range
+ * @param[in] end End of memory range (exclusive)
+ * @return[out] New memory range
  *
  * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
  *         if resulting range is invalid
@@ -543,10 +543,10 @@ eya_memory_range_make(void *begin, void *end);
 
 /**
  * @brief Create a slice of a memory range
- * @param self Pointer to memory range structure
- * @param offset Offset from begin
- * @param size Size of slice
- * @return New memory range slice
+ * @param[in] self Pointer to memory range structure
+ * @param[in] offset Offset from begin
+ * @param[in] size Size of slice
+ * @return[out] New memory range slice
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -561,10 +561,10 @@ eya_memory_range_slice(const void *self, eya_uoffset_t offset, eya_usize_t size)
 
 /**
  * @brief Sets all bytes in a memory range to a specified value.
- * @param self Pointer to the memory range structure
+ * @param[in,out] self Pointer to the memory range structure
  *             defining the destination memory range.
- * @param value The byte value to set in the memory range.
- * @return Returns a pointer to the end of the memory range.
+ * @param[in] value The byte value to set in the memory range.
+ * @return[out] Returns a pointer to the end of the memory range.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -577,10 +577,10 @@ eya_memory_range_set(void *self, eya_uchar_t value);
 
 /**
  * @brief Sets a single byte at a specified offset in a memory range
- * @param self Pointer to the memory range structure
- * @param offset Offset from the start of the memory range
- * @param reversed If true, offset is calculated from the end of the range
- * @param value The byte value to set at the specified offset
+ * @param[in,out] self Pointer to the memory range structure
+ * @param[in] offset Offset from the start of the memory range
+ * @param[in] reversed If true, offset is calculated from the end of the range
+ * @param[in] value The byte value to set at the specified offset
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -595,10 +595,10 @@ eya_memory_range_set_value(void *self, eya_uoffset_t offset, bool reversed, eya_
 
 /**
  * @brief Copy data from external range to this memory range
- * @param self Pointer to destination memory range
- * @param begin Start of source data range
- * @param end End of source data range (exclusive)
- * @return Pointer to end of copied data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] begin Start of source data range
+ * @param[in] end End of source data range (exclusive)
+ * @return[out] Pointer to end of copied data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -611,10 +611,10 @@ eya_memory_range_copy_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Fills a memory range with a repeating pattern from a pointer range.
- * @param self Destination memory range to fill with pattern
- * @param begin Start of pattern source range (inclusive)
- * @param end End of pattern source range (exclusive)
- * @return Pointer to the end of filled data in destination range
+ * @param[in,out] self Destination memory range to fill with pattern
+ * @param[in] begin Start of pattern source range (inclusive)
+ * @param[in] end End of pattern source range (exclusive)
+ * @return[out] Pointer to the end of filled data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -631,9 +631,9 @@ eya_memory_range_set_pattern_range(void *self, const void *begin, const void *en
 
 /**
  * @brief Fills a memory range with a repeating pattern from another memory range.
- * @param self Destination memory range to fill with pattern
- * @param other Source memory range containing the pattern to repeat
- * @return Pointer to the end of filled data in destination range
+ * @param[in,out] self Destination memory range to fill with pattern
+ * @param[in] other Source memory range containing the pattern to repeat
+ * @return[out] Pointer to the end of filled data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -652,9 +652,9 @@ eya_memory_range_set_pattern(void *self, const eya_memory_range_t *other);
 
 /**
  * @brief Copy data from another memory range to this memory range
- * @param self Pointer to destination memory range
- * @param other Pointer to source memory range
- * @return Pointer to end of copied data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
+ * @return[out] Pointer to end of copied data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -667,10 +667,10 @@ eya_memory_range_copy(void *self, const void *other);
 
 /**
  * @brief Copies data from a pointer range to a memory range in reverse order.
- * @param self Destination memory range (will receive reversed copy)
- * @param begin Start of source memory range (inclusive)
- * @param end End of source memory range (exclusive)
- * @return Pointer to the beginning of the destination range.
+ * @param[in,out] self Destination memory range (will receive reversed copy)
+ * @param[in] begin Start of source memory range (inclusive)
+ * @param[in] end End of source memory range (exclusive)
+ * @return[out] Pointer to the beginning of the destination range.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -683,9 +683,9 @@ eya_memory_range_copy_rev_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Copies data between two memory ranges in reverse order.
- * @param self Destination memory range (will receive reversed copy)
- * @param other Source memory range to copy from
- * @return Pointer to the beginning of the destination range.
+ * @param[in,out] self Destination memory range (will receive reversed copy)
+ * @param[in] other Source memory range to copy from
+ * @return[out] Pointer to the beginning of the destination range.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -698,10 +698,10 @@ eya_memory_range_copy_rev(void *self, const void *other);
 
 /**
  * @brief Copy data from external range to this memory range in reverse order
- * @param self Pointer to destination memory range
- * @param begin Start of source data range
- * @param end End of source data range (exclusive)
- * @return Pointer to end of copied data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] begin Start of source data range
+ * @param[in] end End of source data range (exclusive)
+ * @return[out] Pointer to end of copied data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -714,9 +714,9 @@ eya_memory_range_rcopy_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Copy data from another memory range to this memory range in reverse order
- * @param self Pointer to destination memory range
- * @param other Pointer to source memory range
- * @return Pointer to end of copied data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
+ * @return[out] Pointer to end of copied data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -729,10 +729,10 @@ eya_memory_range_rcopy(void *self, const void *other);
 
 /**
  * @brief Move data from external range to this memory range
- * @param self Pointer to destination memory range
- * @param begin Start of source data range
- * @param end End of source data range (exclusive)
- * @return Pointer to end of moved data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] begin Start of source data range
+ * @param[in] end End of source data range (exclusive)
+ * @return[out] Pointer to end of moved data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -747,9 +747,9 @@ eya_memory_range_move_range(void *self, const void *begin, const void *end);
 
 /**
  * @brief Move data from another memory range to this memory range
- * @param self Pointer to destination memory range
- * @param other Pointer to source memory range
- * @return Pointer to end of moved data in destination range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
+ * @return[out] Pointer to end of moved data in destination range
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -767,7 +767,7 @@ eya_memory_range_move(void *self, const void *other);
  * @param[in] self Pointer to memory range to search in
  * @param[in] begin Start of subrange to find
  * @param[in] end End of subrange to find (exclusive)
- * @return Pointer to first occurrence or nullptr if not found
+ * @return[out] Pointer to first occurrence or nullptr if not found
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -782,7 +782,7 @@ eya_memory_range_find_range(const void *self, const void *begin, const void *end
  * @brief Find first occurrence of another memory range within this range
  * @param[in] self Pointer to memory range to search in
  * @param[in] other Pointer to memory range to find
- * @return Pointer to first occurrence or nullptr if not found
+ * @return[out] Pointer to first occurrence or nullptr if not found
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -798,7 +798,7 @@ eya_memory_range_find(const void *self, const void *other);
  * @param[in] self Pointer to memory range to search in
  * @param[in] begin Start of subrange to find
  * @param[in] end End of subrange to find (exclusive)
- * @return Pointer to last occurrence or nullptr if not found
+ * @return[out] Pointer to last occurrence or nullptr if not found
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -813,7 +813,7 @@ eya_memory_range_rfind_range(const void *self, const void *begin, const void *en
  * @brief Find last occurrence of another memory range within this range
  * @param[in] self Pointer to memory range to search in
  * @param[in] other Pointer to memory range to find
- * @return Pointer to last occurrence or nullptr if not found
+ * @return[out] Pointer to last occurrence or nullptr if not found
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -829,7 +829,7 @@ eya_memory_range_rfind(const void *self, const void *other);
  * @param[in] self Pointer to first memory range
  * @param[in] begin Start of subrange to compare
  * @param[in] end End of subrange to compare (exclusive)
- * @return Pointer to first difference or nullptr if ranges are equal
+ * @return[out] Pointer to first difference or nullptr if ranges are equal
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -844,7 +844,7 @@ eya_memory_range_compare_range(const void *self, const void *begin, const void *
  * @brief Compare two memory ranges
  * @param[in] self Pointer to first memory range
  * @param[in] other Pointer to second memory range
- * @return Pointer to first difference or nullptr if ranges are equal
+ * @return[out] Pointer to first difference or nullptr if ranges are equal
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr
@@ -860,7 +860,7 @@ eya_memory_range_compare(const void *self, const void *other);
  * @param[in] self Pointer to first memory range
  * @param[in] begin Start of subrange to compare
  * @param[in] end End of subrange to compare (exclusive)
- * @return Pointer to last difference or nullptr if ranges are equal
+ * @return[out] Pointer to last difference or nullptr if ranges are equal
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self is nullptr
@@ -875,7 +875,7 @@ eya_memory_range_rcompare_range(const void *self, const void *begin, const void 
  * @brief Compare two memory ranges in reverse order
  * @param[in] self Pointer to first memory range
  * @param[in] other Pointer to second memory range
- * @return Pointer to last difference or nullptr if ranges are equal
+ * @return[out] Pointer to last difference or nullptr if ranges are equal
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         if self or other is nullptr

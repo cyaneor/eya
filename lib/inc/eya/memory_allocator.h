@@ -35,7 +35,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
  * @brief Retrieves the allocation function pointer
- * @param self Pointer to the memory allocator structure
+ * @param[in] self Pointer to the memory allocator structure
  * @return The allocation function pointer
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -47,7 +47,7 @@ eya_memory_allocator_get_alloc_fn(const eya_memory_allocator_t *self);
 
 /**
  * @brief Retrieves the deallocation function pointer
- * @param self Pointer to the memory allocator structure
+ * @param[in] self Pointer to the memory allocator structure
  * @return The deallocation function pointer
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -59,8 +59,8 @@ eya_memory_allocator_get_dealloc_fn(const eya_memory_allocator_t *self);
 
 /**
  * @brief Allocates memory using the allocator
- * @param self Pointer to the memory allocator structure
- * @param size Size of memory to allocate in bytes
+ * @param[in] self Pointer to the memory allocator structure
+ * @param[in] size Size of memory to allocate in bytes
  * @return Pointer to allocated memory
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -81,8 +81,8 @@ eya_memory_allocator_alloc(const eya_memory_allocator_t *self, eya_usize_t size)
 
 /**
  * @brief Frees memory using the allocator
- * @param self Pointer to the memory allocator structure
- * @param ptr Pointer to memory to free
+ * @param[in] self Pointer to the memory allocator structure
+ * @param[in] ptr Pointer to memory to free
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
@@ -97,10 +97,10 @@ eya_memory_allocator_free(const eya_memory_allocator_t *self, void *ptr);
 
 /**
  * @brief Reallocates memory using the allocator
- * @param self Pointer to the memory allocator structure
- * @param old_ptr Pointer to previously allocated memory
- * @param old_size Size of previously allocated memory
- * @param new_size New desired size
+ * @param[in] self Pointer to the memory allocator structure
+ * @param[in] old_ptr Pointer to previously allocated memory
+ * @param[in] old_size Size of previously allocated memory
+ * @param[in] new_size New desired size
  * @return Pointer to reallocated memory
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER

@@ -74,8 +74,8 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  * Swaps the memory ranges of two arrays.
  * Both arrays must have the same element size.
  *
- * @param self Pointer to the first array
- * @param other Pointer to the second array
+ * @param[in,out] self Pointer to the first array
+ * @param[in,out] other Pointer to the second array
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self or other is nullptr
@@ -94,7 +94,7 @@ eya_allocated_array_exchange(void *self, void *other);
  * Computes the theoretical maximum number of elements the array
  * can hold based on its element size and system address space limitations.
  *
- * @param self Pointer to the array
+ * @param[in] self Pointer to the array
  * @return Maximum number of elements array can hold
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -112,8 +112,8 @@ eya_allocated_array_get_max_size(const void *self);
  * Verifies whether the requested number of elements
  * would exceed the array's maximum capacity.
  *
- * @param self Pointer to the array
- * @param size Requested number of elements
+ * @param[in] self Pointer to the array
+ * @param[in] size Requested number of elements
  * @return true if requested size exceeds maximum, false otherwise
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
@@ -131,8 +131,8 @@ eya_allocated_array_is_max_size_exceeds(const void *self, eya_usize_t size);
  * Changes the size of the array's allocated memory.
  * The new size must not exceed the maximum possible size for the array's element type.
  *
- * @param self Pointer to the array
- * @param size New number of elements
+ * @param[in,out] self Pointer to the array
+ * @param[in] size New number of elements
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is nullptr

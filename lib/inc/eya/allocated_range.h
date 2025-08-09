@@ -53,8 +53,8 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  * @note The range structure itself is not deallocated, only the memory it points to.
  *       The caller is responsible for managing the range structure's lifetime.
  *
- * @param self Pointer to the allocated range structure to clear.
- *             Must be a valid, non-nullptr pointer.
+ * @param[in,out] self Pointer to the allocated range structure to clear.
+ *                     Must be a valid, non-nullptr pointer.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is nullptr
@@ -82,10 +82,10 @@ eya_allocated_range_clear(void *self);
  * @warning The caller must ensure both ranges are valid.
  *          This operation transfers memory ownership between the ranges.
  *
- * @param self Pointer to the target range that will receive new memory.
- *             Will be cleared before the swap.
- * @param other Pointer to the source range that provides new memory.
- *              Will be left empty after the operation.
+ * @param[in,out] self Pointer to the target range that will receive new memory.
+ *                     Will be cleared before the swap.
+ * @param[in,out] other Pointer to the source range that provides new memory.
+ *                      Will be left empty after the operation.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self or other is nullptr
@@ -111,10 +111,10 @@ eya_allocated_range_exchange(void *self, void *other);
  *       If reallocation fails, the original range remains unchanged.
  * @warning The new size must be a valid, non-zero value that the allocator can handle.
  *
- * @param self Pointer to the allocated range structure to resize.
- *             Must be a valid, non-nullptr pointer to an initialized range.
- * @param size The new desired size in bytes for the memory range.
- *             Must be a valid size supported by the allocator.
+ * @param[in,out] self Pointer to the allocated range structure to resize.
+ *                     Must be a valid, non-nullptr pointer to an initialized range.
+ * @param[in] size The new desired size in bytes for the memory range.
+ *                 Must be a valid size supported by the allocator.
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is nullptr
