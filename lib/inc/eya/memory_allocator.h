@@ -15,7 +15,26 @@
 #include "memory_allocator_alloc_fn.h"
 #include "memory_allocator_dealloc_fn.h"
 #include "attribute.h"
+#include "config.h"
 #include "size.h"
+
+/**
+ * @def EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+ * @brief Configuration option for zero-initializing memory after allocation
+ *
+ * This macro controls whether newly allocated memory should be filled with zeros.
+ * When enabled (EYA_CONFIG_ON), all allocated memory will be initialized to zero.
+ * When disabled (EYA_CONFIG_OFF), memory contents will be undefined after allocation.
+ *
+ * @note Default value is EYA_CONFIG_ON if not previously defined.
+ * @see eya_memory_allocator_alloc() where this option is used
+ *
+ * @value EYA_CONFIG_ON  Enable zero-initialization (recommended for security)
+ * @value EYA_CONFIG_OFF Disable zero-initialization (faster but less secure)
+ */
+#ifndef EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+#    define EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
 
 /**
  * @struct eya_memory_allocator

@@ -3,17 +3,27 @@
 
 #include "allocated_array.h"
 #include "array_fields.h"
+#include "config.h"
 
 /**
  * @def EYA_ARRAY_OPTIMIZE_RESIZE
- * @brief Macro to enable/disable array resize optimization
+ * @brief Configuration option for array resize optimization behavior
  *
- * - When set to 1 (default), the array will only be resized
- *   when necessary (when the new size exceeds current capacity).
- * - When set to 0, the array will be resized on every call.
+ * This macro controls whether array resizing operations should be optimized
+ * to only occur when necessary. The optimization prevents unnecessary memory
+ * reallocations when the new size would fit within the current capacity.
+ *
+ * @note Default value is EYA_CONFIG_ON if not previously defined.
+ * @see eya_array_resize() where this option is implemented
+ *
+ * @value EYA_CONFIG_ON  Enable resize optimization (only resize when capacity exceeded)
+ * @value EYA_CONFIG_OFF Disable optimization (resize on every call)
+ *
+ * @warning Disabling optimization (EYA_CONFIG_OFF) may impact performance
+ *          due to frequent reallocations, but ensures minimal memory usage.
  */
 #ifndef EYA_ARRAY_OPTIMIZE_RESIZE
-#    define EYA_ARRAY_OPTIMIZE_RESIZE 1
+#    define EYA_ARRAY_OPTIMIZE_RESIZE EYA_CONFIG_ON
 #endif // EYA_ARRAY_OPTIMIZE_RESIZE
 
 /**

@@ -30,7 +30,7 @@ eya_memory_allocator_alloc(const eya_memory_allocator_t *self, eya_usize_t size)
     void *ptr = alloc_fn(size);
     eya_runtime_check(ptr, EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED);
 
-#if EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+#if (EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE == EYA_CONFIG_ON)
     eya_memory_set(ptr, size, 0);
 #endif
 

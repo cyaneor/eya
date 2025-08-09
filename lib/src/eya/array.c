@@ -14,13 +14,13 @@ eya_array_capacity(const void *self)
 void
 eya_array_resize(void *self, eya_usize_t size)
 {
-#if EYA_ARRAY_OPTIMIZE_RESIZE == 1
+#if (EYA_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
     const eya_usize_t capacity = eya_array_capacity(self);
     if (capacity < size)
     {
 #endif
         eya_allocated_array_resize(self, size);
-#if EYA_ARRAY_OPTIMIZE_RESIZE == 1
+#if (EYA_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
     }
 #endif
     eya_ptr_cast(eya_array_t, self)->size = size;

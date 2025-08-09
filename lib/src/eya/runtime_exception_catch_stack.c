@@ -3,20 +3,6 @@
 #include <eya/nullptr.h>
 #include <eya/static_assert.h>
 
-/**
- * @def EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX
- * @brief Maximum depth of the exception handling stack
- *
- * Defines the maximum number of simultaneously handled exceptions per thread.
- * Default value is 255 if not otherwise defined.
- *
- * @warning Changing this value may affect per-thread memory consumption,
- *          since the m_runtime_exceptions array has THREAD_LOCAL storage.
- */
-#ifndef EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX
-#    define EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX 255
-#endif // EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX
-
 eya_static_assert(EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX,
                   "Zero stack depth makes exception handling impossible.");
 

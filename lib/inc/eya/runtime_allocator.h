@@ -22,6 +22,34 @@
 
 #include "memory_allocator.h"
 
+/**
+ * @def EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+ * @brief Configuration option for default runtime allocator initialization
+ *
+ * Controls whether to initialize the thread-local runtime allocator with
+ * standard library's malloc/free functions or leave it uninitialized.
+ *
+ * When enabled (EYA_CONFIG_ON):
+ * - Includes <stdlib.h> and pointer utilities
+ * - Initializes allocator with standard malloc() and free()
+ * - Provides immediate out-of-the-box memory allocation capability
+ *
+ * When disabled (EYA_CONFIG_OFF):
+ * - Leaves allocator uninitialized (zero-initialized)
+ * - Requires manual allocator setup before use
+ * - Useful for custom memory management scenarios
+ *
+ * @note Default value is EYA_CONFIG_ON for immediate usability
+ * @warning When disabled, using uninitialized allocator will cause undefined behavior
+ * @see eya_memory_allocator_t for allocator structure definition
+ *
+ * @value EYA_CONFIG_ON  Use standard malloc/free (default safe configuration)
+ * @value EYA_CONFIG_OFF Leave uninitialized (for custom allocator setup)
+ */
+#ifndef EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+#    define EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
