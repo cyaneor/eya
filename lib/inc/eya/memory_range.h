@@ -302,7 +302,7 @@ eya_memory_range_is_valid_offset(const void *self, eya_uoffset_t offset);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_from_front(void *self, eya_uoffset_t offset);
+eya_memory_range_at_from_front(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset from end
@@ -319,7 +319,7 @@ eya_memory_range_at_from_front(void *self, eya_uoffset_t offset);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at_from_back(void *self, eya_uoffset_t offset);
+eya_memory_range_at_from_back(const void *self, eya_uoffset_t offset);
 
 /**
  * @brief Get pointer at offset (direction specified)
@@ -337,7 +337,7 @@ eya_memory_range_at_from_back(void *self, eya_uoffset_t offset);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_at(void *self, eya_uoffset_t offset, bool reversed);
+eya_memory_range_at(const void *self, eya_uoffset_t offset, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
@@ -351,7 +351,7 @@ eya_memory_range_at(void *self, eya_uoffset_t offset, bool reversed);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_front(void *self);
+eya_memory_range_front(const void *self);
 
 /**
  * @brief Get pointer to last element in range
@@ -365,7 +365,7 @@ eya_memory_range_front(void *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_range_back(void *self);
+eya_memory_range_back(const void *self);
 
 /**
  * @brief Check if range begin equals pointer

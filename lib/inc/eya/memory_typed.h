@@ -174,7 +174,7 @@ eya_memory_typed_get_offset_by_index(const void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_from_front(void *self, eya_usize_t index);
+eya_memory_typed_at_from_front(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index (back-to-front order)
@@ -191,7 +191,7 @@ eya_memory_typed_at_from_front(void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at_from_back(void *self, eya_usize_t index);
+eya_memory_typed_at_from_back(const void *self, eya_usize_t index);
 
 /**
  * @brief Get pointer to element at index with direction control
@@ -209,7 +209,7 @@ eya_memory_typed_at_from_back(void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_memory_typed_at(void *self, eya_usize_t index, bool reversed);
+eya_memory_typed_at(const void *self, eya_usize_t index, bool reversed);
 
 /**
  * @brief Get pointer to first element in range
