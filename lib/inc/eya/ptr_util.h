@@ -44,7 +44,7 @@
  * @param ptr Pointer to check.
  * @return true if pointer is nullptr, false otherwise.
  */
-#define eya_ptr_is_null(ptr) (ptr == nullptr)
+#define eya_ptr_is_null(ptr) ((ptr) == nullptr)
 
 /**
  * @def eya_ptr_to_const_char
@@ -118,7 +118,7 @@
  * @return true if ranges do not overlap, false otherwise.
  */
 #define eya_ptr_ranges_no_overlap(r1_begin, r2_begin, r2_end)                                      \
-    ((r1_begin <= r2_begin) || (r2_end <= r1_begin))
+    (((r1_begin) <= (r2_begin)) || ((r2_end) <= (r1_begin)))
 
 /**
  * @def eya_ptr_ranges_is_overlap(r1_begin, r2_begin, r2_end)
