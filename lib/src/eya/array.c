@@ -6,6 +6,18 @@
 #include <eya/ptr_util.h>
 
 /**
+ * @def EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
+ * @brief Enables capacity check optimization in eya_array_resize()
+ *
+ * When this macro is defined (by default), the eya_array_resize() function will
+ * only perform memory reallocation if the requested new size exceeds the current
+ * array capacity. This provides an optimization by avoiding unnecessary reallocations.
+ */
+#ifndef EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
+#    define EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
+#endif // EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
+
+/**
  * @def EYA_ARRAY_DEFAULT_GROWTH_RATIO
  * @brief Default growth multiplier for array expansion (fixed-point, per mille)
  *
@@ -27,11 +39,15 @@ eya_array_capacity(const void *self)
 void
 eya_array_resize(void *self, eya_usize_t size)
 {
+#ifdef EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
     const eya_usize_t capacity = eya_array_capacity(self);
     if (capacity < size)
     {
+#endif // EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
         eya_allocated_array_resize(self, size);
+#ifdef EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
     }
+#endif // EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK
     eya_ptr_cast(eya_array_t, self)->size = size;
 }
 
