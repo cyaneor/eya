@@ -87,6 +87,21 @@ eya_usize_t
 eya_array_get_size(const void *self);
 
 /**
+ * @brief Checks if the array has reached its capacity
+ * @param[in] self Pointer to the array object
+ * @return true if array is full (size == capacity), false otherwise
+ *
+ * @details This function compares the current size of the array with its capacity
+ *          to determine if no more elements can be added without reallocation.
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ */
+EYA_ATTRIBUTE(SYMBOL)
+bool
+eya_array_is_full(const void *self);
+
+/**
  * @brief Checks if an index is valid
  * @param[in] self Pointer to the array
  * @param[in] index Index to validate
@@ -112,7 +127,7 @@ eya_array_is_valid_index(const void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_array_at_from_front(void *self, eya_usize_t index);
+eya_array_at_from_front(const void *self, eya_usize_t index);
 
 /**
  * @brief Gets element pointer from back
@@ -127,7 +142,7 @@ eya_array_at_from_front(void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_array_at_from_back(void *self, eya_usize_t index);
+eya_array_at_from_back(const void *self, eya_usize_t index);
 
 /**
  * @brief Gets element pointer with direction control
@@ -143,7 +158,49 @@ eya_array_at_from_back(void *self, eya_usize_t index);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void *
-eya_array_at(void *self, eya_usize_t index, bool reversed);
+eya_array_at(const void *self, eya_usize_t index, bool reversed);
+
+/**
+ * @brief Gets pointer to the first element in the array
+ * @param[in] self Pointer to the array object
+ * @return Pointer to the first element
+ *
+ * @details This is a convenience wrapper around eya_array_at() that always
+ *          returns the first element (index 0 from front).
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_OUT_OF_RANGE
+ *         If array is empty
+ *
+ * @see eya_array_at
+ * @see eya_array_back
+ * @see eya_array_get_begin
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_array_front(const void *self);
+
+/**
+ * @brief Gets pointer to the last element in the array
+ * @param[in] self Pointer to the array object
+ * @return Pointer to the last element
+ *
+ * @details This is a convenience wrapper around eya_array_at() that always
+ *          returns the last element (index 0 from back).
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_OUT_OF_RANGE
+ *         If array is empty
+ *
+ * @see eya_array_at
+ * @see eya_array_front
+ * @see eya_array_get_end
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_array_back(const void *self);
 
 /**
  * @brief Checks if array is empty
