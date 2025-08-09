@@ -5,31 +5,6 @@
 #include <eya/memory_std.h>
 #include <eya/ptr_util.h>
 
-/**
- * @def EYA_ARRAY_OPTIMIZE_RESIZE
- * @brief Macro to enable/disable array resize optimization
- *
- * - When set to 1 (default), the array will only be resized
- *   when necessary (when the new size exceeds current capacity).
- * - When set to 0, the array will be resized on every call.
- */
-#ifndef EYA_ARRAY_OPTIMIZE_RESIZE
-#    define EYA_ARRAY_OPTIMIZE_RESIZE 1
-#endif // EYA_ARRAY_OPTIMIZE_RESIZE
-
-/**
- * @def EYA_ARRAY_DEFAULT_GROWTH_RATIO
- * @brief Default growth multiplier for array expansion (fixed-point, per mille)
- *
- * Defines the growth factor as a fixed-point value where 1000 = 1.0x (no growth).
- * A value of 1500 means the array will grow by 1.5x (1500/1000) of its current capacity.
- * Used in integer arithmetic to avoid floating-point operations in embedded systems.
- * Can be redefined before including the header file.
- */
-#ifndef EYA_ARRAY_DEFAULT_GROWTH_RATIO
-#    define EYA_ARRAY_DEFAULT_GROWTH_RATIO 1500
-#endif // EYA_ARRAY_DEFAULT_GROWTH_RATIO
-
 eya_usize_t
 eya_array_capacity(const void *self)
 {
@@ -169,7 +144,7 @@ eya_array_shrink(void *self)
     const eya_usize_t capacity = eya_array_capacity(self);
     const eya_usize_t size     = eya_array_get_size(self);
 
-    if (size < capacity)
+    if (size <= capacity / EYA_ARRAY_DEFAULT_SHRINK_RATIO)
     {
         eya_array_resize(self, size);
     }

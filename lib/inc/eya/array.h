@@ -5,6 +5,43 @@
 #include "array_fields.h"
 
 /**
+ * @def EYA_ARRAY_OPTIMIZE_RESIZE
+ * @brief Macro to enable/disable array resize optimization
+ *
+ * - When set to 1 (default), the array will only be resized
+ *   when necessary (when the new size exceeds current capacity).
+ * - When set to 0, the array will be resized on every call.
+ */
+#ifndef EYA_ARRAY_OPTIMIZE_RESIZE
+#    define EYA_ARRAY_OPTIMIZE_RESIZE 1
+#endif // EYA_ARRAY_OPTIMIZE_RESIZE
+
+/**
+ * @def EYA_ARRAY_DEFAULT_SHRINK_RATIO
+ * @brief Default ratio used to determine when to shrink the array capacity
+ *
+ * This macro defines the default shrink ratio used by eya_array_shrink().
+ * When the array size becomes less than or equal to the current capacity divided by this ratio,
+ * the array will be shrunk to fit its current size.
+ */
+#ifndef EYA_ARRAY_DEFAULT_SHRINK_RATIO
+#    define EYA_ARRAY_DEFAULT_SHRINK_RATIO 2
+#endif // EYA_ARRAY_DEFAULT_SHRINK_RATIO
+
+/**
+ * @def EYA_ARRAY_DEFAULT_GROWTH_RATIO
+ * @brief Default growth multiplier for array expansion (fixed-point, per mille)
+ *
+ * Defines the growth factor as a fixed-point value where 1000 = 1.0x (no growth).
+ * A value of 1500 means the array will grow by 1.5x (1500/1000) of its current capacity.
+ * Used in integer arithmetic to avoid floating-point operations in embedded systems.
+ * Can be redefined before including the header file.
+ */
+#ifndef EYA_ARRAY_DEFAULT_GROWTH_RATIO
+#    define EYA_ARRAY_DEFAULT_GROWTH_RATIO 1500
+#endif // EYA_ARRAY_DEFAULT_GROWTH_RATIO
+
+/**
  * @struct eya_array
  * @brief Dynamic array structure with size tracking
  *
