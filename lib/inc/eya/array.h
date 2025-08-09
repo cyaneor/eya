@@ -34,24 +34,20 @@ eya_usize_t
 eya_array_capacity(const void *self);
 
 /**
- * @brief Resizes the array to the specified number of elements
- * @param self Pointer to the array object
- * @param size New element count
+ * @brief Resizes a dynamic array
  *
- * @details This function changes the size of the array to the specified number of elements.
- *          When compiled with `EYA_ARRAY_RESIZE_WITH_CAPACITY_CHECK` defined, the function
- *          will only perform reallocation if the new size exceeds current capacity.
- *          Otherwise, reallocation occurs unconditionally.
+ * @param self Pointer to the array
+ * @param size New size of the array
  *
- * @throws EYA_RUNTIME_ERROR_NULL_POINTER
- *         If self is NULL
- * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
- *         If size exceeds maximum capacity
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
- *         If memory allocation fails
+ * @details Behavior depends on EYA_ARRAY_OPTIMIZE_RESIZE:
+ * - If EYA_ARRAY_OPTIMIZE_RESIZE == 1 (default), reallocation only occurs
+ *   when the new size exceeds the array's current capacity.
+ * - If EYA_ARRAY_OPTIMIZE_RESIZE == 0, reallocation occurs on every call.
  *
- * @see eya_array_capacity
+ * In all cases, the array's size field will be updated to the specified value.
+ *
  * @see eya_allocated_array_resize
+ * @see eya_array_capacity
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
