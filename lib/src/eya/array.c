@@ -109,8 +109,7 @@ eya_array_is_empty(const void *self)
 void
 eya_array_clear(void *self)
 {
-    eya_runtime_check_ref(self);
-    eya_ptr_cast(eya_array_t, self)->size = 0;
+    eya_array_resize(self, 0);
 }
 
 void *
