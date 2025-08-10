@@ -20,17 +20,22 @@
 
 /**
  * @def EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
- * @brief Configuration option for zero-initializing memory after allocation
+ * @brief Configuration option for memory initialization behavior
  *
- * This macro controls whether newly allocated memory should be filled with zeros.
- * When enabled (EYA_CONFIG_ON), all allocated memory will be initialized to zero.
- * When disabled (EYA_CONFIG_OFF), memory contents will be undefined after allocation.
+ * Controls whether to fill newly allocated memory
+ * with zeros or leave it uninitialized.
  *
- * @note Default value is EYA_CONFIG_ON if not previously defined.
- * @see eya_memory_allocator_alloc() where this option is used
+ * When enabled (EYA_CONFIG_ON):
+ * - All allocated memory will be initialized to zero
+ * - Provides safer operation with predictable initial values
+ * - Prevents exposure of potentially sensitive data
  *
- * @value EYA_CONFIG_ON  Enable zero-initialization (recommended for security)
- * @value EYA_CONFIG_OFF Disable zero-initialization (faster but less secure)
+ * When disabled (EYA_CONFIG_OFF):
+ * - Memory contents remain undefined after allocation
+ * - Provides faster allocation performance
+ * - Requires explicit initialization by the user
+ *
+ * @note Default value is EYA_CONFIG_ON (safe mode with zero-initialization)
  */
 #ifndef EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
 #    define EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE EYA_CONFIG_ON

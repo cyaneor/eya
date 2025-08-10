@@ -42,9 +42,6 @@
  * @note Default value is EYA_CONFIG_ON (safe mode with abort())
  * @warning Disabling this may lead to undefined behavior if termination occurs
  *          before custom handler is installed
- *
- * @value EYA_CONFIG_ON  Use abort() for immediate termination (default)
- * @value EYA_CONFIG_OFF Use nullptr (requires manual handler setup)
  */
 #ifndef EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
 #    define EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB EYA_CONFIG_ON

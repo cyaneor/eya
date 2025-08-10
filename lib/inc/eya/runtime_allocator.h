@@ -42,9 +42,6 @@
  * @note Default value is EYA_CONFIG_ON for immediate usability
  * @warning When disabled, using uninitialized allocator will cause undefined behavior
  * @see eya_memory_allocator_t for allocator structure definition
- *
- * @value EYA_CONFIG_ON  Use standard malloc/free (default safe configuration)
- * @value EYA_CONFIG_OFF Leave uninitialized (for custom allocator setup)
  */
 #ifndef EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 #    define EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB EYA_CONFIG_ON
