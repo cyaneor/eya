@@ -1,5 +1,5 @@
 /**
- * @file eya_runtime_try.h
+ * @file runtime_try.h
  * @brief Exception handling macros for EYA runtime (try-catch implementation)
  *
  * Provides a set of macros that implement try-catch exception handling mechanism
