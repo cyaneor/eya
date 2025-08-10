@@ -33,6 +33,35 @@
 #    define EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX 255
 #endif // EYA_RUNTIME_EXCEPTION_CATCH_STACK_MAX
 
+/**
+ * @def eya_runtime_exception_catch_stack_capture
+ * @brief Macro for capturing execution context and setting exception handlers
+ *
+ * Combines stack push and setjmp into atomic operation:
+ * 1. Pushes exception frame to handler stack
+ * 2. Captures execution context via setjmp
+ * 3. Returns entry point for exception handling
+ *
+ * @param x Exception frame pointer (`eya_exception_catch_t*`)
+ * @return 0 - during initial context saving
+ * @return >0 - when returning from `eya_runtime_exception_catch_stack_throw()`
+ *
+ * @note Used as foundation for try/catch block implementation
+ * @warning MUST only be used in if/switch conditions
+ *
+ * Usage example:
+ * @code
+ * if (eya_runtime_exception_catch_stack_capture(frame)) {
+ *   // Exception handling code
+ * }
+ * @endcode
+ *
+ * @see eya_runtime_exception_catch_stack_push()
+ * @see eya_runtime_exception_catch_stack_throw()
+ */
+#define eya_runtime_exception_catch_stack_capture(x)                                               \
+    setjmp(eya_runtime_exception_catch_stack_push(x)->env)
+
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
