@@ -11,8 +11,8 @@
  * @note No definitions are made when compiling as C++ or when stdbool.h is detected.
  */
 
-#ifndef SE_BOOL_H
-#define SE_BOOL_H
+#ifndef EYA_BOOL_H
+#define EYA_BOOL_H
 
 #if !defined(__cplusplus) && !defined(__STDBOOL_H)
 /**
@@ -45,4 +45,4 @@ typedef enum
 
 #endif // !defined(__cplusplus) && !defined(__STDBOOL_H)
 
-#endif // SE_BOOL_H
+#endif // EYA_BOOL_H

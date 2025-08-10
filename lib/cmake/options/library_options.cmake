@@ -99,7 +99,7 @@ option(EYA_LIBRARY_OPTION_STATIC_BUILD
 #
 # Note:
 #
-#     Essential for architectures where EYA_usize_t/EYA_ssize_t
+#     Essential for architectures where EYA_USIZE_T/EYA_SSIZE_T
 #     sizes are smaller than pointer size. Ensures correct
 #     memory-related operations handling.
 #
@@ -113,7 +113,7 @@ option(EYA_LIBRARY_OPTION_SEGMENTED_ARCH
 # Description:
 #
 #     This CMake option determines whether to use standard library
-#     functions for runtime allocator initialization in the SE project.
+#     functions for runtime allocator initialization in the EYA project.
 #
 #     When enabled (ON), runtime allocator initialization
 #     uses standard library functions.
@@ -139,11 +139,11 @@ option(EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 # Description:
 #
 #     Determines whether to initialize default termination handler (`abort()`)
-#     using the C standard library in the SE framework.
+#     using the C standard library in the EYA framework.
 #
 #     - ON: Global handler `m_runtime_terminate` initialized with `abort()`
 #     - OFF: Handler set to `nullptr`, requiring explicit setup
-#            via `se_runtime_terminate_set()`
+#            via `eya_runtime_terminate_set()`
 #
 # Usage:
 #
@@ -153,13 +153,13 @@ option(EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 #         for embedded systems.
 #
 #     OFF:
-#         Requires explicit handler setup via `se_runtime_terminate_set()`.
+#         Requires explicit handler setup via `eya_runtime_terminate_set()`.
 #         Useful for custom termination logic (logging, restarting, etc.).
 #
 # Note:
 #
 #     Handler behavior can be overridden at runtime using
-#     `se_runtime_terminate_set()` even when enabled.
+#     `eya_runtime_terminate_set()` even when enabled.
 #
 option(EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
         "Initialize termination handler (m_runtime_terminate) as abort()." ON)

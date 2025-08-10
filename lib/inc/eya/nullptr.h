@@ -13,8 +13,8 @@
  * as C++, providing cross-compiler consistency and unified code patterns.
  */
 
-#ifndef SE_NULLPTR_H
-#define SE_NULLPTR_H
+#ifndef EYA_NULLPTR_H
+#define EYA_NULLPTR_H
 
 #include "numeric_limit.h"
 
@@ -35,4 +35,4 @@
 #    define nullptr eya_numeric_limit_umin(void *)
 #endif // __cplusplus
 
-#endif // SE_NULLPTR_H
+#endif // EYA_NULLPTR_H
