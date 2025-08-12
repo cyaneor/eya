@@ -11,6 +11,15 @@ project(${CMAKE_PROJECT_NAME}_test
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Check GCC version if GCC is used
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(REQUIRED_GCC_VERSION 11.2.0)
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS REQUIRED_GCC_VERSION)
+        message(FATAL_ERROR "GCC version ${CMAKE_CXX_COMPILER_VERSION} is too old. "
+                "Required at least GCC ${REQUIRED_GCC_VERSION}.")
+    endif()
+endif()
+
 # -------------------------------------------------------------------------------------------- #
 # Options                                                                                      #
 # -------------------------------------------------------------------------------------------- #
