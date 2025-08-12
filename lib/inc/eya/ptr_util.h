@@ -1,3 +1,49 @@
+/**
+ * @file ptr_util.h
+ * @brief Utility macros for pointer operations and manipulations.
+ *
+ * This header provides a comprehensive set of macros for safe and unsafe pointer operations,
+ * including casting, dereferencing, arithmetic, alignment, and range checking.
+ *
+ * The macros are designed to:
+ * - Provide type-safe pointer operations
+ * - Support both safe (with null checks) and unsafe variants
+ * - Enable address arithmetic and manipulation
+ * - Facilitate memory alignment operations
+ * - Check for pointer ranges and overlaps
+ *
+ * @note Many operations come in both safe and unsafe variants:
+ *       - Unsafe variants (suffixed with _unsafe) assume valid inputs
+ *       - Safe variants perform basic null checks
+ *
+ * @warning Even "safe" variants don't guarantee memory safety - they only add null checks.
+ *          Proper memory bounds and validity must still be ensured by the caller.
+ *
+ * Key functionality groups:
+ * - Basic pointer operations: casting, dereferencing, null checks
+ * - Pointer arithmetic: addition/subtraction with offsets
+ * - Address conversion: to unsigned/signed numeric addresses
+ * - Alignment operations: align up/down to boundaries
+ * - Range checking: overlap detection between pointer ranges
+ *
+ * @see addr_util.h For underlying address manipulation utilities
+ * @see nullptr.h For nullptr definition
+ *
+ * Example usage:
+ * @code
+ * void* data = ...;
+ *
+ * // Safe pointer arithmetic
+ * void* next = eya_ptr_add_by_offset(data, sizeof(int));
+ *
+ * // Type-safe dereference
+ * int value = eya_ptr_deref(int, data);
+ *
+ * // Alignment operations
+ * void* aligned = eya_ptr_align_up(data, 16);
+ * @endcode
+ */
+
 #ifndef EYA_PTR_UTIL_H
 #define EYA_PTR_UTIL_H
 
