@@ -6,10 +6,6 @@
 # appropriate compiler-specific flags for the target build configuration.                 #
 # --------------------------------------------------------------------------------------- #
 
-# Includes the CheckCCompilerFlag CMake module,
-# which provides functions to check for support of C compiler flags (options).
-include(CheckCCompilerFlag)
-
 # ---------------------------------------------------------------------------------------- #
 # Function to add a compilation option if it's not already present in the list             #
 # Parameters:                                                                              #
@@ -116,18 +112,23 @@ function(add_link_library_if_missing VAR_NAME OPTION_VALUE)
     endif ()
 endfunction()
 
-# Instruction set hierarchy handling:
-# AVX512 includes all AVX2 features, and AVX2 includes all SSE2 features.
-# When a higher-level instruction set is enabled, we disable the lower ones
-# to prevent redundant/conflicting compiler flags and ensure optimal performance.
-if (EYA_COMPILE_OPTION_AVX512 STREQUAL "ON")
-    set(EYA_COMPILE_OPTION_AVX2 OFF)
-    set(EYA_COMPILE_OPTION_SSE2 OFF)
-elseif (EYA_COMPILE_OPTION_AVX2 STREQUAL "ON")
-    set(EYA_COMPILE_OPTION_SSE2 OFF)
-endif ()
-
 function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS OUT_LINK_OPTIONS OUT_LINK_LIBRARIES)
+    # Initialize instruction set variables
+    set(LOCAL_COMPILE_OPTION_AVX512 OFF)
+    set(LOCAL_COMPILE_OPTION_AVX2 OFF)
+    set(LOCAL_COMPILE_OPTION_SSE2 OFF)
+
+    # First pass: collect which instruction sets are requested
+    foreach (CMAKE_OPTION IN ITEMS ${CMAKE_OPTIONS})
+        if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_AVX512" AND ${CMAKE_OPTION})
+            set(LOCAL_COMPILE_OPTION_AVX512 ON)
+        elseif (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_AVX2" AND ${CMAKE_OPTION})
+            set(LOCAL_COMPILE_OPTION_AVX2 ON)
+        elseif (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_SSE2" AND ${CMAKE_OPTION})
+            set(LOCAL_COMPILE_OPTION_SSE2 ON)
+        endif ()
+    endforeach ()
+
     # Detect the C compiler type and set corresponding flags
     # Checks C_COMPILER_ID and sets the following variables:
     #   C_COMPILER_ID_IS_CLANG - for Clang compiler
@@ -190,7 +191,7 @@ function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS
 
         # Instruction Set Optimizations
         if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_SSE2")
-            if (${CMAKE_OPTION} STREQUAL "ON")
+            if (LOCAL_COMPILE_OPTION_SSE2 AND NOT LOCAL_COMPILE_OPTION_AVX2 AND NOT LOCAL_COMPILE_OPTION_AVX512)
                 if (C_COMPILER_ID_IS_GNU_LIKE)
                     add_compile_option_if_missing(LOCAL_COMPILE_OPTIONS -msse2)
                 elseif (C_COMPILER_ID_IS_MSVC)
@@ -201,7 +202,7 @@ function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS
         endif ()
 
         if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_AVX2")
-            if (${CMAKE_OPTION} STREQUAL "ON")
+            if (LOCAL_COMPILE_OPTION_AVX2 AND NOT LOCAL_COMPILE_OPTION_AVX512)
                 if (C_COMPILER_ID_IS_GNU_LIKE)
                     add_compile_option_if_missing(LOCAL_COMPILE_OPTIONS -mavx2)
                 elseif (C_COMPILER_ID_IS_MSVC)
@@ -212,7 +213,7 @@ function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS
         endif ()
 
         if (CMAKE_OPTION STREQUAL "EYA_COMPILE_OPTION_AVX512")
-            if (${CMAKE_OPTION} STREQUAL "ON")
+            if (LOCAL_COMPILE_OPTION_AVX512)
                 if (C_COMPILER_ID_IS_GNU_LIKE)
                     add_compile_option_if_missing(LOCAL_COMPILE_OPTIONS -mavx512f)
                     add_compile_option_if_missing(LOCAL_COMPILE_OPTIONS -mavx512bw)
