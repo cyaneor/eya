@@ -22,9 +22,9 @@
  * @warning Disabling optimization (EYA_CONFIG_OFF) may impact performance
  *          due to frequent reallocations, but ensures minimal memory usage.
  */
-#ifndef EYA_ARRAY_OPTIMIZE_RESIZE
-#    define EYA_ARRAY_OPTIMIZE_RESIZE EYA_CONFIG_ON
-#endif // EYA_ARRAY_OPTIMIZE_RESIZE
+#ifndef EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
+#    define EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
 
 /**
  * @def EYA_ARRAY_DEFAULT_SHRINK_RATIO
@@ -34,9 +34,9 @@
  * When the array size becomes less than or equal to the current capacity divided by this ratio,
  * the array will be shrunk to fit its current size.
  */
-#ifndef EYA_ARRAY_DEFAULT_SHRINK_RATIO
-#    define EYA_ARRAY_DEFAULT_SHRINK_RATIO 2
-#endif // EYA_ARRAY_DEFAULT_SHRINK_RATIO
+#ifndef EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
+#    define EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO 2
+#endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
 
 /**
  * @def EYA_ARRAY_DEFAULT_GROWTH_RATIO
@@ -47,9 +47,9 @@
  * Used in integer arithmetic to avoid floating-point operations in embedded systems.
  * Can be redefined before including the header file.
  */
-#ifndef EYA_ARRAY_DEFAULT_GROWTH_RATIO
-#    define EYA_ARRAY_DEFAULT_GROWTH_RATIO 1500
-#endif // EYA_ARRAY_DEFAULT_GROWTH_RATIO
+#ifndef EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
+#    define EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO 1500
+#endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
 
 /**
  * @struct eya_array

@@ -14,13 +14,13 @@ eya_array_capacity(const void *self)
 void
 eya_array_resize(void *self, eya_usize_t size)
 {
-#if (EYA_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
+#if (EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
     const eya_usize_t capacity = eya_array_capacity(self);
     if (capacity < size)
     {
 #endif
         eya_allocated_array_resize(self, size);
-#if (EYA_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
+#if (EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE == EYA_CONFIG_ON)
     }
 #endif
     eya_ptr_cast(eya_array_t, self)->size = size;
@@ -144,7 +144,7 @@ eya_array_shrink(void *self)
     const eya_usize_t capacity = eya_array_capacity(self);
     const eya_usize_t size     = eya_array_get_size(self);
 
-    if (size <= capacity / EYA_ARRAY_DEFAULT_SHRINK_RATIO)
+    if (size <= capacity / EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO)
     {
         eya_array_resize(self, size);
     }
@@ -160,7 +160,8 @@ eya_array_reserve(void *self, eya_usize_t size)
     if (capacity < reserve_size)
     {
         const eya_usize_t new_capacity =
-            capacity == 0 ? reserve_size : (capacity * EYA_ARRAY_DEFAULT_GROWTH_RATIO) / 1000;
+            capacity == 0 ? reserve_size
+                          : (capacity * EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO) / 1000;
 
         eya_allocated_array_resize(self, new_capacity > reserve_size ? new_capacity : reserve_size);
     }

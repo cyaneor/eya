@@ -190,3 +190,108 @@ option(EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
 #
 option(EYA_LIBRARY_OPTION_THREAD_LOCAL
         "Use thread modifier for all static variables." ON)
+
+# Option:
+#
+#     EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX
+#
+# Description:
+#
+#     This CMake option defines the maximum depth of the runtime exception
+#     handling stack per thread. It controls the size of the thread-local array
+#     `m_runtime_exceptions[]` used to store exception frames.
+#
+#     The value determines how many nested exceptions can be simultaneously
+#     tracked and handled within a single thread.
+#
+# Usage:
+#
+#     - Higher values allow deeper exception nesting but consume more memory.
+#     - Lower values conserve memory but may cause stack overflow in complex
+#       exception handling scenarios.
+#     - Must be > 0 (zero would disable exception handling).
+#
+# Default:
+#
+#     255 (provides reasonable depth for most applications)
+#
+# Note:
+#
+#     The stack is thread-local (THREAD_LOCAL), so this memory is allocated
+#     separately for each thread. Consider thread count and memory constraints
+#     when adjusting this value.
+#
+option(EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX
+        "Max stack size for exception catching" 255)
+
+# Option:
+#
+#     EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
+#
+# Description:
+#
+#     This CMake option controls whether array resizing operations should be optimized
+#     to only occur when necessary. The optimization prevents unnecessary memory
+#     reallocations when the new size would fit within the current capacity.
+#
+# Usage:
+#
+#     ON: Enable resize optimization (only resize when capacity exceeded)
+#     OFF: Disable optimization (resize on every call)
+#
+# Note:
+#
+#     Disabling optimization (OFF) may impact performance due to frequent reallocations,
+#     but ensures minimal memory usage by always resizing to exact requested size.
+#
+option(EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
+        "Optimize array resizing to only reallocate when capacity is exceeded" ON)
+
+# Option:
+#
+#     EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
+#
+# Description:
+#
+#     This CMake option defines the default shrink ratio used to determine
+#     when to shrink the array capacity. When the array size becomes less than
+#     or equal to the current capacity divided by this ratio, the array will
+#     be shrunk to fit its current size.
+#
+# Usage:
+#
+#     Positive integer value (default: 2)
+#     Higher values trigger shrinking more aggressively
+#     Lower values make shrinking less frequent
+#
+# Note:
+#
+#     Setting this too high may cause frequent reallocations,
+#     while setting too low may waste memory with underutilized capacity.
+#
+option(EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO 2
+        "Default ratio for determining when to shrink array capacity")
+
+# Option:
+#
+#     EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
+#
+# Description:
+#
+#     This CMake option defines the default growth multiplier for array expansion
+#     as a fixed-point value where 1000 = 1.0x (no growth).
+#     A value of 1500 means the array will grow by 1.5x (1500/1000) of its current capacity.
+#
+# Usage:
+#
+#     Positive integer value in per mille (default: 1500 for 1.5x growth)
+#     Higher values increase growth factor (more memory, fewer reallocations)
+#     Lower values decrease growth factor (less memory, more reallocations)
+#
+# Note:
+#
+#     This uses integer arithmetic to avoid floating-point operations,
+#     making it suitable for embedded systems.
+#
+option(EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
+        1500 "Default growth multiplier for array expansion (fixed-point, per mille)")
