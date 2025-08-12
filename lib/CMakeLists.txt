@@ -63,7 +63,6 @@ message(STATUS "Library options:")
 process_cmake_options(
         OPTION_LIST ${CMAKE_OPTIONS}
         OPTION_PREFIX "EYA_LIBRARY_OPTION_"
-        OPTION_VALUE "ON"
         OUTPUT_WITH_VALUES TRUE
         OUTPUT_LIST EYA_TARGET_PRIVATE_COMPILE_DEFINITIONS
 )
@@ -92,8 +91,7 @@ process_compile_options(
 message(STATUS "Compilation features:")
 process_cmake_options(
         OPTION_LIST ${EYA_COMPILE_OPTIONS}
-        OPTION_PREFIX "EYA_COMPILE_OPTION_"
-        OPTION_VALUE "ON")
+        OPTION_PREFIX "EYA_COMPILE_OPTION_")
 
 # -------------------------------------------------------------------------------------------- #
 # Library Target Configuration                                                                 #
