@@ -2,6 +2,12 @@
 # Using a relatively recent version to support modern features
 cmake_minimum_required(VERSION 3.12)
 
+# Check if CMake 3.5 is available (for compatibility)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.5)
+    # Turning on or disconnecting of the output data of compilation commands during creation.
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
+
 # Initialize project named "eya"
 # Defines basic project settings and controls build targets
 project(eya
