@@ -59,6 +59,7 @@ include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/source_files.cmake)              # So
 
 # Display active library features
 get_property(CMAKE_OPTIONS DIRECTORY PROPERTY VARIABLES)
+message(STATUS "Library options:")
 process_cmake_options(
         OPTION_LIST ${CMAKE_OPTIONS}
         OPTION_PREFIX "EYA_LIBRARY_OPTION_"
@@ -88,7 +89,7 @@ process_compile_options(
 )
 
 # Display active compilation features
-message(STATUS "Active compilation features:")
+message(STATUS "Compilation features:")
 process_cmake_options(
         OPTION_LIST ${EYA_COMPILE_OPTIONS}
         OPTION_PREFIX "EYA_COMPILE_OPTION_"
