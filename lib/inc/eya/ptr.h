@@ -42,7 +42,6 @@
 
 #else /* EYA_VOID_P_SIZE not defined */
 /**
- * @def EYA_PTR_ERROR
  * @brief Compilation error for unsupported platforms
  * @details Generates error if platform doesn't define EYA_VOID_P_SIZE
  */
