@@ -25,24 +25,26 @@ function(process_cmake_options)
     # Process all options
     foreach (CURRENT_OPTION IN ITEMS ${ARGS_OPTION_LIST})
         # Check prefix and value match
-        if (CURRENT_OPTION MATCHES "^${ARGS_OPTION_PREFIX}.*" AND ${CURRENT_OPTION} STREQUAL "${ARGS_OPTION_VALUE}")
+        if (CURRENT_OPTION MATCHES "^${ARGS_OPTION_PREFIX}.*")
             # Display option information
-            message(STATUS "  • ${CURRENT_OPTION}")
+            message(STATUS "  • ${CURRENT_OPTION} = ${${CURRENT_OPTION}}")
 
-            # Add to output list if specified
-            if (ARGS_OUTPUT_LIST)
-                if (ARGS_OUTPUT_WITH_VALUES)
-                    # Convert ON/OFF to 1/0 if needed
-                    if (${CURRENT_OPTION} STREQUAL "ON")
-                        set(VALUE_TO_OUTPUT "1")
-                    elseif (${CURRENT_OPTION} STREQUAL "OFF")
-                        set(VALUE_TO_OUTPUT "0")
+            if (${CURRENT_OPTION} STREQUAL "${ARGS_OPTION_VALUE}")
+                # Add to output list if specified
+                if (ARGS_OUTPUT_LIST)
+                    if (ARGS_OUTPUT_WITH_VALUES)
+                        # Convert ON/OFF to 1/0 if needed
+                        if (${CURRENT_OPTION} STREQUAL "ON")
+                            set(VALUE_TO_OUTPUT "1")
+                        elseif (${CURRENT_OPTION} STREQUAL "OFF")
+                            set(VALUE_TO_OUTPUT "0")
+                        else ()
+                            set(VALUE_TO_OUTPUT "${${CURRENT_OPTION}}")
+                        endif ()
+                        list(APPEND ${ARGS_OUTPUT_LIST} "${CURRENT_OPTION}=${VALUE_TO_OUTPUT}")
                     else ()
-                        set(VALUE_TO_OUTPUT "${${CURRENT_OPTION}}")
+                        list(APPEND ${ARGS_OUTPUT_LIST} ${CURRENT_OPTION})
                     endif ()
-                    list(APPEND ${ARGS_OUTPUT_LIST} "${CURRENT_OPTION}=${VALUE_TO_OUTPUT}")
-                else ()
-                    list(APPEND ${ARGS_OUTPUT_LIST} ${CURRENT_OPTION})
                 endif ()
             endif ()
         endif ()
