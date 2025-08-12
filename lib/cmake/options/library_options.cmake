@@ -81,33 +81,6 @@ option(EYA_LIBRARY_OPTION_STATIC_BUILD
 
 # Option:
 #
-#     EYA_LIBRARY_OPTION_SEGMENTED_ARCH
-#
-# Description:
-#
-#     The EYA_LIBRARY_OPTION_SEGMENTED_ARCH CMake option specifies
-#     whether the target architecture uses a segmented memory model.
-#     When enabled (ON), manual definition of required macros
-#     with appropriate values is required in the project.
-#
-# Usage:
-#
-#     ON: Indicates target architecture uses segmented memory model
-#         and requires special macro definitions.
-#     OFF: Architecture uses non-segmented memory model
-#          or required macros are predefined.
-#
-# Note:
-#
-#     Essential for architectures where EYA_USIZE_T/EYA_SSIZE_T
-#     sizes are smaller than pointer size. Ensures correct
-#     memory-related operations handling.
-#
-option(EYA_LIBRARY_OPTION_SEGMENTED_ARCH
-        "Specify segmented memory model architecture." OFF)
-
-# Option:
-#
 #     EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 #
 # Description:
