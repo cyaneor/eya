@@ -81,7 +81,7 @@ option(EYA_LIBRARY_OPTION_STATIC_BUILD
 
 # Option:
 #
-#     EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+#     EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB
 #
 # Description:
 #
@@ -102,12 +102,12 @@ option(EYA_LIBRARY_OPTION_STATIC_BUILD
 #     portable implementations. Disable for custom environments
 #     or specialized allocators.
 #
-option(EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+option(EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB
         "Use stdlib functions for runtime allocator initialization." ON)
 
 # Option:
 #
-#     EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
+#     EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_USE_STDLIB
 #
 # Description:
 #
@@ -134,12 +134,12 @@ option(EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
 #     Handler behavior can be overridden at runtime using
 #     `eya_runtime_terminate_set()` even when enabled.
 #
-option(EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
+option(EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_USE_STDLIB
         "Initialize termination handler (m_runtime_terminate) as abort()." ON)
 
 # Option:
 #
-#     EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+#     EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
 #
 # Description:
 #
@@ -162,7 +162,7 @@ option(EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
 #     Zeroing memory prevents security risks but incurs
 #     performance overhead. Disable when optimization is critical.
 #
-option(EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+option(EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
         "Zero-initialize newly allocated memory regions." ON)
 
 # Option:

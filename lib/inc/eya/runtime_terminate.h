@@ -23,7 +23,7 @@
 #include "config.h"
 
 /**
- * @def EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
+ * @def EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
  * @brief Configuration option for standard library termination behavior
  *
  * Controls whether to initialize the runtime termination handler
@@ -43,9 +43,9 @@
  * @warning Disabling this may lead to undefined behavior if termination occurs
  *          before custom handler is installed
  */
-#ifndef EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
-#    define EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_TERMINATE_INIT_STDLIB
+#ifndef EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
+#    define EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 

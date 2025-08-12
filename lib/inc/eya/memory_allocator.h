@@ -19,7 +19,7 @@
 #include "size.h"
 
 /**
- * @def EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+ * @def EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
  * @brief Configuration option for memory initialization behavior
  *
  * Controls whether to fill newly allocated memory
@@ -37,9 +37,9 @@
  *
  * @note Default value is EYA_CONFIG_ON (safe mode with zero-initialization)
  */
-#ifndef EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
-#    define EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_FILL_ZERO_AFTER_MEMORY_ALLOCATE
+#ifndef EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
+#    define EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
 
 /**
  * @struct eya_memory_allocator
