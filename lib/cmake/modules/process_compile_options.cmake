@@ -20,39 +20,29 @@ include(CheckCCompilerFlag)
 # Returns status via STATUS_VAR (if provided):                                             #
 #   "OK" - Option was successfully added                                                   #
 #   "SKIPPED" - Option was already present in the list                                     #
-#   "UNSUPPORTED" - Compiler doesn't support this flag                                     #
 # ---------------------------------------------------------------------------------------- #
 function(add_compile_option_if_missing VAR_NAME OPTION_VALUE)
     # Initialize status variable (if provided as third parameter)
     set(STATUS_VAR "")
     if (ARGC GREATER 2)
         set(STATUS_VAR "${ARGV2}")
-    endif()
+    endif ()
 
     # Default status: SKIPPED (if flag exists)
     set(STATUS_FLAG "SKIPPED")
 
     # Check if the flag is already in the list
     if (NOT "${OPTION_VALUE}" IN_LIST ${VAR_NAME})
-        # Verify if compiler supports this flag
-        check_c_compiler_flag("${OPTION_VALUE}" COMPILER_SUPPORTS_FLAG)
-        
-        if (COMPILER_SUPPORTS_FLAG)
-            # Add flag to the list and update parent scope
-            list(APPEND ${VAR_NAME} ${OPTION_VALUE})
-            set(${VAR_NAME} "${${VAR_NAME}}" PARENT_SCOPE)
-            set(STATUS_FLAG "OK") # Successfully added
-        else()
-            # Show warning if flag isn't supported
-            message(WARNING "Compiler doesn't support flag: ${OPTION_VALUE}")
-            set(STATUS_FLAG "UNSUPPORTED")  # Compiler rejected it
-        endif()
-    endif()
+        # Add flag to the list and update parent scope
+        list(APPEND ${VAR_NAME} ${OPTION_VALUE})
+        set(${VAR_NAME} "${${VAR_NAME}}" PARENT_SCOPE)
+        set(STATUS_FLAG "OK") # Successfully added
+    endif ()
 
     # If status variable was requested, set its value
     if (STATUS_VAR)
         set(${STATUS_VAR} "${STATUS_FLAG}" PARENT_SCOPE)
-    endif()
+    endif ()
 endfunction()
 
 
@@ -72,7 +62,7 @@ function(add_link_option_if_missing VAR_NAME OPTION_VALUE)
     set(STATUS_VAR "")
     if (ARGC GREATER 2)
         set(STATUS_VAR "${ARGV2}")
-    endif()
+    endif ()
 
     # Default status: SKIPPED (if flag exists)
     set(STATUS_FLAG "SKIPPED")
@@ -83,12 +73,12 @@ function(add_link_option_if_missing VAR_NAME OPTION_VALUE)
         list(APPEND ${VAR_NAME} ${OPTION_VALUE})
         set(${VAR_NAME} "${${VAR_NAME}}" PARENT_SCOPE)
         set(STATUS_FLAG "OK")  # Successfully added
-    endif()
+    endif ()
 
     # If status variable was requested, set its value
     if (STATUS_VAR)
         set(${STATUS_VAR} "${STATUS_FLAG}" PARENT_SCOPE)
-    endif()
+    endif ()
 endfunction()
 
 # ---------------------------------------------------------------------------------------- #
@@ -107,7 +97,7 @@ function(add_link_library_if_missing VAR_NAME OPTION_VALUE)
     set(STATUS_VAR "")
     if (ARGC GREATER 2)
         set(STATUS_VAR "${ARGV2}")
-    endif()
+    endif ()
 
     # Default status: SKIPPED (if library exists)
     set(STATUS_FLAG "SKIPPED")
@@ -118,12 +108,12 @@ function(add_link_library_if_missing VAR_NAME OPTION_VALUE)
         list(APPEND ${VAR_NAME} ${OPTION_VALUE})
         set(${VAR_NAME} "${${VAR_NAME}}" PARENT_SCOPE)
         set(STATUS_FLAG "OK")  # Successfully added
-    endif()
+    endif ()
 
     # If status variable was requested, set its value
     if (STATUS_VAR)
         set(${STATUS_VAR} "${STATUS_FLAG}" PARENT_SCOPE)
-    endif()
+    endif ()
 endfunction()
 
 # Instruction set hierarchy handling:
@@ -144,7 +134,7 @@ function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS
     #   C_COMPILER_ID_IS_GNU   - for GCC (GNU Compiler Collection)
     #   C_COMPILER_ID_IS_MSVC  - for Microsoft Visual C++ Compiler
     if (C_COMPILER_ID MATCHES "Clang")
-        set(C_COMPILER_ID_IS_CLANG TRUE)     
+        set(C_COMPILER_ID_IS_CLANG TRUE)
     elseif (C_COMPILER_ID MATCHES "GNU")
         set(C_COMPILER_ID_IS_GNU TRUE)
     elseif (C_COMPILER_ID STREQUAL "MSVC")
@@ -154,8 +144,8 @@ function(process_compile_options CMAKE_OPTIONS C_COMPILER_ID OUT_COMPILE_OPTIONS
     # Set a common flag for GNU-like compilers
     # (includes Clang and GCC as they share most GNU-compatible flags)
     if (C_COMPILER_ID_IS_CLANG OR C_COMPILER_ID_IS_GNU)
-        set(C_COMPILER_ID_IS_GNU_LIKE TRUE)      
-    endif()
+        set(C_COMPILER_ID_IS_GNU_LIKE TRUE)
+    endif ()
 
     # Initialize local variables
     set(LOCAL_COMPILE_OPTIONS "")
