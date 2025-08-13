@@ -277,6 +277,19 @@ EYA_ATTRIBUTE(SYMBOL)
 bool
 eya_memory_typed_is_equal(const void *self, const void *other);
 
+/**
+ * @brief Creates a typed memory block with specified parameters.
+ *
+ * @param[in] begin Pointer to the start of the memory block.
+ * @param[in] end Pointer to the end of the memory block (exclusive).
+ * @param[in] element_size Size of a single element in bytes.
+ *
+ * @return Initialized `eya_memory_typed_t` structure representing the typed memory range.
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_memory_typed_t
+eya_memory_typed_make(void *begin, void *end, eya_usize_t element_size);
+
 EYA_COMPILER(EXTERN_C_END)
 
 #endif // EYA_MEMORY_TYPED_H

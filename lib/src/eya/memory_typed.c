@@ -1,5 +1,6 @@
 #include <eya/memory_typed.h>
 
+#include <eya/memory_typed_initializer.h>
 #include <eya/runtime_check_ref.h>
 #include <eya/ptr_util.h>
 
@@ -130,4 +131,12 @@ eya_memory_typed_is_equal(const void *self, const void *other)
 {
     return eya_memory_typed_is_equal_element_size(self, other) &&
            eya_memory_range_is_equal(self, other);
+}
+
+eya_memory_typed_t
+eya_memory_typed_make(void *begin, void *end, eya_usize_t element_size)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(element_size);
+    eya_memory_range_set_range(&self, begin, end);
+    return self;
 }

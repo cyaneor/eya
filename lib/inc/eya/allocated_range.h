@@ -126,7 +126,7 @@ eya_allocated_range_exchange(void *self, void *other);
  * @see eya_memory_range_get_begin()
  * @see eya_memory_range_get_size()
  * @see eya_memory_allocator_realloc()
- * @see eya_memory_range_set_by_size_v()
+ * @see eya_memory_range_set_by_size_f()
  * @see eya_runtime_allocator()
  */
 EYA_ATTRIBUTE(SYMBOL)

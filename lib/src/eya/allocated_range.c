@@ -28,5 +28,5 @@ eya_allocated_range_resize(void *self, eya_usize_t size)
     eya_memory_allocator_t *allocator = eya_runtime_allocator();
 
     void *new_ptr = eya_memory_allocator_realloc(allocator, old_ptr, cur_size, size);
-    eya_memory_range_set_by_size_v(self, new_ptr, size);
+    eya_memory_range_set_by_size_f(self, new_ptr, size);
 }
