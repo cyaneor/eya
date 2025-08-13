@@ -6,7 +6,7 @@
 #include "config.h"
 
 /**
- * @def EYA_ARRAY_OPTIMIZE_RESIZE
+ * @def EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
  * @brief Configuration option for array resize optimization behavior
  *
  * This macro controls whether array resizing operations should be optimized
@@ -27,7 +27,7 @@
 #endif // EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
 
 /**
- * @def EYA_ARRAY_DEFAULT_SHRINK_RATIO
+ * @def EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
  * @brief Default ratio used to determine when to shrink the array capacity
  *
  * This macro defines the default shrink ratio used by eya_array_shrink().
@@ -39,7 +39,7 @@
 #endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
 
 /**
- * @def EYA_ARRAY_DEFAULT_GROWTH_RATIO
+ * @def EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
  * @brief Default growth multiplier for array expansion (fixed-point, per mille)
  *
  * Defines the growth factor as a fixed-point value where 1000 = 1.0x (no growth).
