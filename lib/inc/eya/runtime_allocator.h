@@ -23,7 +23,7 @@
 #include "memory_allocator.h"
 
 /**
- * @def EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+ * @def EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB
  * @brief Configuration option for default runtime allocator initialization
  *
  * Controls whether to initialize the thread-local runtime allocator with
@@ -43,9 +43,9 @@
  * @warning When disabled, using uninitialized allocator will cause undefined behavior
  * @see eya_memory_allocator_t for allocator structure definition
  */
-#ifndef EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
-#    define EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB
+#ifndef EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB
+#    define EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB EYA_CONFIG_ON
+#endif // EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 
