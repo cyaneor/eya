@@ -31,8 +31,8 @@ eya_allocated_array_is_max_size_exceeds(const void *self, eya_usize_t size)
 void
 eya_allocated_array_resize(void *self, eya_usize_t size)
 {
-    eya_runtime_check(eya_allocated_array_is_max_size_exceeds(self, size),
-                      EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE);
+    eya_runtime_check_if(eya_allocated_array_is_max_size_exceeds(self, size),
+                         EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE);
 
     const eya_usize_t element_size  = eya_memory_typed_get_element_size(self);
     const eya_usize_t size_in_bytes = size * element_size;
