@@ -75,6 +75,8 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_usize_t
@@ -93,6 +95,8 @@ eya_array_capacity(const void *self);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
  *         If size exceeds maximum capacity
  * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
@@ -160,6 +164,8 @@ eya_array_get_size(const void *self);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  */
 EYA_ATTRIBUTE(SYMBOL)
 bool
@@ -347,6 +353,8 @@ eya_array_get_end(const void *self);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
  *         If reallocation fails
  */
@@ -361,6 +369,8 @@ eya_array_shrink(void *self);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
  *         If requested size exceeds maximum
  * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED

@@ -8,7 +8,11 @@
 eya_usize_t
 eya_array_capacity(const void *self)
 {
-    return eya_memory_typed_get_size(self);
+    const eya_usize_t size_in_bytes = eya_allocated_range_get_size(self);
+    const eya_usize_t element_size  = eya_memory_typed_get_element_size(self);
+    eya_runtime_check(element_size, EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE);
+
+    return size_in_bytes / element_size;
 }
 
 void
