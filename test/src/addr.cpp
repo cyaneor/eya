@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <eya/addr_util.h>
 
-TEST(address_macros, addr_to_ptr_conversion) {
+TEST(address_util, addr_to_ptr_conversion) {
     int value = 42;
     int *ptr = &value;
     auto addr = reinterpret_cast<uintptr_t>(ptr);
@@ -14,7 +14,7 @@ TEST(address_macros, addr_to_ptr_conversion) {
     EXPECT_EQ(void_ptr, ptr);
 }
 
-TEST(address_macros, address_difference) {
+TEST(address_util, address_difference) {
     int arr[10];
     auto addr1 = reinterpret_cast<uintptr_t>(&arr[5]);
     auto addr2 = reinterpret_cast<uintptr_t>(&arr[2]);
@@ -23,7 +23,7 @@ TEST(address_macros, address_difference) {
     EXPECT_EQ(diff, 3 * sizeof(int));
 }
 
-TEST(address_macros, alignment_offset) {
+TEST(address_util, alignment_offset) {
     uintptr_t addr = 0x1234;
 
     EXPECT_EQ(eya_addr_align_by_offset(addr, 4), 0);
@@ -33,7 +33,7 @@ TEST(address_macros, alignment_offset) {
     EXPECT_EQ(eya_addr_align_by_offset(addr + 4, 4), 0);
 }
 
-TEST(address_macros, alignment_check) {
+TEST(address_util, alignment_check) {
     uintptr_t aligned_addr = 0x1000;
     uintptr_t unaligned_addr = 0x1001;
 
@@ -43,7 +43,7 @@ TEST(address_macros, alignment_check) {
     EXPECT_FALSE(eya_addr_is_aligned(unaligned_addr, 16));
 }
 
-TEST(address_macros, align_up_operation) {
+TEST(address_util, align_up_operation) {
     uintptr_t addr = 0x1003;
 
     EXPECT_EQ(eya_addr_align_up(addr, 4), 0x1004);
@@ -52,7 +52,7 @@ TEST(address_macros, align_up_operation) {
     EXPECT_EQ(eya_addr_align_up(0x1000, 4), 0x1000);
 }
 
-TEST(address_macros, align_down_operation) {
+TEST(address_util, align_down_operation) {
     uintptr_t addr = 0x1003;
 
     EXPECT_EQ(eya_addr_align_down(addr, 4), 0x1000);
