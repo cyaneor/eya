@@ -50,15 +50,24 @@
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @brief Returns a pointer to the thread-local
- *        runtime memory allocator.
+ * @brief Returns a pointer to the thread-local runtime memory allocator instance.
  *
- * This function returns a pointer to the global variable `m_runtime_allocator`,
- * which is a thread-local instance of the `eya_memory_allocator` structure.
- * This allocator is initialized using standard library functions
- * if `EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB` is defined.
+ * This function provides access to the thread-local
+ * instance of `eya_memory_allocator_t` named `m_runtime_allocator`.
  *
- * @return Pointer to the thread-local runtime memory allocator.
+ * The allocator's behavior depends on the configuration:
+ * - When `EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB` is enabled,
+ *   the allocator is initialized with standard library functions
+ *   (`malloc` for allocation and `free` for deallocation).
+ * - When disabled, the allocator is zero-initialized
+ *   and must be configured before use.
+ *
+ * The thread-local storage ensures each thread has its own independent instance
+ * of the allocator, preventing synchronization issues in multi-threaded environments.
+ *
+ * @return Pointer to the thread-local `eya_memory_allocator_t` instance.
+ *         The pointer is always valid, though the allocator may need
+ *         initialization depending on configuration.
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_memory_allocator_t *
