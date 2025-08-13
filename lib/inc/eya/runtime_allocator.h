@@ -56,7 +56,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  * This function returns a pointer to the global variable `m_runtime_allocator`,
  * which is a thread-local instance of the `eya_memory_allocator` structure.
  * This allocator is initialized using standard library functions
- * if `EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_INIT_STDLIB` is defined.
+ * if `EYA_LIBRARY_OPTION_RUNTIME_ALLOCATOR_USE_STDLIB` is defined.
  *
  * @return Pointer to the thread-local runtime memory allocator.
  */
