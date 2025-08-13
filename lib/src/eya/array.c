@@ -26,6 +26,14 @@ eya_array_resize(void *self, eya_usize_t size)
     eya_ptr_cast(eya_array_t, self)->size = size;
 }
 
+eya_array_t
+eya_array_make(eya_usize_t element_size, eya_usize_t size)
+{
+    eya_array_t _t = {nullptr, nullptr, element_size, 0};
+    eya_array_resize(&_t, size);
+    return _t;
+}
+
 void
 eya_array_unpack(const void  *self,
                  void       **begin,

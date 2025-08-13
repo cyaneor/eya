@@ -103,6 +103,23 @@ void
 eya_array_resize(void *self, eya_usize_t size);
 
 /**
+ * @brief Creates and initializes a new dynamic array with specified parameters.
+ *
+ * @param[in] element_size Size of each element in bytes.
+ * @param[in] size Initial number of elements in the array.
+ *
+ * @return Initialized `eya_array_t` structure with requested capacity.
+ *
+ * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
+ *         If requested size exceeds system limits
+ * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ *         If memory allocation fails
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_array_t
+eya_array_make(eya_usize_t element_size, eya_usize_t size);
+
+/**
  * @brief Unpacks array metadata into provided pointers
  * @param[in] self Pointer to the array object
  * @param[out] begin Pointer to store the start of data
