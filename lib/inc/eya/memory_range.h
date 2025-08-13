@@ -433,6 +433,18 @@ bool
 eya_memory_range_is_equal(const void *self, const void *other);
 
 /**
+ * @brief Assign one memory range to another
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         if self is nullptr
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_assign(void *self, const void *other);
+
+/**
  * @brief Clear memory range (set to uninitialized state)
  * @param[in,out] self Pointer to memory range structure
  *
@@ -455,7 +467,20 @@ eya_memory_range_clear(void *self);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_assign(void *self, const void *other);
+eya_memory_range_assign_v(void *self, const void *other);
+
+/**
+ * @brief Set memory range begin and end pointers
+ * @param[in,out] self Pointer to memory range structure
+ * @param[in] begin New begin pointer
+ * @param[in] end New end pointer
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         if self is nullptr
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_set_range(void *self, void *begin, void *end);
 
 /**
  * @brief Set memory range begin and end pointers with validation
@@ -470,7 +495,7 @@ eya_memory_range_assign(void *self, const void *other);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_range(void *self, void *begin, void *end);
+eya_memory_range_set_range_v(void *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
@@ -482,8 +507,6 @@ eya_memory_range_set_range(void *self, void *begin, void *end);
  *         if self is nullptr
  * @throws EYA_RUNTIME_ERROR_INVALID_ARGUMENT
  *         if begin is nullptr
- * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
- *         if resulting range is invalid
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -502,7 +525,7 @@ eya_memory_range_set_by_size(void *self, void *begin, eya_usize_t size);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size_v(void *self, void *begin, eya_usize_t size);
+eya_memory_range_set_by_size_f(void *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges

@@ -1,8 +1,10 @@
 #include <eya/memory_range.h>
 
+#include <eya/memory_range_initializer.h>
 #include <eya/runtime_check_ref.h>
 #include <eya/algorithm_utils.h>
 #include <eya/interval_util.h>
+#include <eya/runtime_try.h>
 #include <eya/memory_raw.h>
 #include <eya/ptr_util.h>
 
@@ -236,25 +238,39 @@ eya_memory_range_is_equal(const void *self, const void *other)
 }
 
 void
-eya_memory_range_clear(void *self)
-{
-    eya_runtime_check_ref(self);
-    eya_ptr_deref(eya_memory_range_t, self) = (eya_memory_range_t){};
-}
-
-void
 eya_memory_range_assign(void *self, const void *other)
 {
     eya_runtime_check_ref(self);
     eya_memory_range_t *s = eya_ptr_cast(eya_memory_range_t, self);
-    eya_memory_range_unpack_v(other, &s->begin, &s->end);
+    eya_memory_range_unpack(other, &s->begin, &s->end);
+}
+
+void
+eya_memory_range_clear(void *self)
+{
+    eya_memory_range_t other = eya_memory_range_empty_initializer();
+    eya_memory_range_assign(self, &other);
+}
+
+void
+eya_memory_range_assign_v(void *self, const void *other)
+{
+    eya_runtime_check(eya_memory_range_is_valid(other), EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE);
+    eya_memory_range_assign(self, other);
 }
 
 void
 eya_memory_range_set_range(void *self, void *begin, void *end)
 {
-    const eya_memory_range_t range = {begin, end};
+    const eya_memory_range_t range = eya_memory_range_initializer(begin, end);
     eya_memory_range_assign(self, &range);
+}
+
+void
+eya_memory_range_set_range_v(void *self, void *begin, void *end)
+{
+    const eya_memory_range_t range = eya_memory_range_initializer(begin, end);
+    eya_memory_range_assign_v(self, &range);
 }
 
 void
@@ -265,9 +281,17 @@ eya_memory_range_set_by_size(void *self, void *begin, eya_usize_t size)
 }
 
 void
-eya_memory_range_set_by_size_v(void *self, void *begin, eya_usize_t size)
+eya_memory_range_set_by_size_f(void *self, void *begin, eya_usize_t size)
 {
-    begin ? eya_memory_range_set_by_size(self, begin, size) : eya_memory_range_clear(self);
+    eya_runtime_try(e)
+    {
+        eya_memory_range_set_by_size(self, begin, size);
+        eya_runtime_try_return();
+    }
+    eya_runtime_catch
+    {
+        eya_memory_range_clear(self);
+    }
 }
 
 void
@@ -291,7 +315,7 @@ eya_memory_range_exchange(void *self, void *other)
 eya_memory_range_t
 eya_memory_range_make(void *begin, void *end)
 {
-    eya_memory_range_t self;
+    eya_memory_range_t self = eya_memory_range_empty_initializer();
     eya_memory_range_set_range(&self, begin, end);
     return self;
 }
