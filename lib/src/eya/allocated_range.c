@@ -2,6 +2,18 @@
 
 #include <eya/runtime_allocator.h>
 #include <eya/memory_range.h>
+#include <eya/runtime_try.h>
+
+eya_usize_t
+eya_allocated_range_get_size(const void *self)
+{
+    eya_runtime_try(e)
+    {
+        const eya_usize_t size = eya_memory_range_get_size(self);
+        eya_runtime_try_return(size);
+    }
+    return 0;
+}
 
 void
 eya_allocated_range_clear(void *self)
@@ -23,13 +35,9 @@ eya_allocated_range_exchange(void *self, void *other)
 void
 eya_allocated_range_resize(void *self, eya_usize_t size)
 {
-    // If the memory range is uninitialized, treat current size as 0
-    // Otherwise, get the actual size (end - begin)
-    const eya_usize_t cur_size =
-        eya_memory_range_is_uninit(self) ? 0 : eya_memory_range_get_size(self);
-
-    void                   *old_ptr   = eya_memory_range_get_begin(self);
     eya_memory_allocator_t *allocator = eya_runtime_allocator();
+    void                   *old_ptr   = eya_memory_range_get_begin(self);
+    eya_usize_t             cur_size  = eya_allocated_range_get_size(self);
 
     void *new_ptr = eya_memory_allocator_realloc(allocator, old_ptr, cur_size, size);
     eya_memory_range_set_by_size_f(self, new_ptr, size);

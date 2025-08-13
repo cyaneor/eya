@@ -44,6 +44,20 @@ typedef eya_memory_range_t eya_allocated_range_t;
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
+ * @brief Get the size of the allocated memory range in bytes
+ * @param[in] self Pointer to memory range structure
+ * @return Size of memory range in bytes
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is nullptr
+ *
+ * @see eya_memory_range_get_size()
+ */
+EYA_ATTRIBUTE(SYMBOL)
+eya_usize_t
+eya_allocated_range_get_size(const void *self);
+
+/**
  * @brief Clears and deallocates the memory of an allocated range.
  *
  * This function safely deallocates the memory block referenced by the range
@@ -118,15 +132,13 @@ eya_allocated_range_exchange(void *self, void *other);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is nullptr
- * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
- *         If the memory range is invalid
  * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
  *         If memory reallocation fails
  *
- * @see eya_memory_range_get_begin()
- * @see eya_memory_range_get_size()
- * @see eya_memory_allocator_realloc()
  * @see eya_memory_range_set_by_size_f()
+ * @see eya_allocated_range_get_size()
+ * @see eya_memory_allocator_realloc()
+ * @see eya_memory_range_get_begin()
  * @see eya_runtime_allocator()
  */
 EYA_ATTRIBUTE(SYMBOL)
