@@ -23,8 +23,12 @@ eya_allocated_range_exchange(void *self, void *other)
 void
 eya_allocated_range_resize(void *self, eya_usize_t size)
 {
+    // If the memory range is uninitialized, treat current size as 0
+    // Otherwise, get the actual size (end - begin)
+    const eya_usize_t cur_size =
+        eya_memory_range_is_uninit(self) ? 0 : eya_memory_range_get_size(self);
+
     void                   *old_ptr   = eya_memory_range_get_begin(self);
-    const eya_usize_t       cur_size  = eya_memory_range_get_size(self);
     eya_memory_allocator_t *allocator = eya_runtime_allocator();
 
     void *new_ptr = eya_memory_allocator_realloc(allocator, old_ptr, cur_size, size);
