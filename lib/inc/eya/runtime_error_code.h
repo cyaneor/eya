@@ -131,10 +131,12 @@ typedef enum eya_runtime_error_code_t
 
     /**
      * @var EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
-     * @brief Memory not allocated error.
+     * @brief Memory allocation failure error.
      *
-     * Indicates an attempt to use or free memory
-     * that was not previously allocated.
+     * Indicates that a memory allocation request failed. This occurs when
+     * the system or custom allocator is unable to allocate the requested
+     * amount of memory, typically due to insufficient available memory
+     * or allocation policy restrictions.
      */
     EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED,
 
