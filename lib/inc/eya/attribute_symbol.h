@@ -14,9 +14,9 @@
 #define EYA_ATTRIBUTE_SYMBOL_H
 
 #include "compiler.h"
-#include "config.h"
+#include "library_option.h"
 
-#ifdef EYA_LIBRARY_OPTION_STATIC_BUILD
+#if (EYA_LIBRARY_OPTION_STATIC_BUILD == EYA_LIBRARY_OPTION_ON)
 /**
  * @def EYA_ATTRIBUTE_SYMBOL
  * @brief Marks symbols as public for static library builds.
@@ -27,8 +27,7 @@
  * but lack shared library-specific attributes.
  */
 #    define EYA_ATTRIBUTE_SYMBOL
-#else
-#    ifdef EYA_LIBRARY_OPTION_SHARED_BUILD
+#elif (EYA_LIBRARY_OPTION_SHARED_BUILD == EYA_LIBRARY_OPTION_ON)
 /**
  * @def EYA_ATTRIBUTE_SYMBOL
  * @brief Marks symbols for export in shared library builds.
@@ -37,8 +36,8 @@
  * for export. It expands to `EYA_COMPILER_ATTRIBUTE_SYMBOL_EXPORT`,
  * making symbols visible to external applications and libraries.
  */
-#        define EYA_ATTRIBUTE_SYMBOL EYA_COMPILER_ATTRIBUTE_SYMBOL_EXPORT
-#    else
+#    define EYA_ATTRIBUTE_SYMBOL EYA_COMPILER_ATTRIBUTE_SYMBOL_EXPORT
+#else
 /**
  * @def EYA_ATTRIBUTE_SYMBOL
  * @brief Marks symbols for import when using a shared library.
@@ -47,8 +46,7 @@
  * It expands to `EYA_COMPILER_ATTRIBUTE_SYMBOL_IMPORT`, enabling proper linkage
  * for applications and libraries using this shared library.
  */
-#        define EYA_ATTRIBUTE_SYMBOL EYA_COMPILER_ATTRIBUTE_SYMBOL_IMPORT
-#    endif // EYA_LIBRARY_OPTION_SHARED_BUILD
-#endif     // EYA_LIBRARY_OPTION_STATIC_BUILD
+#    define EYA_ATTRIBUTE_SYMBOL EYA_COMPILER_ATTRIBUTE_SYMBOL_IMPORT
+#endif
 
 #endif // EYA_ATTRIBUTE_SYMBOL_H
