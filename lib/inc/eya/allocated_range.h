@@ -134,6 +134,10 @@ eya_allocated_range_exchange(void *self, void *other);
  *         If self is nullptr
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory reallocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  *
  * @see eya_memory_range_set_by_size_f()
  * @see eya_allocated_range_get_size()

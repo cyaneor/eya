@@ -142,6 +142,10 @@ eya_allocated_array_is_max_size_exceeds(const void *self, eya_usize_t size);
  *         If requested size exceeds maximum capacity
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory allocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 void

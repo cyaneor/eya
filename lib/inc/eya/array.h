@@ -101,6 +101,10 @@ eya_array_capacity(const void *self);
  *         If size exceeds maximum capacity
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory allocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -273,6 +277,8 @@ eya_array_is_empty(const void *self);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -340,6 +346,10 @@ eya_array_get_end(const void *self);
  *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If reallocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -358,6 +368,10 @@ eya_array_shrink(void *self);
  *         If requested size exceeds maximum
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If allocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
@@ -375,6 +389,10 @@ eya_array_reserve(void *self, eya_usize_t size);
  *         If requested size exceeds system limits
  * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory allocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  */
 EYA_ATTRIBUTE(SYMBOL)
 eya_array_t
@@ -388,6 +406,8 @@ eya_array_make(eya_usize_t element_size, eya_usize_t size);
  *         If self is nullptr
  * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
  *         If element size is zero
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
  *
  * @see eya_array_clear()
  * @see eya_array_resize()
