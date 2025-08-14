@@ -30,14 +30,6 @@ eya_array_resize(void *self, eya_usize_t size)
     eya_ptr_cast(eya_array_t, self)->size = size;
 }
 
-eya_array_t
-eya_array_make(eya_usize_t element_size, eya_usize_t size)
-{
-    eya_array_t _t = {nullptr, nullptr, element_size, 0};
-    eya_array_resize(&_t, size);
-    return _t;
-}
-
 void
 eya_array_unpack(const void  *self,
                  void       **begin,
@@ -177,4 +169,19 @@ eya_array_reserve(void *self, eya_usize_t size)
 
         eya_allocated_array_resize(self, new_capacity > reserve_size ? new_capacity : reserve_size);
     }
+}
+
+eya_array_t
+eya_array_make(eya_usize_t element_size, eya_usize_t size)
+{
+    eya_array_t _t = {nullptr, nullptr, element_size, 0};
+    eya_array_resize(&_t, size);
+    return _t;
+}
+
+void
+eya_array_free(void *self)
+{
+    eya_allocated_array_resize(self, 0);
+    eya_ptr_cast(eya_array_t, self)->size = 0;
 }
