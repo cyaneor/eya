@@ -55,21 +55,28 @@
 
 /**
  * @def eya_runtime_check
- * @brief Primary check macro (alias for eya_runtime_check_ifn)
+ * @brief Checks condition and throws exception if false (inverse check)
  *
- * Checks condition and throws exception if false.
- * Supports variadic syntax for flexible usage.
+ * This macro is an alias for eya_runtime_check_ifn and provides a more intuitive name
+ * for the common case of checking positive conditions. It evaluates the expression
+ * and throws an exception with the specified error code if the expression evaluates to false.
  *
- * @param ... Condition and error code (same as eya_runtime_check_ifn)
+ * @param expr Condition expression to evaluate (exception thrown if false)
+ * @param code Error code to throw when condition fails
  *
- * Example:
+ * Example usage:
  * @code
- * // Validate array index range
- * eya_runtime_check(index < max_size, EYA_RUNTIME_ERROR_OUT_OF_RANGE);
+ * // Throw if file opening fails
+ * eya_runtime_check(file.is_open(), EYA_RUNTIME_ERROR_FILE_OPEN);
+ *
+ * // Throw if index is out of bounds
+ * eya_runtime_check(index < array_size, EYA_RUNTIME_ERROR_INDEX_OUT_OF_RANGE);
  * @endcode
  *
- * @see eya_runtime_check_ifn
+ * @note This is equivalent to eya_runtime_check_ifn(expr, code)
+ * @see eya_runtime_check_ifn The underlying implementation
+ * @see eya_runtime_check_if The inverse operation (throws if true)
  */
-#define eya_runtime_check(...) eya_runtime_check_ifn(__VA_ARGS__)
+#define eya_runtime_check(expr, code) eya_runtime_check_ifn(expr, code)
 
 #endif // EYA_RUNTIME_CHECK_H
