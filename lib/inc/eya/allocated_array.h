@@ -142,8 +142,6 @@ eya_allocated_array_is_max_size_exceeds(const void *self, eya_usize_t size);
  *         If requested size exceeds maximum capacity
  * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
  *         If memory allocation fails
- * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
- *         If array contains an invalid range
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
