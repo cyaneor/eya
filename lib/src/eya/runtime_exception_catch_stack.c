@@ -19,8 +19,7 @@ eya_static_assert(EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX,
  * @note Initialized with null pointers upon creation
  */
 EYA_ATTRIBUTE(THREAD_LOCAL)
-eya_exception_catch_t *m_runtime_exceptions[EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX] =
-    {};
+eya_exception_catch_t *m_runtime_exceptions[EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX];
 
 /**
  * @var eya_exception_catch_t **m_runtime_exception
