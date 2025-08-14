@@ -91,7 +91,7 @@
  * @see EYA_LIBRARY_OPTION_ON for enabled state
  */
 #ifndef EYA_LIBRARY_OPTION_STATIC_BUILD
-#    define EYA_LIBRARY_OPTION_STATIC_BUILD EYA_LIBRARY_OPTION_ON
+#    define EYA_LIBRARY_OPTION_STATIC_BUILD EYA_LIBRARY_OPTION_OFF
 #endif // EYA_LIBRARY_OPTION_STATIC_BUILD
 
 // --------------------------------------------------------------------------------------------- //
