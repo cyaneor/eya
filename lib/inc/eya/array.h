@@ -99,7 +99,7 @@ eya_array_capacity(const void *self);
  *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
  *         If size exceeds maximum capacity
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory allocation fails
  */
 EYA_ATTRIBUTE(SYMBOL)
@@ -338,7 +338,7 @@ eya_array_get_end(const void *self);
  *         If self is NULL
  * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
  *         If element size is zero
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If reallocation fails
  */
 EYA_ATTRIBUTE(SYMBOL)
@@ -356,7 +356,7 @@ eya_array_shrink(void *self);
  *         If element size is zero
  * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
  *         If requested size exceeds maximum
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If allocation fails
  */
 EYA_ATTRIBUTE(SYMBOL)
@@ -373,7 +373,7 @@ eya_array_reserve(void *self, eya_usize_t size);
  *
  * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
  *         If requested size exceeds system limits
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory allocation fails
  */
 EYA_ATTRIBUTE(SYMBOL)

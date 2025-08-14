@@ -132,7 +132,7 @@ eya_allocated_range_exchange(void *self, void *other);
  *
  * @throws EYA_RUNTIME_ERROR_NULL_POINTER
  *         If self is nullptr
- * @throws EYA_RUNTIME_ERROR_ALLOCATION_FAILED
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
  *         If memory reallocation fails
  *
  * @see eya_memory_range_set_by_size_f()
