@@ -14,6 +14,7 @@
 #define EYA_ATTRIBUTE_SYMBOL_H
 
 #include "compiler.h"
+#include "config.h"
 
 #ifdef EYA_LIBRARY_OPTION_STATIC_BUILD
 /**

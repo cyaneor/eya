@@ -20,20 +20,6 @@
 #include "runtime_terminate.h"
 
 /**
- * @def EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX
- * @brief Maximum depth of the exception handling stack
- *
- * Defines the maximum number of simultaneously handled exceptions per thread.
- * Default value is 255 if not otherwise defined.
- *
- * @warning Changing this value may affect per-thread memory consumption,
- *          since the m_runtime_exceptions array has THREAD_LOCAL storage.
- */
-#ifndef EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX
-#    define EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX 255
-#endif // EYA_LIBRARY_OPTION_RUNTIME_EXCEPTION_CATCH_STACK_MAX
-
-/**
  * @def eya_runtime_exception_catch_stack_capture
  * @brief Macro for capturing execution context and setting exception handlers
  *

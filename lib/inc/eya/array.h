@@ -3,53 +3,6 @@
 
 #include "allocated_array.h"
 #include "array_fields.h"
-#include "config.h"
-
-/**
- * @def EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
- * @brief Configuration option for array resize optimization behavior
- *
- * This macro controls whether array resizing operations should be optimized
- * to only occur when necessary. The optimization prevents unnecessary memory
- * reallocations when the new size would fit within the current capacity.
- *
- * @note Default value is EYA_CONFIG_ON if not previously defined.
- * @see eya_array_resize() where this option is implemented
- *
- * @value EYA_CONFIG_ON  Enable resize optimization (only resize when capacity exceeded)
- * @value EYA_CONFIG_OFF Disable optimization (resize on every call)
- *
- * @warning Disabling optimization (EYA_CONFIG_OFF) may impact performance
- *          due to frequent reallocations, but ensures minimal memory usage.
- */
-#ifndef EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
-#    define EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
-
-/**
- * @def EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
- * @brief Default ratio used to determine when to shrink the array capacity
- *
- * This macro defines the default shrink ratio used by eya_array_shrink().
- * When the array size becomes less than or equal to the current capacity divided by this ratio,
- * the array will be shrunk to fit its current size.
- */
-#ifndef EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
-#    define EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO 2
-#endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
-
-/**
- * @def EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
- * @brief Default growth multiplier for array expansion (fixed-point, per mille)
- *
- * Defines the growth factor as a fixed-point value where 1000 = 1.0x (no growth).
- * A value of 1500 means the array will grow by 1.5x (1500/1000) of its current capacity.
- * Used in integer arithmetic to avoid floating-point operations in embedded systems.
- * Can be redefined before including the header file.
- */
-#ifndef EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
-#    define EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO 1500
-#endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
 
 /**
  * @struct eya_array

@@ -20,32 +20,6 @@
 
 #include "runtime_terminate_fn.h"
 #include "attribute.h"
-#include "config.h"
-
-/**
- * @def EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
- * @brief Configuration option for standard library termination behavior
- *
- * Controls whether to initialize the runtime termination handler
- * with standard library's abort() function or set it to null.
- *
- * When enabled (EYA_CONFIG_ON):
- * - Includes <stdlib.h>
- * - Sets default termination handler to abort()
- * - Provides immediate termination on critical errors
- *
- * When disabled (EYA_CONFIG_OFF):
- * - Includes null pointer definition
- * - Sets default termination handler to nullptr
- * - Allows custom termination handler setup
- *
- * @note Default value is EYA_CONFIG_ON (safe mode with abort())
- * @warning Disabling this may lead to undefined behavior if termination occurs
- *          before custom handler is installed
- */
-#ifndef EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
-#    define EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_RUNTIME_TERMINATE_INIT_STDLIB
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 

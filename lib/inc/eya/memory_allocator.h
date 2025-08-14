@@ -15,31 +15,7 @@
 #include "memory_allocator_alloc_fn.h"
 #include "memory_allocator_dealloc_fn.h"
 #include "attribute.h"
-#include "config.h"
 #include "size.h"
-
-/**
- * @def EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
- * @brief Configuration option for memory initialization behavior
- *
- * Controls whether to fill newly allocated memory
- * with zeros or leave it uninitialized.
- *
- * When enabled (EYA_CONFIG_ON):
- * - All allocated memory will be initialized to zero
- * - Provides safer operation with predictable initial values
- * - Prevents exposure of potentially sensitive data
- *
- * When disabled (EYA_CONFIG_OFF):
- * - Memory contents remain undefined after allocation
- * - Provides faster allocation performance
- * - Requires explicit initialization by the user
- *
- * @note Default value is EYA_CONFIG_ON (safe mode with zero-initialization)
- */
-#ifndef EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
-#    define EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED EYA_CONFIG_ON
-#endif // EYA_LIBRARY_OPTION_MEMORY_ALLOCATOR_INIT_ALLOCATED
 
 /**
  * @struct eya_memory_allocator

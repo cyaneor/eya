@@ -16,8 +16,30 @@
 #define EYA_ATTRIBUTE_THREAD_LOCAL_H
 
 #include "compiler.h"
+#include "config.h"
 
-#ifdef EYA_LIBRARY_OPTION_THREAD_LOCAL
+/**
+ * @def EYA_LIBRARY_OPTION_THREAD_LOCAL
+ * @brief Configuration macro for thread-local storage support
+ *
+ * @details Determines whether thread-local storage is enabled in the library.
+ *          Defaults to `EYA_CONFIG_OFF` if not explicitly defined.
+ *
+ * Possible values:
+ * - `EYA_CONFIG_ON` - Enable thread-local storage support
+ * - `EYA_CONFIG_OFF` - Disable thread-local storage support
+ *
+ * @note This macro should be defined before including this header if the default
+ *       behavior needs to be overridden. The value must be either `EYA_CONFIG_ON`
+ *       or `EYA_CONFIG_OFF`.
+ *
+ * @see EYA_ATTRIBUTE_THREAD_LOCAL
+ */
+#ifndef EYA_LIBRARY_OPTION_THREAD_LOCAL
+#    define EYA_LIBRARY_OPTION_THREAD_LOCAL EYA_CONFIG_OFF
+#endif // EYA_LIBRARY_OPTION_THREAD_LOCAL
+
+#if (EYA_LIBRARY_OPTION_THREAD_LOCAL == EYA_CONFIG_ON)
 /**
  * @def EYA_ATTRIBUTE_THREAD_LOCAL
  * @brief Compiler-specific thread-local storage attribute
@@ -32,7 +54,7 @@
  *       implementation in the target environment
  */
 #    define EYA_ATTRIBUTE_THREAD_LOCAL EYA_COMPILER_ATTRIBUTE_THREAD_LOCAL
-#else
+#elif (EYA_LIBRARY_OPTION_THREAD_LOCAL == EYA_CONFIG_OFF)
 /**
  * @def EYA_ATTRIBUTE_THREAD_LOCAL
  * @brief Empty placeholder for thread-local storage attribute
