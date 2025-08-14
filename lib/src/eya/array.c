@@ -1,5 +1,7 @@
 #include <eya/array.h>
 
+#include <eya/allocated_array_initializer.h>
+#include <eya/array_initializer.h>
 #include <eya/runtime_check_ref.h>
 #include <eya/memory_typed.h>
 #include <eya/memory_std.h>
@@ -174,8 +176,12 @@ eya_array_reserve(void *self, eya_usize_t size)
 eya_array_t
 eya_array_make(eya_usize_t element_size, eya_usize_t size)
 {
-    eya_array_t _t = {nullptr, nullptr, element_size, 0};
-    eya_array_resize(&_t, size);
+    eya_runtime_check(element_size, EYA_RUNTIME_ERROR_INVALID_ARGUMENT);
+    eya_array_t _t = eya_array_initializer(eya_allocated_array_initializer(element_size));
+    if (size)
+    {
+        eya_array_resize(&_t, size);
+    }
     return _t;
 }
 

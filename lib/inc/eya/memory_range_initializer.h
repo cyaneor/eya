@@ -34,18 +34,20 @@
 #define eya_memory_range_initializer(begin, end, ...) eya_initializer(begin, end, __VA_ARGS__)
 
 /**
- * @def eya_memory_range_empty_initializer()
- * @brief Creates an empty (uninitialized) memory range
- * @return Memory range with null begin and end pointers
+ * @def eya_memory_range_empty_initializer(...)
+ * @brief Initializes an empty memory range with null pointers
+ * @param ... Additional initialization arguments (if needed)
+ * @return Initialized empty memory range structure
  *
- * @note The returned range will be in uninitialized state
- * @see eya_memory_range_is_uninit()
+ * @note This macro is a convenience wrapper around eya_memory_range_initializer
+ *       that sets both begin and end pointers to nullptr, creating an empty range.
  *
  * Example usage:
  * @code
- * eya_memory_range_t empty = eya_memory_range_empty_initializer();
+ * eya_memory_range_t empty_range = eya_memory_range_empty_initializer();
  * @endcode
  */
-#define eya_memory_range_empty_initializer() eya_memory_range_initializer(nullptr, nullptr)
+#define eya_memory_range_empty_initializer(...)                                                    \
+    eya_memory_range_initializer(nullptr, nullptr, __VA_ARGS__)
 
 #endif // EYA_MEMORY_RANGE_INITIALIZER_H
