@@ -91,7 +91,9 @@ process_compile_options(
 message(STATUS "Compilation features:")
 process_cmake_options(
         OPTION_LIST ${EYA_COMPILE_OPTIONS}
-        OPTION_PREFIX "EYA_COMPILE_OPTION_")
+        OPTION_PREFIX "EYA_COMPILE_OPTION_"
+        OUTPUT_WITH_VALUES TRUE
+        OUTPUT_LIST EYA_TARGET_PRIVATE_COMPILE_DEFINITIONS)
 
 # -------------------------------------------------------------------------------------------- #
 # Library Target Configuration                                                                 #
@@ -118,12 +120,12 @@ target_compile_options(${CMAKE_PROJECT_NAME}
         PRIVATE ${EYA_TARGET_PRIVATE_COMPILE_OPTIONS}
         PUBLIC ${EYA_TARGET_PUBLIC_COMPILE_OPTIONS})
 
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
-# Set linker options for the target
-target_link_options(${CMAKE_PROJECT_NAME}
-        PRIVATE ${EYA_TARGET_PRIVATE_LINK_OPTIONS}
-        PUBLIC ${EYA_TARGET_PUBLIC_LINK_OPTIONS})
-endif()
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
+    # Set linker options for the target
+    target_link_options(${CMAKE_PROJECT_NAME}
+            PRIVATE ${EYA_TARGET_PRIVATE_LINK_OPTIONS}
+            PUBLIC ${EYA_TARGET_PUBLIC_LINK_OPTIONS})
+endif ()
 
 # Set linked libraries for the target
 target_link_libraries(${CMAKE_PROJECT_NAME}
