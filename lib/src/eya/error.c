@@ -1,5 +1,6 @@
 #include <eya/error.h>
 
+#include <eya/nullptr.h>
 #include <eya/runtime_check.h>
 #include <eya/error_initializer.h>
 #include <eya/runtime_error_code.h>
@@ -59,7 +60,7 @@ eya_error_assign(eya_error_t *self, const eya_error_t *other)
 void
 eya_error_clear(eya_error_t *self)
 {
-    const eya_error_t _t = eya_error_empty_initializer();
+    eya_error_t _t = eya_error_empty_initializer();
     eya_error_assign(self, &_t);
 }
 
