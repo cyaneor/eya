@@ -1,0 +1,9 @@
+.vs
+.idea
+.cache
+.vscode
+.PVS-Studio
+cmake-build-debug
+cmake-build-release
+build
+docs/html

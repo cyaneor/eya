@@ -1,0 +1,71 @@
+# Aligns assignments in consecutive lines by the `=` sign if the lines are consecutive.
+AlignConsecutiveAssignments: Consecutive
+
+# Aligns variable and other declarations in consecutive lines by type if the lines are consecutive.
+AlignConsecutiveDeclarations: Consecutive
+
+# Disables sorting of `#include` directives.
+SortIncludes: Never
+
+# Allows all function arguments to be placed on the next line.
+AllowAllArgumentsOnNextLine: true
+
+# Prohibits placing all declaration parameters on a new line.
+AllowAllParametersOfDeclarationOnNextLine: false
+
+# Prohibits short blocks (e.g., `if` or `for`) on a single line, even if they fit.
+AllowShortBlocksOnASingleLine: Never
+
+# Prohibits placing `case` labels on a single line.
+AllowShortCaseLabelsOnASingleLine: false
+
+# Prohibits short functions (shorter than 1 line) on a single line.
+AllowShortFunctionsOnASingleLine: None
+
+# Always adds a line break after the return type in function definitions.
+AlwaysBreakAfterDefinitionReturnType: All
+
+# Always adds a line break after the return type in function declarations.
+AlwaysBreakAfterReturnType: All
+
+# Adds a line break after the template header (e.g., after `template<>`).
+AlwaysBreakTemplateDeclarations: Yes
+
+# Prohibits packing function arguments onto a single line if possible.
+BinPackArguments: false
+
+# Prohibits packing function parameters onto a single line if possible.
+BinPackParameters: false
+
+# Does not add line breaks before binary operators.
+BreakBeforeBinaryOperators: None
+
+# Places the opening curly brace on a new line (Allman style).
+BreakBeforeBraces: Allman
+
+# Sets the maximum line length to 100 characters.
+ColumnLimit: 100
+
+# Disables automatic detection of argument and parameter packing.
+ExperimentalAutoDetectBinPacking: false
+
+# Does not add indentation before an `extern` block.
+IndentExternBlock: NoIndent
+
+# Sets the indentation for preprocessor directives right after `#`.
+IndentPPDirectives: AfterHash
+
+# Sets the indentation width to 4 spaces.
+IndentWidth: 4
+
+# Does not pack constructor initializers onto a single line.
+PackConstructorInitializers: Never
+
+# Allows auto-formatting of long comments to match the line width.
+ReflowComments: true
+
+# Sets the tab width to 4 spaces (when using tabs, but they are disabled).
+TabWidth: 4
+
+# Uses spaces instead of tabs for indentation.
+UseTab: Never
