@@ -52,6 +52,7 @@ enable_testing()
 add_executable(${PROJECT_NAME}
         src/main.cpp
         src/addr.cpp
+        src/array.cpp
         src/error.cpp
         src/memory.cpp
         src/date_year.cpp
