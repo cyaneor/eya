@@ -2276,3 +2276,299 @@ TEST(eya_memory_range_move, move_valid_data)
     EXPECT_EQ(data[2], 3);
     EXPECT_EQ(data[3], 4);
 }
+
+TEST(eya_memory_range_set, sets_memory_with_given_value)
+{
+    constexpr size_t size         = 10;
+    unsigned char    buffer[size] = {0};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0xAB;
+    void         *result     = eya_memory_range_set(&range, test_value);
+
+    EXPECT_EQ(result, buffer + size);
+
+    for (unsigned char i : buffer)
+    {
+        EXPECT_EQ(i, test_value);
+    }
+}
+
+TEST(eya_memory_range_set, handles_empty_range)
+{
+    void              *ptr   = (void *)0x1000;
+    eya_memory_range_t range = {ptr, ptr};
+
+    unsigned char test_value = 0xAB;
+    void         *result     = eya_memory_range_set(&range, test_value);
+
+    EXPECT_EQ(result, ptr);
+}
+
+TEST(eya_memory_range_set, handles_null_self_pointer_gracefully)
+{
+    unsigned char test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set(nullptr, test_value), ".*");
+}
+
+TEST(eya_memory_range_set, fails_on_uninitialized_range)
+{
+    eya_memory_range_t range      = {nullptr, nullptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set(&range, test_value), ".*");
+}
+
+TEST(eya_memory_range_set, fails_on_invalid_null_begin_range)
+{
+    eya_memory_range_t range      = {nullptr, (void *)0x2000};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set(&range, test_value), ".*");
+}
+
+TEST(eya_memory_range_set, fails_on_invalid_null_end_range)
+{
+    eya_memory_range_t range      = {(void *)0x1000, nullptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set(&range, test_value), ".*");
+}
+
+TEST(eya_memory_range_set, fails_on_dangling_range)
+{
+    eya_memory_range_t range      = {(void *)0x2000, (void *)0x1000};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set(&range, test_value), ".*");
+}
+
+TEST(eya_memory_range_set, sets_zero_value_correctly)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x01, 0x02, 0x03, 0x04, 0x05};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set(&range, 0);
+
+    EXPECT_EQ(result, buffer + size);
+
+    for (unsigned char i : buffer)
+    {
+        EXPECT_EQ(i, 0);
+    }
+}
+
+TEST(eya_memory_range_set, sets_max_value_correctly)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char max_value = 0xFF;
+    void         *result    = eya_memory_range_set(&range, max_value);
+
+    EXPECT_EQ(result, buffer + size);
+
+    for (unsigned char i : buffer)
+    {
+        EXPECT_EQ(i, max_value);
+    }
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_forward_offset)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x01, 0x02, 0x03, 0x04, 0x05};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0xAB;
+    eya_memory_range_set_value(&range, 2, false, test_value);
+
+    EXPECT_EQ(buffer[2], test_value);
+    EXPECT_EQ(buffer[0], 0x01);
+    EXPECT_EQ(buffer[1], 0x02);
+    EXPECT_EQ(buffer[3], 0x04);
+    EXPECT_EQ(buffer[4], 0x05);
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_reversed_offset)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x01, 0x02, 0x03, 0x04, 0x05};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0xCD;
+    eya_memory_range_set_value(&range, 1, true, test_value);
+
+    EXPECT_EQ(buffer[3], test_value);
+    EXPECT_EQ(buffer[0], 0x01);
+    EXPECT_EQ(buffer[1], 0x02);
+    EXPECT_EQ(buffer[2], 0x03);
+    EXPECT_EQ(buffer[4], 0x05);
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_zero_offset_forward)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0x10, 0x20, 0x30};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0x99;
+    eya_memory_range_set_value(&range, 0, false, test_value);
+
+    EXPECT_EQ(buffer[0], test_value);
+    EXPECT_EQ(buffer[1], 0x20);
+    EXPECT_EQ(buffer[2], 0x30);
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_zero_offset_reversed)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0x10, 0x20, 0x30};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0x77;
+    eya_memory_range_set_value(&range, 0, true, test_value);
+
+    EXPECT_EQ(buffer[2], test_value);
+    EXPECT_EQ(buffer[0], 0x10);
+    EXPECT_EQ(buffer[1], 0x20);
+}
+
+TEST(eya_memory_range_set_value, handles_null_self_pointer_gracefully)
+{
+    unsigned char test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(nullptr, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_uninitialized_range)
+{
+    eya_memory_range_t range      = {nullptr, nullptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_invalid_null_begin_range)
+{
+    eya_memory_range_t range      = {nullptr, (void *)0x2000};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_invalid_null_end_range)
+{
+    eya_memory_range_t range      = {(void *)0x1000, nullptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_dangling_range)
+{
+    eya_memory_range_t range      = {(void *)0x2000, (void *)0x1000};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_empty_range_forward)
+{
+    void              *ptr        = (void *)0x1000;
+    eya_memory_range_t range      = {ptr, ptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_empty_range_reversed)
+{
+    void              *ptr        = (void *)0x1000;
+    eya_memory_range_t range      = {ptr, ptr};
+    unsigned char      test_value = 0xAB;
+    EXPECT_DEATH(eya_memory_range_set_value(&range, 0, true, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_offset_exceeding_size_forward)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0x01, 0x02, 0x03};
+
+    eya_memory_range_t range      = {buffer, buffer + size};
+    unsigned char      test_value = 0xAB;
+
+    EXPECT_DEATH(eya_memory_range_set_value(&range, size, false, test_value), ".*");
+    EXPECT_DEATH(eya_memory_range_set_value(&range, size + 1, false, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, fails_on_offset_exceeding_size_reversed)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0x01, 0x02, 0x03};
+
+    eya_memory_range_t range      = {buffer, buffer + size};
+    unsigned char      test_value = 0xAB;
+
+    EXPECT_DEATH(eya_memory_range_set_value(&range, size, true, test_value), ".*");
+    EXPECT_DEATH(eya_memory_range_set_value(&range, size + 1, true, test_value), ".*");
+}
+
+TEST(eya_memory_range_set_value, sets_max_value_correctly)
+{
+    constexpr size_t size         = 4;
+    unsigned char    buffer[size] = {0};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char max_value = 0xFF;
+    eya_memory_range_set_value(&range, 2, false, max_value);
+
+    EXPECT_EQ(buffer[2], max_value);
+}
+
+TEST(eya_memory_range_set_value, sets_zero_value_correctly)
+{
+    constexpr size_t size         = 4;
+    unsigned char    buffer[size] = {0xFF, 0xFF, 0xFF, 0xFF};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+    eya_memory_range_set_value(&range, 1, false, 0);
+
+    EXPECT_EQ(buffer[1], 0);
+    EXPECT_EQ(buffer[0], 0xFF);
+    EXPECT_EQ(buffer[2], 0xFF);
+    EXPECT_EQ(buffer[3], 0xFF);
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_last_position_forward)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x10, 0x20, 0x30, 0x40, 0x50};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0x99;
+    eya_memory_range_set_value(&range, size - 1, false, test_value);
+
+    EXPECT_EQ(buffer[size - 1], test_value);
+    EXPECT_EQ(buffer[0], 0x10);
+    EXPECT_EQ(buffer[1], 0x20);
+    EXPECT_EQ(buffer[2], 0x30);
+    EXPECT_EQ(buffer[3], 0x40);
+}
+
+TEST(eya_memory_range_set_value, sets_value_at_last_position_reversed)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x10, 0x20, 0x30, 0x40, 0x50};
+
+    eya_memory_range_t range = {buffer, buffer + size};
+
+    unsigned char test_value = 0x99;
+    eya_memory_range_set_value(&range, size - 1, true, test_value);
+
+    EXPECT_EQ(buffer[0], test_value);
+    EXPECT_EQ(buffer[1], 0x20);
+    EXPECT_EQ(buffer[2], 0x30);
+    EXPECT_EQ(buffer[3], 0x40);
+    EXPECT_EQ(buffer[4], 0x50);
+}
