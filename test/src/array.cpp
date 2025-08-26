@@ -103,3 +103,9 @@ TEST(eya_array_reserve, should_increase_capacity_without_changing_size)
     eya_array_reserve(&array, 50);
     EXPECT_EQ(size, array.size);
 }
+
+TEST(eya_array_is_full, returns_true_when_size_equals_capacity)
+{
+    eya_array_t array = eya_array_make(sizeof(int), 10);
+    EXPECT_TRUE(eya_array_is_full(&array));
+}
