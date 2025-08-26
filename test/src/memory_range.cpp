@@ -2572,3 +2572,236 @@ TEST(eya_memory_range_set_value, sets_value_at_last_position_reversed)
     EXPECT_EQ(buffer[3], 0x40);
     EXPECT_EQ(buffer[4], 0x50);
 }
+
+TEST(eya_memory_range_set_pattern, sets_pattern_from_valid_range)
+{
+    constexpr size_t size         = 10;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0x01, 0x02, 0x03};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + sizeof(pattern_data)};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    for (size_t i = 0; i < size; ++i)
+    {
+        EXPECT_EQ(buffer[i], pattern_data[i % sizeof(pattern_data)]);
+    }
+}
+
+TEST(eya_memory_range_set_pattern, sets_single_byte_pattern)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0xAA};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 1};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    for (unsigned char i : buffer)
+    {
+        EXPECT_EQ(i, 0xAA);
+    }
+}
+
+TEST(eya_memory_range_set_pattern, handles_empty_target_range)
+{
+    void              *ptr   = (void *)0x1000;
+    eya_memory_range_t range = {ptr, ptr};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    void *result = eya_memory_range_set_pattern(&range, &pattern);
+    EXPECT_EQ(result, nullptr);
+}
+
+TEST(eya_memory_range_set_pattern, handles_empty_pattern_range)
+{
+    constexpr size_t size         = 5;
+    unsigned char    buffer[size] = {0x10, 0x20, 0x30, 0x40, 0x50};
+
+    void              *ptr     = (void *)0x1000;
+    eya_memory_range_t pattern = {ptr, ptr};
+    eya_memory_range_t range   = {buffer, buffer + size};
+    EXPECT_EQ(eya_memory_range_set_pattern(&range, &pattern), nullptr);
+}
+
+TEST(eya_memory_range_set_pattern, handles_null_self_pointer_gracefully)
+{
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(nullptr, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, handles_null_other_pointer_gracefully)
+{
+    constexpr size_t   size         = 5;
+    unsigned char      buffer[size] = {0};
+    eya_memory_range_t range        = {buffer, buffer + size};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, nullptr), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_uninitialized_self_range)
+{
+    eya_memory_range_t range = {nullptr, nullptr};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_uninitialized_other_range)
+{
+    constexpr size_t   size         = 5;
+    unsigned char      buffer[size] = {0};
+    eya_memory_range_t range        = {buffer, buffer + size};
+
+    eya_memory_range_t pattern = {nullptr, nullptr};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_invalid_null_begin_self_range)
+{
+    eya_memory_range_t range = {nullptr, (void *)0x2000};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_invalid_null_end_self_range)
+{
+    eya_memory_range_t range = {(void *)0x1000, nullptr};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_dangling_self_range)
+{
+    eya_memory_range_t range = {(void *)0x2000, (void *)0x1000};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_invalid_null_begin_other_range)
+{
+    constexpr size_t   size         = 5;
+    unsigned char      buffer[size] = {0};
+    eya_memory_range_t range        = {buffer, buffer + size};
+
+    eya_memory_range_t pattern = {nullptr, (void *)0x2000};
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_invalid_null_end_other_range)
+{
+    constexpr size_t   size         = 5;
+    unsigned char      buffer[size] = {0};
+    eya_memory_range_t range        = {buffer, buffer + size};
+
+    eya_memory_range_t pattern = {(void *)0x1000, nullptr};
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, fails_on_dangling_other_range)
+{
+    constexpr size_t   size         = 5;
+    unsigned char      buffer[size] = {0};
+    eya_memory_range_t range        = {buffer, buffer + size};
+
+    unsigned char      pattern_data[2] = {0x01, 0x02};
+    eya_memory_range_t pattern         = {pattern_data + 1, pattern_data};
+
+    EXPECT_DEATH(eya_memory_range_set_pattern(&range, &pattern), ".*");
+}
+
+TEST(eya_memory_range_set_pattern, pattern_size_larger_than_target)
+{
+    constexpr size_t size         = 3;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0x01, 0x02, 0x03, 0x04, 0x05};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 5};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    EXPECT_EQ(buffer[0], 0x01);
+    EXPECT_EQ(buffer[1], 0x02);
+    EXPECT_EQ(buffer[2], 0x03);
+}
+
+TEST(eya_memory_range_set_pattern, pattern_size_exactly_target_size)
+{
+    constexpr size_t size         = 4;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0x0A, 0x0B, 0x0C, 0x0D};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 4};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    for (size_t i = 0; i < size; ++i)
+    {
+        EXPECT_EQ(buffer[i], pattern_data[i]);
+    }
+}
+
+TEST(eya_memory_range_set_pattern, pattern_size_smaller_than_target)
+{
+    constexpr size_t size         = 8;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0x01, 0x02};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 2};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    for (size_t i = 0; i < size; ++i)
+    {
+        EXPECT_EQ(buffer[i], pattern_data[i % 2]);
+    }
+}
+
+TEST(eya_memory_range_set_pattern, overlapping_pattern_repetition)
+{
+    constexpr size_t size         = 7;
+    unsigned char    buffer[size] = {0};
+
+    unsigned char      pattern_data[] = {0x10, 0x20, 0x30};
+    eya_memory_range_t pattern        = {pattern_data, pattern_data + 3};
+
+    eya_memory_range_t range  = {buffer, buffer + size};
+    void              *result = eya_memory_range_set_pattern(&range, &pattern);
+
+    EXPECT_EQ(result, buffer + size);
+    EXPECT_EQ(buffer[0], 0x10);
+    EXPECT_EQ(buffer[1], 0x20);
+    EXPECT_EQ(buffer[2], 0x30);
+    EXPECT_EQ(buffer[3], 0x10);
+    EXPECT_EQ(buffer[4], 0x20);
+    EXPECT_EQ(buffer[5], 0x30);
+    EXPECT_EQ(buffer[6], 0x10);
+}
