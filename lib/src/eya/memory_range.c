@@ -261,24 +261,36 @@ eya_memory_range_assign_v(eya_memory_range_t *self, const eya_memory_range_t *ot
 }
 
 void
-eya_memory_range_reset_r(eya_memory_range_t *self, void *begin, void *end)
+eya_memory_range_pack(eya_memory_range_t *self, void *begin, void *end)
 {
     const eya_memory_range_t range = eya_memory_range_initializer(begin, end);
     eya_memory_range_assign(self, &range);
 }
 
 void
-eya_memory_range_reset_v(eya_memory_range_t *self, void *begin, void *end)
+eya_memory_range_pack_v(eya_memory_range_t *self, void *begin, void *end)
 {
     const eya_memory_range_t range = eya_memory_range_initializer(begin, end);
     eya_memory_range_assign_v(self, &range);
 }
 
 void
+eya_memory_range_reset(eya_memory_range_t *self, void *begin, void *end)
+{
+    eya_memory_range_pack(self, begin, end);
+}
+
+void
+eya_memory_range_reset_v(eya_memory_range_t *self, void *begin, void *end)
+{
+    eya_memory_range_pack_v(self, begin, end);
+}
+
+void
 eya_memory_range_reset_s(eya_memory_range_t *self, void *begin, eya_usize_t size)
 {
     eya_runtime_check(begin, EYA_RUNTIME_ERROR_INVALID_ARGUMENT);
-    eya_memory_range_reset_r(self, begin, eya_ptr_add_by_offset_unsafe(begin, size));
+    eya_memory_range_reset(self, begin, eya_ptr_add_by_offset_unsafe(begin, size));
 }
 
 void
@@ -317,7 +329,7 @@ eya_memory_range_t
 eya_memory_range_make(void *begin, void *end)
 {
     eya_memory_range_t self = eya_memory_range_empty_initializer();
-    eya_memory_range_reset_r(&self, begin, end);
+    eya_memory_range_reset(&self, begin, end);
     return self;
 }
 

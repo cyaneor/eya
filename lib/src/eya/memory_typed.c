@@ -162,6 +162,6 @@ eya_memory_typed_t
 eya_memory_typed_make(void *begin, void *end, eya_usize_t element_size)
 {
     eya_memory_typed_t self = eya_memory_typed_empty_initializer(element_size);
-    eya_memory_range_reset_r(eya_ptr_cast(eya_memory_range_t, &self), begin, end);
+    eya_memory_range_reset(eya_ptr_cast(eya_memory_range_t, &self), begin, end);
     return self;
 }

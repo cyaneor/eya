@@ -470,6 +470,34 @@ void
 eya_memory_range_assign_v(eya_memory_range_t *self, const eya_memory_range_t *other);
 
 /**
+ * @brief Pack begin and end pointers into a memory range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] begin Pointer to the beginning of the memory range
+ * @param[in] end Pointer to the end of the memory range
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         if self is nullptr
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_pack(eya_memory_range_t *self, void *begin, void *end);
+
+/**
+ * @brief Pack begin and end pointers into a memory range with validation
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] begin Pointer to the beginning of the memory range
+ * @param[in] end Pointer to the end of the memory range
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         if self is nullptr
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         if the created range is invalid
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_memory_range_pack_v(eya_memory_range_t *self, void *begin, void *end);
+
+/**
  * @brief Set memory range begin and end pointers
  * @param[in,out] self Pointer to memory range structure
  * @param[in] begin New begin pointer
@@ -480,7 +508,7 @@ eya_memory_range_assign_v(eya_memory_range_t *self, const eya_memory_range_t *ot
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_reset_r(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_reset(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Set memory range begin and end pointers with validation
