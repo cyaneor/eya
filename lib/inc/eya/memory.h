@@ -170,16 +170,17 @@ eya_memory_set(void *dst, eya_usize_t size, eya_uchar_t val);
  * @brief Fills a memory buffer with a repeating pattern from a source buffer.
  *
  * This function safely copies the source pattern repeatedly into the destination buffer,
- * handling cases where the pattern doesn't evenly divide the destination size. It performs
- * full runtime validation of input parameters and ensures no buffer overflows occur.
+ * handling cases where the pattern doesn't evenly divide the destination size.
+ * It performs full runtime validation of input parameters
+ * and ensures no buffer overflows occur.
  *
  * @param[out] dst      Pointer to the destination buffer to fill.
  * @param[in]  dst_size Total size of the destination buffer in bytes.
  * @param[in]  src      Pointer to the source pattern to replicate.
  * @param[in]  src_size Size of the source pattern in bytes.
  *
- * @return Returns the original destination pointer (dst) on success.
- *         Returns NULL if either dst_size or src_size is zero.
+ * @return Returns a pointer to the end of the destination buffer (one byte past last written)
+ *         on success. Returns NULL if either dst_size or src_size is zero.
  *
  * @note Both dst and src pointers are validated via eya_runtime_check_ref.
  * @note The function handles partial pattern copies at the end of the buffer.

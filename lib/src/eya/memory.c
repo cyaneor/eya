@@ -52,6 +52,7 @@ eya_memory_set_pattern(void *dst, eya_usize_t dst_size, const void *src, eya_usi
     eya_uchar_t       *d = eya_ptr_cast(eya_uchar_t, dst);
     const eya_uchar_t *s = eya_ptr_cast(const eya_uchar_t, src);
 
+    eya_uchar_t *cur = d;
     for (eya_usize_t i = 0; i < dst_size; i += src_size)
     {
         eya_usize_t remaining = dst_size - i;
@@ -61,9 +62,11 @@ eya_memory_set_pattern(void *dst, eya_usize_t dst_size, const void *src, eya_usi
         {
             d[i + j] = s[j];
         }
+
+        cur = d + i + copy_size;
     }
 
-    return d;
+    return cur;
 }
 
 const void *
