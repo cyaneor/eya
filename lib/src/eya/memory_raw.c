@@ -60,7 +60,6 @@ eya_memory_raw_set(void *dst, const void *dst_end, eya_uchar_t value)
 void *
 eya_memory_raw_set_pattern(void *dst, const void *dst_end, const void *src, const void *src_end)
 {
-
     eya_runtime_check_ref(dst_end);
     eya_runtime_check_ref(src_end);
 
