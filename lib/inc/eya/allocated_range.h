@@ -141,7 +141,7 @@ eya_allocated_range_exchange(eya_allocated_range_t *self, eya_allocated_range_t 
  * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
  *         If allocator's deallocation function is not initialized during free
  *
- * @see eya_memory_range_set_by_size_f()
+ * @see eya_memory_range_reset_f()
  * @see eya_allocated_range_get_size()
  * @see eya_memory_allocator_realloc()
  * @see eya_memory_range_get_begin()

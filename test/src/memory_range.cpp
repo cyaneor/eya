@@ -1417,55 +1417,55 @@ TEST(eya_memory_range_assign_v, fails_on_invalid_range)
     EXPECT_DEATH(eya_memory_range_assign_v(&dst, &src), ".*");
 }
 
-TEST(eya_memory_range_set_range_v, sets_valid_range)
+TEST(eya_memory_range_reset_v, sets_valid_range)
 {
     eya_memory_range_t range;
 
-    eya_memory_range_set_range_v(&range, (void *)0x1000, (void *)0x2000);
+    eya_memory_range_reset_v(&range, (void *)0x1000, (void *)0x2000);
 
     EXPECT_EQ(range.begin, (void *)0x1000);
     EXPECT_EQ(range.end, (void *)0x2000);
 }
 
-TEST(eya_memory_range_set_range_v, fails_on_invalid_range)
+TEST(eya_memory_range_reset_v, fails_on_invalid_range)
 {
     eya_memory_range_t range;
 
-    EXPECT_DEATH(eya_memory_range_set_range_v(&range, nullptr, (void *)0x2000), ".*");
+    EXPECT_DEATH(eya_memory_range_reset_v(&range, nullptr, (void *)0x2000), ".*");
 }
 
-TEST(eya_memory_range_set_by_size, sets_range_from_begin_and_size)
+TEST(eya_memory_range_reset_s, sets_range_from_begin_and_size)
 {
     eya_memory_range_t range;
 
-    eya_memory_range_set_by_size(&range, (void *)0x1000, 0x1000);
+    eya_memory_range_reset_s(&range, (void *)0x1000, 0x1000);
 
     EXPECT_EQ(range.begin, (void *)0x1000);
     EXPECT_EQ(range.end, (void *)0x2000);
 }
 
-TEST(eya_memory_range_set_by_size, fails_on_null_begin)
+TEST(eya_memory_range_reset_s, fails_on_null_begin)
 {
     eya_memory_range_t range;
 
-    EXPECT_DEATH(eya_memory_range_set_by_size(&range, nullptr, 0x1000), ".*");
+    EXPECT_DEATH(eya_memory_range_reset_s(&range, nullptr, 0x1000), ".*");
 }
 
-TEST(eya_memory_range_set_by_size_f, sets_range_when_begin_not_null)
+TEST(eya_memory_range_reset_f, sets_range_when_begin_not_null)
 {
     eya_memory_range_t range;
 
-    eya_memory_range_set_by_size_f(&range, (void *)0x1000, 0x1000);
+    eya_memory_range_reset_f(&range, (void *)0x1000, 0x1000);
 
     EXPECT_EQ(range.begin, (void *)0x1000);
     EXPECT_EQ(range.end, (void *)0x2000);
 }
 
-TEST(eya_memory_range_set_by_size_f, clears_range_when_begin_null)
+TEST(eya_memory_range_reset_f, clears_range_when_begin_null)
 {
     eya_memory_range_t range = {(void *)0x1000, (void *)0x2000};
 
-    eya_memory_range_set_by_size_f(&range, nullptr, 0x1000);
+    eya_memory_range_reset_f(&range, nullptr, 0x1000);
 
     EXPECT_EQ(range.begin, nullptr);
     EXPECT_EQ(range.end, nullptr);

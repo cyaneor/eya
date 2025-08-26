@@ -480,7 +480,7 @@ eya_memory_range_assign_v(eya_memory_range_t *self, const eya_memory_range_t *ot
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_range(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_reset_r(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Set memory range begin and end pointers with validation
@@ -495,7 +495,7 @@ eya_memory_range_set_range(eya_memory_range_t *self, void *begin, void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_range_v(eya_memory_range_t *self, void *begin, void *end);
+eya_memory_range_reset_v(eya_memory_range_t *self, void *begin, void *end);
 
 /**
  * @brief Set memory range from begin pointer and size
@@ -510,7 +510,7 @@ eya_memory_range_set_range_v(eya_memory_range_t *self, void *begin, void *end);
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_reset_s(eya_memory_range_t *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Set memory range from begin pointer and size (null-safe)
@@ -525,7 +525,7 @@ eya_memory_range_set_by_size(eya_memory_range_t *self, void *begin, eya_usize_t 
  */
 EYA_ATTRIBUTE(SYMBOL)
 void
-eya_memory_range_set_by_size_f(eya_memory_range_t *self, void *begin, eya_usize_t size);
+eya_memory_range_reset_f(eya_memory_range_t *self, void *begin, eya_usize_t size);
 
 /**
  * @brief Swap two memory ranges
