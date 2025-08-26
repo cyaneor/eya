@@ -55,34 +55,6 @@ eya_usize_t
 eya_array_capacity(const eya_array_t *self);
 
 /**
- * @brief Resizes a dynamic array
- *
- * @param[in,out] self Pointer to the array
- * @param[in] size New size of the array
- *
- * @details Behavior depends on EYA_ARRAY_OPTIMIZE_RESIZE:
- * - If EYA_ARRAY_OPTIMIZE_RESIZE == 1 (default), reallocation only occurs
- *   when the new size exceeds the array's current capacity.
- * - If EYA_ARRAY_OPTIMIZE_RESIZE == 0, reallocation occurs on every call.
- *
- * @throws EYA_RUNTIME_ERROR_NULL_POINTER
- *         If self is NULL
- * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
- *         If element size is zero
- * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
- *         If size exceeds maximum capacity
- * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
- *         If memory allocation fails
- * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
- *         If allocator's allocation function is not initialized
- * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
- *         If allocator's deallocation function is not initialized during free
- */
-EYA_ATTRIBUTE(SYMBOL)
-void
-eya_array_resize(eya_array_t *self, eya_usize_t size);
-
-/**
  * @brief Gets the current number of elements
  * @param[in] self Pointer to the array object
  * @return Current element count
@@ -329,6 +301,34 @@ eya_array_shrink(eya_array_t *self);
 EYA_ATTRIBUTE(SYMBOL)
 void
 eya_array_reserve(eya_array_t *self, eya_usize_t size);
+
+/**
+ * @brief Resizes a dynamic array
+ *
+ * @param[in,out] self Pointer to the array
+ * @param[in] size New size of the array
+ *
+ * @details Behavior depends on EYA_ARRAY_OPTIMIZE_RESIZE:
+ * - If EYA_ARRAY_OPTIMIZE_RESIZE == 1 (default), reallocation only occurs
+ *   when the new size exceeds the array's current capacity.
+ * - If EYA_ARRAY_OPTIMIZE_RESIZE == 0, reallocation occurs on every call.
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         If self is NULL
+ * @throws EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE
+ *         If element size is zero
+ * @throws EYA_RUNTIME_ERROR_EXCEEDS_MAX_SIZE
+ *         If size exceeds maximum capacity
+ * @throws EYA_RUNTIME_ERROR_MEMORY_NOT_ALLOCATED
+ *         If memory allocation fails
+ * @throws EYA_RUNTIME_ERROR_ALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's allocation function is not initialized
+ * @throws EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+ *         If allocator's deallocation function is not initialized during free
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void
+eya_array_resize(eya_array_t *self, eya_usize_t size);
 
 /**
  * @brief Creates and initializes a new dynamic array with specified parameters.

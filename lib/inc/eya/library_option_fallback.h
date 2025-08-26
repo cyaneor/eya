@@ -165,6 +165,33 @@
 #    define EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO 1500
 #endif // EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO
 
+/**
+ * @def EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE
+ * @brief Enables optimized memory allocation strategy for array resizing
+ *
+ * When enabled (set to EYA_LIBRARY_OPTION_ON),
+ * this option activates a smart growth algorithm for array memory allocation.
+ *
+ * Instead of allocating exactly the requested amount of memory,
+ * the array will allocate additional capacity using a growth ratio
+ * to minimize frequent reallocations.
+ *
+ * The optimization uses `EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO` (typically 150-200%)
+ * to calculate the new capacity: `new_capacity = requested_size * growth_ratio / 1000`
+ *
+ * @note When disabled (set to EYA_LIBRARY_OPTION_OFF), arrays will allocate exactly
+ *       the requested amount of memory without any additional capacity.
+ *
+ * @warning Enabling this option increases memory usage but significantly improves
+ *          performance for frequent append operations by reducing reallocation frequency.
+ *
+ * @see eya_array_reserve()
+ * @see eya_allocated_array_resize()
+ */
+#ifndef EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE
+#    define EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE EYA_LIBRARY_OPTION_OFF
+#endif // EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE
+
 // --------------------------------------------------------------------------------------------- //
 //                                            RUNTIME                                            //
 // --------------------------------------------------------------------------------------------- //

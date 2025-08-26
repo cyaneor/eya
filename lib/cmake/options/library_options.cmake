@@ -249,6 +249,30 @@ option(EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE
 
 # Option:
 #
+#     EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE
+#
+# Description:
+#
+#     This CMake option enables smart growth optimization for array memory allocation.
+#     When enabled, array reserve operations allocate additional capacity beyond the
+#     immediately requested size to minimize frequent reallocations during append operations.
+#
+# Usage:
+#
+#     ON: Enable smart growth optimization (allocates extra capacity using growth ratio)
+#     OFF: Disable optimization (allocate exactly requested amount without extra capacity)
+#
+# Note:
+#
+#     Enabling this option improves performance for frequent append operations by
+#     reducing reallocation frequency, but increases overall memory usage.
+#     The growth ratio is controlled by EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO.
+#
+option(EYA_LIBRARY_OPTION_ARRAY_RESERVE_OPTIMIZE
+        "Enable smart growth optimization for array memory allocation" ON)
+
+# Option:
+#
 #     EYA_LIBRARY_OPTION_ARRAY_DEFAULT_SHRINK_RATIO
 #
 # Description:
