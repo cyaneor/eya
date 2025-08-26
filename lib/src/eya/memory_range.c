@@ -355,7 +355,7 @@ eya_memory_range_set_value(eya_memory_range_t *self,
                            bool                reversed,
                            eya_uchar_t         value)
 {
-    *eya_ptr_cast(eya_uchar_t, eya_memory_range_at(self, offset, reversed)) = value;
+    eya_ptr_deref(eya_uchar_t, eya_memory_range_at(self, offset, reversed)) = value;
 }
 
 void *
