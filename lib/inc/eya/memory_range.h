@@ -636,6 +636,21 @@ void *
 eya_memory_range_copy_range(eya_memory_range_t *self, const void *begin, const void *end);
 
 /**
+ * @brief Copy data from another memory range to this memory range
+ * @param[in,out] self Pointer to destination memory range
+ * @param[in] other Pointer to source memory range
+ * @return[out] Pointer to end of copied data in destination range
+ *
+ * @throws EYA_RUNTIME_ERROR_NULL_POINTER
+ *         if self or other is nullptr
+ * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
+ *         if range is invalid
+ */
+EYA_ATTRIBUTE(SYMBOL)
+void *
+eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
+
+/**
  * @brief Fills a memory range with a repeating pattern from a pointer range.
  * @param[in,out] self Destination memory range to fill with pattern
  * @param[in] begin Start of pattern source range (inclusive)
@@ -675,21 +690,6 @@ eya_memory_range_set_pattern_range(eya_memory_range_t *self, const void *begin, 
 EYA_ATTRIBUTE(SYMBOL)
 void *
 eya_memory_range_set_pattern(eya_memory_range_t *self, const eya_memory_range_t *other);
-
-/**
- * @brief Copy data from another memory range to this memory range
- * @param[in,out] self Pointer to destination memory range
- * @param[in] other Pointer to source memory range
- * @return[out] Pointer to end of copied data in destination range
- *
- * @throws EYA_RUNTIME_ERROR_NULL_POINTER
- *         if self or other is nullptr
- * @throws EYA_RUNTIME_ERROR_INVALID_MEMORY_RANGE
- *         if range is invalid
- */
-EYA_ATTRIBUTE(SYMBOL)
-void *
-eya_memory_range_copy(eya_memory_range_t *self, const eya_memory_range_t *other);
 
 /**
  * @brief Copies data from a pointer range to a memory range in reverse order.
