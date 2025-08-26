@@ -32,7 +32,7 @@
  * @endcode
  */
 #define eya_memory_typed_initializer(begin, end, element_size, ...)                                \
-    eya_memory_range_initializer(begin, end, element_size, __VA_ARGS__)
+    eya_initializer(eya_memory_range_initializer(begin, end), element_size, __VA_ARGS__)
 
 /**
  * @def eya_memory_typed_empty_initializer(element_size, ...)
