@@ -59,9 +59,10 @@ add_executable(${PROJECT_NAME}
         src/memory_std.cpp
         src/memory_raw.cpp
         src/memory_range.cpp
+        src/memory_typed.cpp
         src/numeric_limits.cpp
         src/memory_allocator.cpp
-        )
+)
 
 # -------------------------------------------------------------------------------------------- #
 # Test Dependencies                                                                            #
@@ -74,7 +75,7 @@ target_link_libraries(${PROJECT_NAME}
         gtest           # Google Test framework
         gtest_main      # Google Test main function
         eya             # Project's main library
-        )
+)
 
 # -------------------------------------------------------------------------------------------- #
 # Post-Build Processing                                                                        #
@@ -86,7 +87,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:eya>                  # Source library file
         $<TARGET_FILE_DIR:${PROJECT_NAME}>  # Destination directory
-        )
+)
 
 # -------------------------------------------------------------------------------------------- #
 # Test Registration                                                                            #
