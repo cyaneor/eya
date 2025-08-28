@@ -21,7 +21,6 @@
 #ifndef EYA_RUNTIME_THROW_H
 #define EYA_RUNTIME_THROW_H
 
-#include "compound_literal.h"
 #include "exception_initializer.h"
 #include "runtime_exception_catch_stack.h"
 
@@ -49,8 +48,11 @@
  * @see eya_runtime_exception_catch_stack_throw
  */
 #define eya_runtime_throw(...)                                                                     \
-    eya_runtime_exception_catch_stack_throw(                                                       \
-        eya_compound_literal_of(eya_exception_t, eya_exception_initializer, __VA_ARGS__))
+    do                                                                                             \
+    {                                                                                              \
+        const eya_exception_t e = eya_exception_initializer(__VA_ARGS__);                          \
+        eya_runtime_exception_catch_stack_throw(&e);                                               \
+    } while (0)
 
 /**
  * @def eya_runtime_rethrow
