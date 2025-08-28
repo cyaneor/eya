@@ -358,3 +358,317 @@ TEST(eya_memory_typed_swap, same_range)
     EXPECT_EQ(self.range.end, self_before.range.end);
     EXPECT_EQ(self.element_size, self_before.element_size);
 }
+
+TEST(eya_memory_range_is_valid_index, valid_index)
+{
+    int                array[5] = {1, 2, 3, 4, 5};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 5), sizeof(int));
+
+    bool is_valid = eya_memory_range_is_valid_index(&self, 2);
+    EXPECT_TRUE(is_valid);
+}
+
+TEST(eya_memory_range_is_valid_index, index_equal_to_size)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    bool is_valid = eya_memory_range_is_valid_index(&self, 3);
+    EXPECT_FALSE(is_valid);
+}
+
+TEST(eya_memory_range_is_valid_index, index_beyond_size)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    bool is_valid = eya_memory_range_is_valid_index(&self, 5);
+    EXPECT_FALSE(is_valid);
+}
+
+TEST(eya_memory_range_is_valid_index, empty_range)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(sizeof(double));
+    EXPECT_DEATH(eya_memory_range_is_valid_index(&self, 0), ".*");
+}
+
+TEST(eya_memory_range_is_valid_index, null_self)
+{
+    EXPECT_DEATH(eya_memory_range_is_valid_index(nullptr, 0), ".*");
+}
+
+TEST(eya_memory_range_is_valid_index, invalid_range_size)
+{
+    char               array[5] = {'a', 'b', 'c', 'd', 'e'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_range_is_valid_index(&self, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_front, valid_index)
+{
+    int                array[5] = {1, 2, 3, 4, 5};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 5), sizeof(int));
+
+    void *result = eya_memory_typed_at_from_front(&self, 2);
+
+    EXPECT_EQ(result, static_cast<void *>(array + 2));
+}
+
+TEST(eya_memory_typed_at_from_front, index_zero)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    void *result = eya_memory_typed_at_from_front(&self, 0);
+
+    EXPECT_EQ(result, static_cast<void *>(array));
+}
+
+TEST(eya_memory_typed_at_from_front, empty_range)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(sizeof(double));
+    EXPECT_DEATH(eya_memory_typed_at_from_front(&self, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_front, null_self)
+{
+    EXPECT_DEATH(eya_memory_typed_at_from_front(nullptr, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_front, invalid_range_size)
+{
+    char               array[5] = {'a', 'b', 'c', 'd', 'e'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_at_from_front(&self, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_front, index_equal_to_size)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_at_from_front(&self, 3), ".*");
+}
+
+TEST(eya_memory_typed_at_from_back, valid_index)
+{
+    int                array[5] = {1, 2, 3, 4, 5};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 5), sizeof(int));
+
+    void *result = eya_memory_typed_at_from_back(&self, 1);
+    EXPECT_EQ(result, static_cast<void *>(array + 3));
+}
+
+TEST(eya_memory_typed_at_from_back, index_zero)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    void *result = eya_memory_typed_at_from_back(&self, 0);
+    EXPECT_EQ(result, static_cast<void *>(array + 2));
+}
+
+TEST(eya_memory_typed_at_from_back, empty_range)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(sizeof(double));
+    EXPECT_DEATH(eya_memory_typed_at_from_back(&self, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_back, null_self)
+{
+    EXPECT_DEATH(eya_memory_typed_at_from_back(nullptr, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_back, invalid_range_size)
+{
+    char               array[5] = {'a', 'b', 'c', 'd', 'e'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_at_from_back(&self, 0), ".*");
+}
+
+TEST(eya_memory_typed_at_from_back, index_equal_to_size)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_at_from_back(&self, 3), ".*");
+}
+
+TEST(eya_memory_typed_front, valid_range)
+{
+    int                array[5] = {1, 2, 3, 4, 5};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 5), sizeof(int));
+
+    void *result = eya_memory_typed_front(&self);
+    EXPECT_EQ(result, static_cast<void *>(array));
+}
+
+TEST(eya_memory_typed_front, single_element)
+{
+    char               array[1] = {'a'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 1), sizeof(char));
+
+    void *result = eya_memory_typed_front(&self);
+    EXPECT_EQ(result, static_cast<void *>(array));
+}
+
+TEST(eya_memory_typed_front, empty_range)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(sizeof(double));
+
+    EXPECT_DEATH(eya_memory_typed_front(&self), ".*");
+}
+
+TEST(eya_memory_typed_front, null_self)
+{
+    EXPECT_DEATH(eya_memory_typed_front(nullptr), ".*");
+}
+
+TEST(eya_memory_typed_front, invalid_range_size)
+{
+    char               array[5] = {'a', 'b', 'c', 'd', 'e'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_front(&self), ".*");
+}
+
+TEST(eya_memory_typed_back, valid_range)
+{
+    int                array[5] = {1, 2, 3, 4, 5};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 5), sizeof(int));
+
+    void *result = eya_memory_typed_back(&self);
+    EXPECT_EQ(result, static_cast<void *>(array + 4));
+}
+
+TEST(eya_memory_typed_back, single_element)
+{
+    char               array[1] = {'a'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 1), sizeof(char));
+
+    void *result = eya_memory_typed_back(&self);
+    EXPECT_EQ(result, static_cast<void *>(array));
+}
+
+TEST(eya_memory_typed_back, empty_range)
+{
+    eya_memory_typed_t self = eya_memory_typed_empty_initializer(sizeof(double));
+    EXPECT_DEATH(eya_memory_typed_back(&self), ".*");
+}
+
+TEST(eya_memory_typed_back, null_self)
+{
+    EXPECT_DEATH(eya_memory_typed_back(nullptr), ".*");
+}
+
+TEST(eya_memory_typed_back, invalid_range_size)
+{
+    char               array[5] = {'a', 'b', 'c', 'd', 'e'};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_back(&self), ".*");
+}
+
+TEST(eya_memory_typed_is_equal, equal_ranges_same_element_size)
+{
+    int array[3] = {1, 2, 3};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_TRUE(eya_memory_typed_is_equal(&self, &other));
+}
+
+TEST(eya_memory_typed_is_equal, different_element_sizes)
+{
+    int array[3] = {1, 2, 3};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(char));
+
+    EXPECT_FALSE(eya_memory_typed_is_equal(&self, &other));
+}
+
+TEST(eya_memory_typed_is_equal, different_ranges_same_element_size)
+{
+    int array1[3] = {1, 2, 3};
+    int array2[2] = {4, 5};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array1, array1 + 3), sizeof(int));
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array2, array2 + 2), sizeof(int));
+
+    EXPECT_FALSE(eya_memory_typed_is_equal(&self, &other));
+}
+
+TEST(eya_memory_typed_is_equal, empty_ranges_same_element_size)
+{
+    eya_memory_typed_t self  = eya_memory_typed_empty_initializer(sizeof(double));
+    eya_memory_typed_t other = eya_memory_typed_empty_initializer(sizeof(double));
+    EXPECT_TRUE(eya_memory_typed_is_equal(&self, &other));
+}
+
+TEST(eya_memory_typed_is_equal, null_self)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_is_equal(nullptr, &other), ".*");
+}
+
+TEST(eya_memory_typed_is_equal, null_other)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_is_equal(&self, nullptr), ".*");
+}
+
+TEST(eya_memory_typed_is_equal, same_range)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_TRUE(eya_memory_typed_is_equal(&self, &self));
+}
+
+TEST(eya_memory_typed_is_equal, invalid_range_size)
+{
+    char array[5] = {'a', 'b', 'c', 'd', 'e'};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_TRUE(eya_memory_typed_is_equal(&self, &other));
+}
