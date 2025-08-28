@@ -132,7 +132,7 @@ void
 eya_memory_typed_swap(eya_memory_typed_t *self, eya_memory_typed_t *other);
 
 /**
- * @brief Exchange contents of two typed memory ranges
+ * @brief Exchange two typed memory (clear self and swap)
  * @param[in,out] self First typed memory range
  * @param[in,out] other Second typed memory range
  *

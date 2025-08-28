@@ -672,3 +672,89 @@ TEST(eya_memory_typed_is_equal, invalid_range_size)
 
     EXPECT_TRUE(eya_memory_typed_is_equal(&self, &other));
 }
+
+TEST(eya_memory_typed_exchange, valid_exchange_same_element_size)
+{
+    int array1[3] = {1, 2, 3};
+    int array2[2] = {4, 5};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array1, array1 + 3), sizeof(int));
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array2, array2 + 2), sizeof(int));
+
+    eya_memory_typed_t self_before  = self;
+    eya_memory_typed_t other_before = other;
+
+    eya_memory_typed_exchange(&self, &other);
+
+    EXPECT_EQ(self.range.begin, other_before.range.begin);
+    EXPECT_EQ(self.range.end, other_before.range.end);
+    EXPECT_EQ(self.element_size, self_before.element_size);
+    EXPECT_EQ(other.range.begin, nullptr);
+    EXPECT_EQ(other.range.end, nullptr);
+    EXPECT_EQ(other.element_size, other_before.element_size);
+}
+
+TEST(eya_memory_typed_exchange, empty_ranges_same_element_size)
+{
+    eya_memory_typed_t self  = eya_memory_typed_empty_initializer(sizeof(double));
+    eya_memory_typed_t other = eya_memory_typed_empty_initializer(sizeof(double));
+
+    eya_memory_typed_t self_before  = self;
+    eya_memory_typed_t other_before = other;
+
+    eya_memory_typed_exchange(&self, &other);
+
+    EXPECT_EQ(self.range.begin, nullptr);
+    EXPECT_EQ(self.range.end, nullptr);
+    EXPECT_EQ(self.element_size, self_before.element_size);
+    EXPECT_EQ(other.range.begin, nullptr);
+    EXPECT_EQ(other.range.end, nullptr);
+    EXPECT_EQ(other.element_size, other_before.element_size);
+}
+
+TEST(eya_memory_typed_exchange, different_element_sizes)
+{
+    int  array1[3] = {1, 2, 3};
+    char array2[2] = {'a', 'b'};
+
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array1, array1 + 3), sizeof(int));
+    eya_memory_typed_t other = eya_memory_typed_initializer(
+        eya_memory_range_initializer(array2, array2 + 2), sizeof(char));
+
+    EXPECT_DEATH(eya_memory_typed_exchange(&self, &other), ".*");
+}
+
+TEST(eya_memory_typed_exchange, null_self)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t other =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_exchange(nullptr, &other), ".*");
+}
+
+TEST(eya_memory_typed_exchange, null_other)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    EXPECT_DEATH(eya_memory_typed_exchange(&self, nullptr), ".*");
+}
+
+TEST(eya_memory_typed_exchange, same_range)
+{
+    int                array[3] = {1, 2, 3};
+    eya_memory_typed_t self =
+        eya_memory_typed_initializer(eya_memory_range_initializer(array, array + 3), sizeof(int));
+
+    eya_memory_typed_t self_before = self;
+    eya_memory_typed_exchange(&self, &self);
+
+    EXPECT_EQ(self.range.begin, nullptr);
+    EXPECT_EQ(self.range.end, nullptr);
+    EXPECT_EQ(self.element_size, self_before.element_size);
+}
