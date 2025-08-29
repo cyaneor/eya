@@ -178,7 +178,7 @@ eya_memory_range_at_from_front(const eya_memory_range_t *self, eya_uoffset_t off
                       EYA_RUNTIME_ERROR_OUT_OF_RANGE);
 
     const void *begin = eya_memory_range_get_begin(self);
-    return eya_ptr_add_by_offset_unsafe(begin, offset);
+    return eya_ptr_add_by_offset_unsafe(void, begin, offset);
 }
 
 void *
@@ -290,7 +290,7 @@ void
 eya_memory_range_reset_s(eya_memory_range_t *self, void *begin, eya_usize_t size)
 {
     eya_runtime_check(begin, EYA_RUNTIME_ERROR_INVALID_ARGUMENT);
-    eya_memory_range_reset(self, begin, eya_ptr_add_by_offset_unsafe(begin, size));
+    eya_memory_range_reset(self, begin, eya_ptr_add_by_offset_unsafe(void, begin, size));
 }
 
 void

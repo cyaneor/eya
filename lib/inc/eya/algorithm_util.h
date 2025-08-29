@@ -106,8 +106,8 @@
 #define eya_algorithm_rcopy(T, dst, src, n)                                                        \
     do                                                                                             \
     {                                                                                              \
-        T       *d = eya_ptr_add_by_offset_unsafe(dst, n);                                         \
-        const T *s = eya_ptr_add_by_offset_unsafe(src, n);                                         \
+        T       *d = eya_ptr_add_by_offset_unsafe(T, dst, n);                                      \
+        const T *s = eya_ptr_add_by_offset_unsafe(T, src, n);                                      \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \
@@ -129,7 +129,7 @@
 #define eya_algorithm_set(T, dst, val, n)                                                          \
     do                                                                                             \
     {                                                                                              \
-        T *d = eya_ptr_cast(eya_uchar_t, dst);                                                     \
+        T *d = eya_ptr_cast(T, dst);                                                               \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \
@@ -181,8 +181,8 @@
 #define eya_algorithm_rcompare(T, lhs, rhs, n)                                                     \
     do                                                                                             \
     {                                                                                              \
-        const T *l = eya_ptr_add_unsafe(lhs, eya_math_sub_one(n));                                 \
-        const T *r = eya_ptr_add_unsafe(rhs, eya_math_sub_one(n));                                 \
+        const T *l = eya_ptr_add_unsafe(T, lhs, eya_math_sub_one(n));                              \
+        const T *r = eya_ptr_add_unsafe(T, rhs, eya_math_sub_one(n));                              \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \
@@ -210,7 +210,7 @@
 #define eya_algorithm_copy_rev(T, dst, src, n)                                                     \
     do                                                                                             \
     {                                                                                              \
-        T       *d = eya_ptr_add_by_offset_unsafe(dst, n);                                         \
+        T       *d = eya_ptr_add_by_offset_unsafe(T, dst, n);                                      \
         const T *s = eya_ptr_ccast(T, src);                                                        \
                                                                                                    \
         while (n--)                                                                                \

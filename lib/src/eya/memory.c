@@ -80,8 +80,8 @@ const void *
 eya_memory_rcompare(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size)
 {
     const eya_usize_t n = eya_math_min(lhs_size, rhs_size);
-    const eya_u8_t   *l = eya_ptr_add(lhs, lhs_size - n);
-    const eya_u8_t   *r = eya_ptr_add(rhs, rhs_size - n);
+    const void   *l = eya_ptr_add(void, lhs, eya_math_sub(lhs_size, n));
+    const void   *r = eya_ptr_add(void, rhs, eya_math_sub(rhs_size, n));
 
     return eya_memory_std_rcompare(l, r, n);
 }
@@ -96,7 +96,7 @@ eya_memory_find(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usiz
     eya_runtime_return_ifn(rhs_size, nullptr);
 
     const eya_u8_t *l = eya_ptr_cast(const eya_u8_t, lhs);
-    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(l, lhs_size);
+    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(const eya_u8_t, l, lhs_size);
 
     for (; l < e; ++l)
     {
@@ -118,13 +118,13 @@ eya_memory_rfind(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usi
     eya_runtime_return_ifn(rhs_size, nullptr);
 
     const eya_u8_t *l = eya_ptr_cast(const eya_u8_t, lhs);
-    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(l, lhs_size);
+    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(const eya_u8_t, l, lhs_size);
 
     for (; e > l; --e)
     {
         if (!eya_memory_rcompare(l, e - l, rhs, rhs_size))
         {
-            return eya_ptr_sub_by_offset_unsafe(e, rhs_size);
+            return eya_ptr_sub_by_offset_unsafe(const void, e, rhs_size);
         }
     }
     return nullptr;

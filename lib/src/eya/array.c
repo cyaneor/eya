@@ -127,7 +127,7 @@ eya_array_get_end(const eya_array_t *self)
 {
     void             *begin      = eya_array_get_begin(self);
     const eya_usize_t total_size = eya_array_get_total_size(self);
-    return eya_ptr_add_by_offset(begin, total_size);
+    return eya_ptr_add_by_offset(void, begin, total_size);
 }
 
 void

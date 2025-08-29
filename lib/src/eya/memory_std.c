@@ -21,7 +21,7 @@ eya_memory_std_copy(void *dst, const void *src, eya_usize_t n)
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    void *end = eya_ptr_add_unsafe(dst, n);
+    void *end = eya_ptr_add_unsafe(void, dst, n);
     eya_algorithm_copy(eya_uchar_t, dst, src, n);
 
     return end;
@@ -33,7 +33,7 @@ eya_memory_std_copy_rev(void *dst, const void *src, eya_usize_t n)
     eya_runtime_check_ref(dst);
     eya_runtime_check_ref(src);
 
-    void *end = eya_ptr_add_unsafe(dst, n);
+    void *end = eya_ptr_add_unsafe(void, dst, n);
     eya_algorithm_copy_rev(eya_uchar_t, dst, src, n);
 
     return end;
@@ -52,13 +52,13 @@ eya_memory_std_rcopy(void *dst, const void *src, eya_usize_t n)
 void *
 eya_memory_std_move(void *dst, const void *src, eya_usize_t n)
 {
-    const void *src_end = eya_ptr_add_by_offset(src, n);
+    const void *src_end = eya_ptr_add_by_offset(void, src, n);
     if (eya_ptr_ranges_no_overlap(dst, src, src_end))
     {
         return eya_memory_std_copy(dst, src, n);
     }
     void *d = eya_memory_std_rcopy(dst, src, n);
-    return eya_ptr_add_by_offset(d, n);
+    return eya_ptr_add_by_offset(void, d, n);
 }
 
 void *
@@ -66,7 +66,7 @@ eya_memory_std_set(void *dst, eya_uchar_t val, eya_usize_t n)
 {
     eya_runtime_check_ref(dst);
 
-    void *end = eya_ptr_add_unsafe(dst, n);
+    void *end = eya_ptr_add_unsafe(void, dst, n);
     eya_algorithm_set(eya_uchar_t, dst, val, n);
     return end;
 }
