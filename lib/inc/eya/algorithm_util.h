@@ -83,7 +83,7 @@
     do                                                                                             \
     {                                                                                              \
         T       *d = eya_ptr_cast(T, dst);                                                         \
-        const T *s = eya_cptr_cast(T, src);                                                        \
+        const T *s = eya_ptr_ccast(T, src);                                                        \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \
@@ -152,8 +152,8 @@
 #define eya_algorithm_compare(T, lhs, rhs, n)                                                      \
     do                                                                                             \
     {                                                                                              \
-        const T *l = eya_cptr_cast(T, lhs);                                                        \
-        const T *r = eya_cptr_cast(T, rhs);                                                        \
+        const T *l = eya_ptr_ccast(T, lhs);                                                        \
+        const T *r = eya_ptr_ccast(T, rhs);                                                        \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \
@@ -211,7 +211,7 @@
     do                                                                                             \
     {                                                                                              \
         T       *d = eya_ptr_add_by_offset_unsafe(dst, n);                                         \
-        const T *s = eya_cptr_cast(T, src);                                                        \
+        const T *s = eya_ptr_ccast(T, src);                                                        \
                                                                                                    \
         while (n--)                                                                                \
         {                                                                                          \

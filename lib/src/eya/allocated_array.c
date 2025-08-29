@@ -8,7 +8,7 @@
 eya_usize_t
 eya_allocated_array_get_size(const eya_allocated_array_t *self)
 {
-    return eya_memory_range_is_uninit(eya_cptr_cast(eya_memory_range_t, self))
+    return eya_memory_range_is_uninit(eya_ptr_ccast(eya_memory_range_t, self))
                ? 0
                : eya_memory_typed_get_size(eya_ptr_cast(eya_memory_typed_t, self));
 }
@@ -29,7 +29,7 @@ eya_usize_t
 eya_allocated_array_get_max_size(const eya_allocated_array_t *self)
 {
     const eya_usize_t element_size =
-        eya_memory_typed_get_element_size(eya_cptr_cast(eya_memory_typed_t, self));
+        eya_memory_typed_get_element_size(eya_ptr_ccast(eya_memory_typed_t, self));
 
     eya_runtime_check(element_size, EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE);
     return EYA_USIZE_T_MAX / element_size;

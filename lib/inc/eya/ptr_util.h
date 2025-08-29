@@ -61,14 +61,14 @@
 #define eya_ptr_cast(T, ptr) eya_type_cast(T *, ptr)
 
 /**
- * @def eya_cptr_cast(T, ptr)
+ * @def eya_ptr_ccast(T, ptr)
  * @brief Casts a pointer to a const pointer of type T.
  *
  * @param T Target type (without const or pointer).
  * @param ptr Pointer to cast.
  * @return Const pointer of type const T*.
  */
-#define eya_cptr_cast(T, ptr) eya_ptr_cast(const T, ptr)
+#define eya_ptr_ccast(T, ptr) eya_ptr_cast(const T, ptr)
 
 /**
  * @def eya_ptr_deref(T, ptr)
