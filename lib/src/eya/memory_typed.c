@@ -25,8 +25,7 @@ eya_memory_typed_unpack(const eya_memory_typed_t *self,
 {
     if (range)
     {
-        eya_memory_range_t *r = eya_ptr_cast(eya_memory_range_t, range);
-        eya_memory_typed_unpack_full(self, &r->begin, &r->end, element_size);
+        eya_memory_typed_unpack_full(self, &range->begin, &range->end, element_size);
     }
     else
     {
