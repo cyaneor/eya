@@ -71,6 +71,26 @@
 #define eya_ptr_ccast(T, ptr) eya_ptr_cast(const T, ptr)
 
 /**
+ * @def eya_ptr_rcast(T, ptr)
+ * @brief Pointer-specific reinterpret cast macro
+ *
+ * This macro provides a convenient shorthand for performing a reinterpret cast
+ * specifically for pointer types. It leverages the `eya_reinterpret_cast` macro
+ * to perform the type conversion, ensuring compatibility with both C and C++ codebases.
+ *
+ * @param T Target pointer type (e.g., `int*`, `void*`)
+ * @param ptr Pointer value to cast
+ * @return Casted pointer of type `T`
+ *
+ * @note This macro is defined in terms of `eya_reinterpret_cast`, which uses
+ *       `reinterpret_cast` in C++ and a C-style cast in C, depending on the
+ *       compilation environment.
+ *
+ * @see eya_reinterpret_cast
+ */
+#define eya_ptr_rcast(T, ptr) eya_reinterpret_cast(T *, ptr)
+
+/**
  * @def eya_ptr_deref(T, ptr)
  * @brief Dereferences a pointer cast to type T*.
  *
@@ -103,18 +123,6 @@
 #define eya_ptr_is_null(ptr) ((ptr) == nullptr)
 
 /**
- * @def eya_ptr_to_const_char
- * @brief Converts a pointer to a const char pointer.
- *
- * This macro performs a type cast to convert any pointer type
- * to a const char pointer type.
- *
- * @param ptr Pointer to convert.
- * @return Converted pointer of type const char*.
- */
-#define eya_ptr_to_const_char(ptr) eya_ptr_cast(const char, ptr)
-
-/**
  * @def eya_ptr_to_uaddr
  * @brief Converts any pointer to an unsigned address type (eya_uaddr_t).
  *
@@ -124,7 +132,7 @@
  * @param ptr Pointer to convert.
  * @return Converted value of type eya_uaddr_t.
  */
-#define eya_ptr_to_uaddr(ptr) eya_reinterpret_cast(eya_uaddr_t, eya_ptr_to_const_char(ptr))
+#define eya_ptr_to_uaddr(ptr) eya_reinterpret_cast(eya_uaddr_t, ptr)
 
 /**
  * @def eya_ptr_to_saddr
@@ -136,7 +144,7 @@
  * @param ptr Pointer to convert.
  * @return Converted value of type eya_saddr_t.
  */
-#define eya_ptr_to_saddr(ptr) eya_reinterpret_cast(eya_saddr_t, eya_ptr_to_const_char(ptr))
+#define eya_ptr_to_saddr(ptr) eya_reinterpret_cast(eya_saddr_t, ptr)
 
 /**
  * @def eya_ptr_sdiff

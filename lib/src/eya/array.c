@@ -14,7 +14,9 @@ eya_array_unpack(const eya_array_t *self,
                  eya_usize_t       *element_size,
                  eya_usize_t       *size)
 {
-    eya_memory_typed_unpack_full(eya_ptr_ccast(eya_memory_typed_t, self), begin, end, element_size);
+    eya_memory_typed_unpack_full(
+        eya_ptr_rcast(const eya_memory_typed_t, self), begin, end, element_size);
+
     if (size)
     {
         *size = self->size;
@@ -24,7 +26,7 @@ eya_array_unpack(const eya_array_t *self,
 eya_usize_t
 eya_array_capacity(const eya_array_t *self)
 {
-    return eya_allocated_array_get_size(eya_ptr_ccast(eya_allocated_array_t, self));
+    return eya_allocated_array_get_size(eya_ptr_rcast(const eya_allocated_array_t, self));
 }
 
 eya_usize_t
@@ -52,7 +54,7 @@ void *
 eya_array_at_from_front(const eya_array_t *self, eya_usize_t index)
 {
     eya_runtime_check(eya_array_is_valid_index(self, index), EYA_RUNTIME_ERROR_OUT_OF_RANGE);
-    return eya_memory_typed_at_from_front(eya_ptr_ccast(eya_memory_typed_t, self), index);
+    return eya_memory_typed_at_from_front(eya_ptr_rcast(const eya_memory_typed_t, self), index);
 }
 
 void *
@@ -95,14 +97,15 @@ eya_array_clear(eya_array_t *self)
 void *
 eya_array_get_begin(const eya_array_t *self)
 {
-    return eya_memory_range_get_begin(eya_ptr_ccast(eya_memory_range_t, self));
+    return eya_memory_range_get_begin(eya_ptr_rcast(const eya_memory_range_t, self));
 }
 
 eya_usize_t
 eya_array_get_total_size(const eya_array_t *self)
 {
     const eya_usize_t element_size =
-        eya_memory_typed_get_element_size(eya_ptr_ccast(eya_memory_typed_t, self));
+        eya_memory_typed_get_element_size(eya_ptr_rcast(const eya_memory_typed_t, self));
+
     eya_runtime_check(element_size, EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE);
 
     const eya_usize_t size = eya_array_get_size(self);
@@ -113,9 +116,9 @@ eya_usize_t
 eya_array_get_available_size(const eya_array_t *self)
 {
     eya_usize_t max_size =
-        eya_allocated_array_get_max_size(eya_ptr_cast(eya_allocated_array_t, self));
-    const eya_usize_t total_size = eya_array_get_total_size(self);
+        eya_allocated_array_get_max_size(eya_ptr_rcast(const eya_allocated_array_t, self));
 
+    const eya_usize_t total_size = eya_array_get_total_size(self);
     return max_size - total_size;
 }
 
@@ -155,7 +158,7 @@ eya_array_reserve(eya_array_t *self, eya_usize_t size)
                            : (reserve_size * EYA_LIBRARY_OPTION_ARRAY_DEFAULT_GROWTH_RATIO) / 1000;
 
 #endif
-        eya_allocated_array_resize(eya_ptr_cast(eya_allocated_array_t, self), reserve_size);
+        eya_allocated_array_resize(eya_ptr_rcast(eya_allocated_array_t, self), reserve_size);
     }
 }
 
@@ -167,7 +170,7 @@ eya_array_resize(eya_array_t *self, eya_usize_t size)
     if (capacity < size)
     {
 #endif
-        eya_allocated_array_resize(eya_ptr_cast(eya_allocated_array_t, self), size);
+        eya_allocated_array_resize(eya_ptr_rcast(eya_allocated_array_t, self), size);
 #if (EYA_LIBRARY_OPTION_ARRAY_OPTIMIZE_RESIZE == EYA_LIBRARY_OPTION_ON)
     }
 #endif
@@ -189,6 +192,6 @@ eya_array_make(eya_usize_t element_size, eya_usize_t size)
 void
 eya_array_free(eya_array_t *self)
 {
-    eya_allocated_array_resize(eya_ptr_cast(eya_allocated_array_t, self), 0);
+    eya_allocated_array_resize(eya_ptr_rcast(eya_allocated_array_t, self), 0);
     self->size = 0;
 }

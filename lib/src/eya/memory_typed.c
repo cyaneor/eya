@@ -10,7 +10,7 @@ eya_memory_typed_unpack_full(const eya_memory_typed_t *self,
                              void                    **end,
                              eya_usize_t              *element_size)
 {
-    eya_memory_range_unpack(eya_ptr_ccast(eya_memory_range_t, self), begin, end);
+    eya_memory_range_unpack(eya_ptr_rcast(const eya_memory_range_t, self), begin, end);
 
     if (element_size)
     {
@@ -45,7 +45,7 @@ bool
 eya_memory_typed_is_valid(const eya_memory_typed_t *self)
 {
     const eya_usize_t element_size = eya_memory_typed_get_element_size(self);
-    return eya_memory_range_is_multiple_of_size(eya_ptr_ccast(eya_memory_range_t, self),
+    return eya_memory_range_is_multiple_of_size(eya_ptr_rcast(const eya_memory_range_t, self),
                                                 element_size);
 }
 
@@ -55,9 +55,10 @@ eya_memory_typed_get_size(const eya_memory_typed_t *self)
     eya_runtime_check(eya_memory_typed_is_valid(self),
                       EYA_RUNTIME_ERROR_SIZE_NOT_MULTIPLE_OF_ELEMENT_SIZE);
 
-    const eya_usize_t size = eya_memory_range_get_size(eya_ptr_ccast(eya_memory_range_t, self));
-    const eya_usize_t element_size = eya_memory_typed_get_element_size(self);
+    const eya_usize_t size =
+        eya_memory_range_get_size(eya_ptr_rcast(const eya_memory_range_t, self));
 
+    const eya_usize_t element_size = eya_memory_typed_get_element_size(self);
     return size / element_size;
 }
 
@@ -73,8 +74,8 @@ eya_memory_typed_swap(eya_memory_typed_t *self, eya_memory_typed_t *other)
     eya_runtime_check(eya_memory_typed_is_equal_element_size(self, other),
                       EYA_RUNTIME_ERROR_DIFFERENT_ELEMENT_SIZE);
 
-    eya_memory_range_swap(eya_ptr_cast(eya_memory_range_t, self),
-                          eya_ptr_cast(eya_memory_range_t, other));
+    eya_memory_range_swap(eya_ptr_rcast(eya_memory_range_t, self),
+                          eya_ptr_rcast(eya_memory_range_t, other));
 }
 
 void
@@ -83,8 +84,8 @@ eya_memory_typed_exchange(eya_memory_typed_t *self, eya_memory_typed_t *other)
     eya_runtime_check(eya_memory_typed_is_equal_element_size(self, other),
                       EYA_RUNTIME_ERROR_DIFFERENT_ELEMENT_SIZE);
 
-    eya_memory_range_exchange(eya_ptr_cast(eya_memory_range_t, self),
-                              eya_ptr_cast(eya_memory_range_t, other));
+    eya_memory_range_exchange(eya_ptr_rcast(eya_memory_range_t, self),
+                              eya_ptr_rcast(eya_memory_range_t, other));
 }
 
 bool
@@ -106,7 +107,7 @@ void *
 eya_memory_typed_at_from_front(const eya_memory_typed_t *self, eya_usize_t index)
 {
     const eya_uoffset_t offset = eya_memory_typed_get_offset_by_index(self, index);
-    return eya_memory_range_at_from_front(eya_ptr_ccast(eya_memory_range_t, self), offset);
+    return eya_memory_range_at_from_front(eya_ptr_rcast(const eya_memory_range_t, self), offset);
 }
 
 void *
@@ -153,14 +154,14 @@ bool
 eya_memory_typed_is_equal(const eya_memory_typed_t *self, const eya_memory_typed_t *other)
 {
     return eya_memory_typed_is_equal_element_size(self, other) &&
-           eya_memory_range_is_equal(eya_ptr_ccast(eya_memory_range_t, self),
-                                     eya_ptr_ccast(eya_memory_range_t, other));
+           eya_memory_range_is_equal(eya_ptr_rcast(const eya_memory_range_t, self),
+                                     eya_ptr_rcast(const eya_memory_range_t, other));
 }
 
 eya_memory_typed_t
 eya_memory_typed_make(void *begin, void *end, eya_usize_t element_size)
 {
     eya_memory_typed_t self = eya_memory_typed_empty_initializer(element_size);
-    eya_memory_range_reset(eya_ptr_cast(eya_memory_range_t, &self), begin, end);
+    eya_memory_range_reset(eya_ptr_rcast(eya_memory_range_t, &self), begin, end);
     return self;
 }
