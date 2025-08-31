@@ -122,22 +122,22 @@
 #define EYA_DATE_MONTH_DECEMBER (EYA_DATE_MONTH_INDEX_DECEMBER + 1)
 
 /**
- * @def EYA_DATE_MONTH_T_MIN
+ * @def EYA_DATE_MONTH_MIN
  * @brief Minimum month value.
  *
  * This macro defines the minimum valid month value,
  * which is January (1).
  */
-#define EYA_DATE_MONTH_T_MIN EYA_DATE_MONTH_JANUARY
+#define EYA_DATE_MONTH_MIN EYA_DATE_MONTH_JANUARY
 
 /**
- * @def EYA_DATE_MONTH_T_MAX
+ * @def EYA_DATE_MONTH_MAX
  * @brief Maximum month value.
  *
  * This macro defines the maximum valid month value,
  * which is December (12).
  */
-#define EYA_DATE_MONTH_T_MAX EYA_DATE_MONTH_DECEMBER
+#define EYA_DATE_MONTH_MAX EYA_DATE_MONTH_DECEMBER
 
 /**
  * @typedef eya_date_month_t

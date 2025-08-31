@@ -13,25 +13,25 @@
 
 #ifdef EYA_VOID_P_SIZE
 /**
- * @def EYA_PTR_T_SIZE
+ * @def EYA_PTR_SIZE
  * @brief Size identifier for pointer type
  * @details Uses platform-defined EYA_VOID_P_SIZE constant
  */
-#    define EYA_PTR_T_SIZE EYA_VOID_P_SIZE
+#    define EYA_PTR_SIZE EYA_VOID_P_SIZE
 
 /**
- * @def EYA_PTR_T_MIN
+ * @def EYA_PTR_MIN
  * @brief Minimum value for pointer type
  * @details Uses eya_numeric_limit_umin() function with eya_ptr_t type
  */
-#    define EYA_PTR_T_MIN eya_numeric_limit_umin(eya_ptr_t)
+#    define EYA_PTR_MIN eya_numeric_limit_umin(eya_ptr_t)
 
 /**
- * @def EYA_PTR_T_MAX
+ * @def EYA_PTR_MAX
  * @brief Maximum value for pointer type
  * @details Uses eya_numeric_limit_umax() function with eya_ptr_t type
  */
-#    define EYA_PTR_T_MAX eya_numeric_limit_umax(eya_ptr_t)
+#    define EYA_PTR_MAX eya_numeric_limit_umax(eya_ptr_t)
 
 /**
  * @typedef eya_ptr_t

@@ -32,7 +32,7 @@ eya_allocated_array_get_max_size(const eya_allocated_array_t *self)
         eya_memory_typed_get_element_size(eya_ptr_rcast(const eya_memory_typed_t, self));
 
     eya_runtime_check(element_size, EYA_RUNTIME_ERROR_ZERO_ELEMENT_SIZE);
-    return EYA_USIZE_T_MAX / element_size;
+    return EYA_USIZE_MAX / element_size;
 }
 
 bool

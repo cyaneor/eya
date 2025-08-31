@@ -123,22 +123,22 @@
 #define EYA_DATE_MONTH_INDEX_DECEMBER 11
 
 /**
- * @def EYA_DATE_MONTH_INDEX_T_MIN
+ * @def EYA_DATE_MONTH_INDEX_MIN
  * @brief Minimum month index.
  *
  * This macro defines the minimum valid month index,
  * which is January (0).
  */
-#define EYA_DATE_MONTH_INDEX_T_MIN EYA_DATE_MONTH_INDEX_JANUARY
+#define EYA_DATE_MONTH_INDEX_MIN EYA_DATE_MONTH_INDEX_JANUARY
 
 /**
- * @def EYA_DATE_MONTH_INDEX_T_MAX
+ * @def EYA_DATE_MONTH_INDEX_MAX
  * @brief Maximum month index.
  *
  * This macro defines the maximum valid month index,
  * which is December (11).
  */
-#define EYA_DATE_MONTH_INDEX_T_MAX EYA_DATE_MONTH_INDEX_DECEMBER
+#define EYA_DATE_MONTH_INDEX_MAX EYA_DATE_MONTH_INDEX_DECEMBER
 
 /**
  * @def EYA_DATE_MONTH_INDEXES_PER_YEAR
@@ -147,7 +147,7 @@
  * This macro defines the total number of month indexes in a year,
  * which is 12.
  */
-#define EYA_DATE_MONTH_INDEXES_PER_YEAR (EYA_DATE_MONTH_INDEX_T_MAX + 1)
+#define EYA_DATE_MONTH_INDEXES_PER_YEAR (EYA_DATE_MONTH_INDEX_MAX + 1)
 
 /**
  * @typedef eya_date_month_index_t

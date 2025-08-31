@@ -71,7 +71,7 @@ typedef long eya_slong_t;
  */
 typedef long long eya_sllong_t;
 
-#ifdef EYA_INT128_T_SIZE
+#ifdef EYA_INT128_SIZE
 
 /**
  * @typedef eya_sint128_t
@@ -85,6 +85,6 @@ typedef __int128 eya_sint128_t;
  */
 typedef unsigned __int128 eya_uint128_t;
 
-#endif // EYA_INT128_T_SIZE
+#endif // EYA_INT128_SIZE
 
 #endif /* EYA_NUMERIC_TYPES_H */

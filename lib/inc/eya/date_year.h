@@ -13,31 +13,31 @@
 
 #include "numeric.h"
 
-#ifndef EYA_DATE_YEAR_T_MIN
+#ifndef EYA_DATE_YEAR_MIN
 /**
- * @def EYA_DATE_YEAR_T_MIN
+ * @def EYA_DATE_YEAR_MIN
  * @brief Minimum valid value for a year (minimum unsigned short value)
  * @details Represents the smallest valid year value that can be represented
  *          by the eya_date_year_t type.
  */
-#    define EYA_DATE_YEAR_T_MIN EYA_USHORT_T_MIN
-#endif // EYA_DATE_YEAR_T_MIN
+#    define EYA_DATE_YEAR_MIN EYA_USHORT_MIN
+#endif // EYA_DATE_YEAR_MIN
 
-#ifndef EYA_DATE_YEAR_T_MAX
+#ifndef EYA_DATE_YEAR_MAX
 /**
- * @def EYA_DATE_YEAR_T_MAX
+ * @def EYA_DATE_YEAR_MAX
  * @brief Maximum valid value for a year (maximum unsigned short value)
  * @details Represents the largest valid year value that can be represented
  *          by the eya_date_year_t type.
  */
-#    define EYA_DATE_YEAR_T_MAX EYA_USHORT_T_MAX
-#endif // EYA_DATE_YEAR_T_MAX
+#    define EYA_DATE_YEAR_MAX EYA_USHORT_MAX
+#endif // EYA_DATE_YEAR_MAX
 
 /**
  * @typedef eya_date_year_t
  * @brief Type representing a calendar year
  * @details This type is an alias for eya_ushort_t and represents years
- *          in the range [EYA_DATE_YEAR_T_MIN, EYA_DATE_YEAR_T_MAX].
+ *          in the range [EYA_DATE_YEAR_MIN, EYA_DATE_YEAR_MAX].
  *          It is used to store and manipulate year values in date operations.
  */
 typedef eya_ushort_t eya_date_year_t;

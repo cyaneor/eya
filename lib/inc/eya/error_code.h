@@ -18,31 +18,31 @@
 #include "return.h"
 
 /**
- * @def EYA_ERROR_CODE_T_SIZE
+ * @def EYA_ERROR_CODE_SIZE
  * @brief Size of the `eya_error_code_t` type in bytes.
  *
- * The `EYA_ERROR_CODE_T_SIZE` macro defines the size (in bytes) of the `eya_error_code_t` type,
- * using the value set for `EYA_RETURN_T_SIZE`.
+ * The `EYA_ERROR_CODE_SIZE` macro defines the size (in bytes) of the `eya_error_code_t` type,
+ * using the value set for `EYA_RETURN_SIZE`.
  */
-#define EYA_ERROR_CODE_T_SIZE EYA_RETURN_T_SIZE
+#define EYA_ERROR_CODE_SIZE EYA_RETURN_SIZE
 
 /**
- * @def EYA_ERROR_CODE_T_MIN
+ * @def EYA_ERROR_CODE_MIN
  * @brief Minimum value that `eya_error_code_t` can hold.
  *
- * The `EYA_ERROR_CODE_T_MIN` macro defines the minimum possible value
- * for the `eya_error_code_t` type, using `EYA_RETURN_T_MIN`.
+ * The `EYA_ERROR_CODE_MIN` macro defines the minimum possible value
+ * for the `eya_error_code_t` type, using `EYA_RETURN_MIN`.
  */
-#define EYA_ERROR_CODE_T_MIN EYA_RETURN_T_MIN
+#define EYA_ERROR_CODE_MIN EYA_RETURN_MIN
 
 /**
- * @def EYA_ERROR_CODE_T_MAX
+ * @def EYA_ERROR_CODE_MAX
  * @brief Maximum value that `eya_error_code_t` can hold.
  *
- * The `EYA_ERROR_CODE_T_MAX` macro defines the maximum possible value
- * for the `eya_error_code_t` type, using `EYA_RETURN_T_MAX`.
+ * The `EYA_ERROR_CODE_MAX` macro defines the maximum possible value
+ * for the `eya_error_code_t` type, using `EYA_RETURN_MAX`.
  */
-#define EYA_ERROR_CODE_T_MAX EYA_RETURN_T_MAX
+#define EYA_ERROR_CODE_MAX EYA_RETURN_MAX
 
 /**
  * @def EYA_ERROR_CODE_NONE

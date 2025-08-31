@@ -15,31 +15,31 @@
 #include "numeric_types.h"
 
 /**
- * @def EYA_RETURN_T_SIZE
+ * @def EYA_RETURN_SIZE
  * @brief Size of `eya_return_t` type in bytes
  *
  * Specifies the size (in bytes) of `eya_return_t` type using
- * the value defined by `EYA_INT_T_SIZE` macro.
+ * the value defined by `EYA_INT_SIZE` macro.
  */
-#define EYA_RETURN_T_SIZE EYA_INT_T_SIZE
+#define EYA_RETURN_SIZE EYA_INT_SIZE
 
 /**
- * @def EYA_RETURN_T_MIN
+ * @def EYA_RETURN_MIN
  * @brief Minimum value for `eya_return_t` type
  *
  * Defines the minimum possible value for `eya_return_t` type,
- * corresponding to `EYA_SINT_T_MIN` value.
+ * corresponding to `EYA_SINT_MIN` value.
  */
-#define EYA_RETURN_T_MIN EYA_SINT_T_MIN
+#define EYA_RETURN_MIN EYA_SINT_MIN
 
 /**
- * @def EYA_RETURN_T_MAX
+ * @def EYA_RETURN_MAX
  * @brief Maximum value for `eya_return_t` type
  *
  * Defines the maximum possible value for `eya_return_t` type,
- * corresponding to `EYA_SINT_T_MAX` value.
+ * corresponding to `EYA_SINT_MAX` value.
  */
-#define EYA_RETURN_T_MAX EYA_SINT_T_MAX
+#define EYA_RETURN_MAX EYA_SINT_MAX
 
 /**
  * @typedef eya_return_t

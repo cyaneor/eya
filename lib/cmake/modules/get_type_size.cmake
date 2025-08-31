@@ -50,43 +50,43 @@ function(get_type_sizes OUTPUT_VAR)
     # If the size of the type Char was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_CHAR})
-        list(APPEND ${OUTPUT_VAR} EYA_CHAR_T_SIZE=${SIZEOF_CHAR})
+        list(APPEND ${OUTPUT_VAR} EYA_CHAR_SIZE=${SIZEOF_CHAR})
     endif ()
 
     # If the size of the type Wchar_t was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_WCHAR})
-        list(APPEND ${OUTPUT_VAR} EYA_WCHAR_T_SIZE=${SIZEOF_WCHAR})
+        list(APPEND ${OUTPUT_VAR} EYA_WCHAR_SIZE=${SIZEOF_WCHAR})
     endif ()
 
     # If the size of the Short type was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_SHORT})
-        list(APPEND ${OUTPUT_VAR} EYA_SHORT_T_SIZE=${SIZEOF_SHORT})
+        list(APPEND ${OUTPUT_VAR} EYA_SHORT_SIZE=${SIZEOF_SHORT})
     endif ()
 
     # If the size of the intent was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_INT})
-        list(APPEND ${OUTPUT_VAR} EYA_INT_T_SIZE=${SIZEOF_INT})
+        list(APPEND ${OUTPUT_VAR} EYA_INT_SIZE=${SIZEOF_INT})
     endif ()
 
     # If the size of the LONG type was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_LONG})
-        list(APPEND ${OUTPUT_VAR} EYA_LONG_T_SIZE=${SIZEOF_LONG})
+        list(APPEND ${OUTPUT_VAR} EYA_LONG_SIZE=${SIZEOF_LONG})
     endif ()
 
     # If the size of the Long Long type was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_LLONG})
-        list(APPEND ${OUTPUT_VAR} EYA_LLONG_T_SIZE=${SIZEOF_LLONG})
+        list(APPEND ${OUTPUT_VAR} EYA_LLONG_SIZE=${SIZEOF_LLONG})
     endif ()
 
     # If the size of the __int128 type was determined,
     # add the definition for its size to the compilation list
     if (${HAVE_SIZEOF_INT128})
-        list(APPEND ${OUTPUT_VAR} EYA_INT128_T_SIZE=${SIZEOF_INT128})
+        list(APPEND ${OUTPUT_VAR} EYA_INT128_SIZE=${SIZEOF_INT128})
     endif ()
 
     # Update the variable in parent scope
