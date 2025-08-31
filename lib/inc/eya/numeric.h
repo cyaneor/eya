@@ -12,9 +12,9 @@
  */
 
 #ifndef EYA_NUMERIC_H
-#    define EYA_NUMERIC_H
+#define EYA_NUMERIC_H
 
-#    include "numeric_types.h"  ///< Type definitions for signed/unsigned integers
-#    include "numeric_limits.h" ///< Size and limit macros for numeric types
+#include "numeric_types.h"  ///< Type definitions for signed/unsigned integers
+#include "numeric_limits.h" ///< Size and limit macros for numeric types
 
 #endif // EYA_NUMERIC_H
