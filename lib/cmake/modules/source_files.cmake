@@ -21,9 +21,6 @@ list(APPEND EYA_TARGET_SOURCE_FILES
         ${EYA_LIB_SOURCE_DIR}/eya/numeric_fixed_types.c
         ${EYA_LIB_SOURCE_DIR}/eya/numeric_fixed_limits.c
 
-        # Date
-        ${EYA_LIB_SOURCE_DIR}/eya/date_year.c
-
         # Error
         ${EYA_LIB_SOURCE_DIR}/eya/error.c
 
