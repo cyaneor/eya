@@ -196,12 +196,16 @@
 #define eya_interval_closed_add(T, self, val, min, max, overflow)                                  \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs = self - min;                                                                    \
-        T sum_abs = cur_abs + val;                                                                 \
-        T range   = max - min + 1;                                                                 \
-        T new_abs = sum_abs % range;                                                               \
-        overflow  = sum_abs / range;                                                               \
-        self      = (new_abs < 0) ? (new_abs + range + min) : (new_abs + min);                     \
+        T range    = (max) - (min) + 1;                                                            \
+        T sum      = (self) - (min) + (val);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
+        {                                                                                          \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
+        }                                                                                          \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
@@ -217,12 +221,16 @@
 #define eya_interval_ropen_add(T, self, val, min, max, overflow)                                   \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs = self - min;                                                                    \
-        T sum_abs = cur_abs + val;                                                                 \
-        T range   = max - min;                                                                     \
-        T new_abs = sum_abs % range;                                                               \
-        overflow  = sum_abs / range;                                                               \
-        self      = (new_abs < 0) ? (new_abs + range + min) : (new_abs + min);                     \
+        T range    = (max) - (min);                                                                \
+        T sum      = (self) - (min) + (val);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
+        {                                                                                          \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
+        }                                                                                          \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
@@ -238,12 +246,16 @@
 #define eya_interval_lopen_add(T, self, val, min, max, overflow)                                   \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs = self - min;                                                                    \
-        T sum_abs = cur_abs + val;                                                                 \
-        T range   = max - min;                                                                     \
-        T new_abs = sum_abs % range;                                                               \
-        overflow  = sum_abs / range;                                                               \
-        self      = (new_abs <= 0) ? (new_abs + range + min) : (new_abs + min);                    \
+        T range    = (max) - (min);                                                                \
+        T sum      = (self) - (min) + (val);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem <= 0)                                                                              \
+        {                                                                                          \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
+        }                                                                                          \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
@@ -259,17 +271,16 @@
 #define eya_interval_open_add(T, self, val, min, max, overflow)                                    \
     do                                                                                             \
     {                                                                                              \
-        T range     = (max) - (min)-1;                                                             \
-        T cur_abs   = (self) - (min)-1;                                                            \
-        T total_abs = (T)(cur_abs + (val));                                                        \
-        T new_abs   = total_abs % range;                                                           \
-        overflow    = total_abs / range;                                                           \
-        if (new_abs < 0)                                                                           \
+        T range    = (max) - (min)-1;                                                              \
+        T sum      = (self) - (min)-1 + (val);                                                     \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
         {                                                                                          \
-            new_abs += range;                                                                      \
-            overflow -= 1;                                                                         \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        (self) = new_abs + (min) + 1;                                                              \
+        (self) = rem + (min) + 1;                                                                  \
     } while (0)
 
 /**
@@ -285,24 +296,16 @@
 #define eya_interval_closed_sub(T, self, val, min, max, overflow)                                  \
     do                                                                                             \
     {                                                                                              \
-        T range        = max - min + 1;                                                            \
-        T total_change = val;                                                                      \
-        T current_pos  = self - min;                                                               \
-        T new_pos      = current_pos - total_change;                                               \
-        overflow       = 0;                                                                        \
-                                                                                                   \
-        if (new_pos < 0)                                                                           \
+        T range    = (max) - (min) + 1;                                                            \
+        T sum      = (self) - (min) - (val);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
         {                                                                                          \
-            overflow = (-new_pos - 1) / range + 1;                                                 \
-            new_pos  = range - (-new_pos - 1) % range - 1;                                         \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = new_pos / range;                                                            \
-            new_pos  = new_pos % range;                                                            \
-        }                                                                                          \
-                                                                                                   \
-        self = new_pos + min;                                                                      \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
@@ -318,24 +321,16 @@
 #define eya_interval_ropen_sub(T, self, val, min, max, overflow)                                   \
     do                                                                                             \
     {                                                                                              \
-        T range        = max - min;                                                                \
-        T total_change = val;                                                                      \
-        T current_pos  = self - min;                                                               \
-        T new_pos      = current_pos - total_change;                                               \
-        overflow       = 0;                                                                        \
-                                                                                                   \
-        if (new_pos < 0)                                                                           \
+        T range    = (max) - (min);                                                                \
+        T sum      = (self) - (min) - (val);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
         {                                                                                          \
-            overflow = (-new_pos - 1) / range + 1;                                                 \
-            new_pos  = range - (-new_pos - 1) % range - 1;                                         \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = new_pos / range;                                                            \
-            new_pos  = new_pos % range;                                                            \
-        }                                                                                          \
-                                                                                                   \
-        self = new_pos + min;                                                                      \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
@@ -351,24 +346,16 @@
 #define eya_interval_lopen_sub(T, self, val, min, max, overflow)                                   \
     do                                                                                             \
     {                                                                                              \
-        T range        = max - min;                                                                \
-        T total_change = val;                                                                      \
-        T current_pos  = self - min - 1;                                                           \
-        T new_pos      = current_pos - total_change;                                               \
-        overflow       = 0;                                                                        \
-                                                                                                   \
-        if (new_pos < 0)                                                                           \
+        T range    = (max) - (min);                                                                \
+        T sum      = (self) - (min)-1 - (val);                                                     \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem <= 0)                                                                              \
         {                                                                                          \
-            overflow = (-new_pos - 1) / range + 1;                                                 \
-            new_pos  = range - (-new_pos - 1) % range - 1;                                         \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = new_pos / range;                                                            \
-            new_pos  = new_pos % range;                                                            \
-        }                                                                                          \
-                                                                                                   \
-        self = new_pos + min + 1;                                                                  \
+        (self) = rem + (min) + 1;                                                                  \
     } while (0)
 
 /**
@@ -384,25 +371,16 @@
 #define eya_interval_open_sub(T, self, val, min, max, overflow)                                    \
     do                                                                                             \
     {                                                                                              \
-        T range     = max - min - 1;                                                               \
-        T cur_pos   = self - min;                                                                  \
-        T total_sub = cur_pos - val;                                                               \
-        overflow    = (total_sub < 0) ? (total_sub - range + 1) / range : 0;                       \
-        if (overflow < 0)                                                                          \
+        T range    = (max) - (min)-1;                                                              \
+        T sum      = (self) - (min)-1 - (val);                                                     \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
         {                                                                                          \
-            total_sub -= overflow * range;                                                         \
-            overflow = -overflow;                                                                  \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = 0;                                                                          \
-        }                                                                                          \
-        T new_pos = total_sub % range;                                                             \
-        if (new_pos < 0)                                                                           \
-        {                                                                                          \
-            new_pos += range;                                                                      \
-        }                                                                                          \
-        self = new_pos + min;                                                                      \
+        (self) = rem + (min) + 1;                                                                  \
     } while (0)
 
 /**
@@ -418,24 +396,16 @@
 #define eya_interval_closed_mul(T, self, val, min, max, overflow)                                  \
     do                                                                                             \
     {                                                                                              \
-        T result = self * val;                                                                     \
-        T range  = max - min + 1;                                                                  \
-                                                                                                   \
-        if (result >= min && result <= max)                                                        \
+        T range    = (max) - (min) + 1;                                                            \
+        T sum      = (self) * (val) - (min);                                                       \
+        (overflow) = sum / range;                                                                  \
+        T rem      = sum % range;                                                                  \
+        if (rem < 0)                                                                               \
         {                                                                                          \
-            self     = result;                                                                     \
-            overflow = 0;                                                                          \
+            rem += range;                                                                          \
+            ++(overflow);                                                                          \
         }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            T normalized = (result - min) % range;                                                 \
-            if (normalized < 0)                                                                    \
-                normalized += range;                                                               \
-            self     = normalized + min;                                                           \
-            overflow = (result - min) / range;                                                     \
-            if (result < min)                                                                      \
-                overflow--;                                                                        \
-        }                                                                                          \
+        (self) = rem + (min);                                                                      \
     } while (0)
 
 /**
