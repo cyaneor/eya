@@ -61,6 +61,9 @@ IndentWidth: 4
 # Does not pack constructor initializers onto a single line.
 PackConstructorInitializers: Never
 
+# Always inserts braces around single-line control statements (if, for, while).
+InsertBraces: true
+
 # Allows auto-formatting of long comments to match the line width.
 ReflowComments: true
 
