@@ -27,8 +27,8 @@
 /**
  * @def EYA_DATE_YEAR_MAX
  * @brief Maximum valid value for a year (maximum unsigned short value)
- * @details Represents the largest valid year value that can be represented
- *          by the eya_date_year_t type.
+ * @details Represents the largest valid year value
+ *          that can be represented by the eya_date_year_t type.
  */
 #    define EYA_DATE_YEAR_MAX EYA_USHORT_MAX
 #endif // EYA_DATE_YEAR_MAX
