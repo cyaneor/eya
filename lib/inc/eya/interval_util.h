@@ -19,6 +19,8 @@
 #ifndef EYA_INTERVAL_UTIL_H
 #define EYA_INTERVAL_UTIL_H
 
+#include "numeric_clamp.h"
+
 /**
  * @def eya_interval_closed_is_valid
  * @brief Checks if a closed interval is valid.
@@ -79,7 +81,7 @@
  *         and `false` otherwise.
  */
 #define eya_interval_closed_contains_value(lower, upper, value)                                    \
-    ((value) >= (lower) && (value) <= (upper))
+    (eya_interval_closed_is_valid(lower, value) && eya_interval_closed_is_valid(value, upper))
 
 /**
  * @def eya_interval_lopen_contains_value
@@ -93,7 +95,7 @@
  *         and `false` otherwise.
  */
 #define eya_interval_lopen_contains_value(lower, upper, value)                                     \
-    ((value) > (lower) && (value) <= (upper))
+    (eya_interval_lopen_is_valid(lower, value) && eya_interval_closed_is_valid(value, upper))
 
 /**
  * @def eya_interval_ropen_contains_value
@@ -107,7 +109,7 @@
  *         and `false` otherwise.
  */
 #define eya_interval_ropen_contains_value(lower, upper, value)                                     \
-    ((value) >= (lower) && (value) < (upper))
+    (eya_interval_closed_is_valid(lower, value) && eya_interval_ropen_is_valid(value, upper))
 
 /**
  * @def eya_interval_open_contains_value
@@ -121,7 +123,7 @@
  *         and `false` otherwise.
  */
 #define eya_interval_open_contains_value(lower, upper, value)                                      \
-    ((value) > (lower) && (value) < (upper))
+    (eya_interval_open_is_valid(lower, value) && eya_interval_open_is_valid(value, upper))
 
 /**
  * @def eya_interval_closed_contains_range
@@ -136,7 +138,8 @@
  *         within [r1_lower, r1_upper], and `false` otherwise.
  */
 #define eya_interval_closed_contains_range(r1_lower, r1_upper, r2_lower, r2_upper)                 \
-    ((r1_lower) <= (r2_lower) && (r2_upper) <= (r1_upper))
+    (eya_interval_closed_is_valid(r1_lower, r2_lower) &&                                           \
+     eya_interval_closed_is_valid(r2_upper, r1_upper))
 
 /**
  * @def eya_interval_lopen_contains_range
@@ -151,7 +154,8 @@
  *         within (r1_lower, r1_upper], and `false` otherwise.
  */
 #define eya_interval_lopen_contains_range(r1_lower, r1_upper, r2_lower, r2_upper)                  \
-    ((r1_lower) < (r2_lower) && (r2_upper) <= (r1_upper))
+    (eya_interval_lopen_is_valid(r1_lower, r2_lower) &&                                            \
+     eya_interval_closed_is_valid(r2_upper, r1_upper))
 
 /**
  * @def eya_interval_ropen_contains_range
@@ -166,7 +170,8 @@
  *         within [r1_lower, r1_upper), and `false` otherwise.
  */
 #define eya_interval_ropen_contains_range(r1_lower, r1_upper, r2_lower, r2_upper)                  \
-    ((r1_lower) <= (r2_lower) && (r2_upper) < (r1_upper))
+    (eya_interval_closed_is_valid(r1_lower, r2_lower) &&                                           \
+     eya_interval_ropen_is_valid(r2_upper, r1_upper))
 
 /**
  * @def eya_interval_open_contains_range
@@ -181,409 +186,311 @@
  *         within (r1_lower, r1_upper), and `false` otherwise.
  */
 #define eya_interval_open_contains_range(r1_lower, r1_upper, r2_lower, r2_upper)                   \
-    ((r1_lower) < (r2_lower) && (r2_upper) < (r1_upper))
+    (eya_interval_open_is_valid(r1_lower, r2_lower) &&                                             \
+     eya_interval_open_is_valid(r2_upper, r1_upper))
 
 /**
- * @def eya_interval_closed_add(T, self, val, min, max, overflow)
- * @brief Adds a value to a variable within a closed interval [min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to add
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_closed_add
+ * @brief Adds a value to a variable
+ *        and clamps the result to a closed interval [min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to add to @p a.
+ * @param min      Lower bound of the closed interval.
+ * @param max      Upper bound of the closed interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_closed_add(T, self, val, min, max, overflow)                                  \
+#define eya_interval_closed_add(T, a, b, min, max, overflow)                                       \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min) + 1;                                                            \
-        T sum      = (self) - (min) + (val);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) += (b);                                                                                \
+        eya_numeric_clamp_closed(T, a, min, max, overflow);                                        \
     } while (0)
 
 /**
- * @def eya_interval_ropen_add(T, self, val, min, max, overflow)
- * @brief Adds a value to a variable within a right-open interval [min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to add
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_ropen_add
+ * @brief Adds a value to a variable
+ *        and clamps the result to a right-open interval [min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to add to @p a.
+ * @param min      Lower bound of the right-open interval.
+ * @param max      Upper bound of the right-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_ropen_add(T, self, val, min, max, overflow)                                   \
+#define eya_interval_ropen_add(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min);                                                                \
-        T sum      = (self) - (min) + (val);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) += (b);                                                                                \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_lopen_add(T, self, val, min, max, overflow)
- * @brief Adds a value to a variable within a left-open interval (min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to add
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_lopen_add
+ * @brief Adds a value to a variable
+ *        and clamps the result to a left-open interval (min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to add to @p a.
+ * @param min      Lower bound of the left-open interval.
+ * @param max      Upper bound of the left-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_lopen_add(T, self, val, min, max, overflow)                                   \
+#define eya_interval_lopen_add(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min);                                                                \
-        T sum      = (self) - (min) + (val);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem <= 0)                                                                              \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) += (b);                                                                                \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_open_add(T, self, val, min, max, overflow)
- * @brief Adds a value to a variable within an open interval (min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to add
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_open_add
+ * @brief Adds a value to a variable
+ *        and clamps the result to an open interval (min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to add to @p a.
+ * @param min      Lower bound of the open interval.
+ * @param max      Upper bound of the open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_open_add(T, self, val, min, max, overflow)                                    \
+#define eya_interval_open_add(T, a, b, min, max, overflow)                                         \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min)-1;                                                              \
-        T sum      = (self) - (min)-1 + (val);                                                     \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min) + 1;                                                                  \
+        (a) += (b);                                                                                \
+        eya_numeric_clamp_open(T, a, min, max, overflow);                                          \
     } while (0)
 
 /**
- * @def eya_interval_closed_sub(T, self, val, min, max, overflow)
- * @brief Subtracts a value from a variable within a closed interval [min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to subtract
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_closed_sub
+ * @brief Subtracts a value from a variable
+ *        and clamps the result to a closed interval [min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to subtract from @p a.
+ * @param min      Lower bound of the closed interval.
+ * @param max      Upper bound of the closed interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_closed_sub(T, self, val, min, max, overflow)                                  \
+#define eya_interval_closed_sub(T, a, b, min, max, overflow)                                       \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min) + 1;                                                            \
-        T sum      = (self) - (min) - (val);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) -= (b);                                                                                \
+        eya_numeric_clamp_closed(T, a, min, max, overflow);                                        \
     } while (0)
 
 /**
- * @def eya_interval_ropen_sub(T, self, val, min, max, overflow)
- * @brief Subtracts a value from a variable within a right-open interval [min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to subtract
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_ropen_sub
+ * @brief Subtracts a value from a variable
+ *        and clamps the result to a right-open interval [min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to subtract from @p a.
+ * @param min      Lower bound of the right-open interval.
+ * @param max      Upper bound of the right-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_ropen_sub(T, self, val, min, max, overflow)                                   \
+#define eya_interval_ropen_sub(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min);                                                                \
-        T sum      = (self) - (min) - (val);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) -= (b);                                                                                \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_lopen_sub(T, self, val, min, max, overflow)
- * @brief Subtracts a value from a variable within a left-open interval (min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to subtract
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_lopen_sub
+ * @brief Subtracts a value from a variable
+ *        and clamps the result to a left-open interval (min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to subtract from @p a.
+ * @param min      Lower bound of the left-open interval.
+ * @param max      Upper bound of the left-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_lopen_sub(T, self, val, min, max, overflow)                                   \
+#define eya_interval_lopen_sub(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min);                                                                \
-        T sum      = (self) - (min)-1 - (val);                                                     \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem <= 0)                                                                              \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min) + 1;                                                                  \
+        (a) -= (b);                                                                                \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_open_sub(T, self, val, min, max, overflow)
- * @brief Subtracts a value from a variable within an open interval (min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to subtract
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_open_sub
+ * @brief Subtracts a value from a variable
+ *        and clamps the result to an open interval (min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to subtract from @p a.
+ * @param min      Lower bound of the open interval.
+ * @param max      Upper bound of the open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_open_sub(T, self, val, min, max, overflow)                                    \
+#define eya_interval_open_sub(T, a, b, min, max, overflow)                                         \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min)-1;                                                              \
-        T sum      = (self) - (min)-1 - (val);                                                     \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min) + 1;                                                                  \
+        (a) -= (b);                                                                                \
+        eya_numeric_clamp_open(T, a, min, max, overflow);                                          \
     } while (0)
 
 /**
- * @def eya_interval_closed_mul(T, self, val, min, max, overflow)
- * @brief Multiplies a variable by a value within a closed interval [min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to multiply by
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_closed_mul
+ * @brief Multiplies a variable by a value
+ *        and clamps the result to a closed interval [min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to multiply @p a by.
+ * @param min      Lower bound of the closed interval.
+ * @param max      Upper bound of the closed interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_closed_mul(T, self, val, min, max, overflow)                                  \
+#define eya_interval_closed_mul(T, a, b, min, max, overflow)                                       \
     do                                                                                             \
     {                                                                                              \
-        T range    = (max) - (min) + 1;                                                            \
-        T sum      = (self) * (val) - (min);                                                       \
-        (overflow) = sum / range;                                                                  \
-        T rem      = sum % range;                                                                  \
-        if (rem < 0)                                                                               \
-        {                                                                                          \
-            rem += range;                                                                          \
-            ++(overflow);                                                                          \
-        }                                                                                          \
-        (self) = rem + (min);                                                                      \
+        (a) *= (b);                                                                                \
+        eya_numeric_clamp_closed(T, a, min, max, overflow);                                        \
     } while (0)
 
 /**
- * @def eya_interval_ropen_mul(T, self, val, min, max, overflow)
- * @brief Multiplies a variable by a value within a right-open interval [min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to multiply by
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_ropen_mul
+ * @brief Multiplies a variable by a value
+ *        and clamps the result to a right-open interval [min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to multiply @p a by.
+ * @param min      Lower bound of the right-open interval.
+ * @param max      Upper bound of the right-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_ropen_mul(T, self, val, min, max, overflow)                                   \
+#define eya_interval_ropen_mul(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T result = self * val;                                                                     \
-        T range  = max - min;                                                                      \
-        T offset = result - min;                                                                   \
-                                                                                                   \
-        if (offset >= 0)                                                                           \
-        {                                                                                          \
-            overflow = offset / range;                                                             \
-            offset   = offset % range;                                                             \
-        }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = (offset - range + 1) / range;                                               \
-            offset   = offset % range;                                                             \
-            if (offset < 0)                                                                        \
-                offset += range;                                                                   \
-        }                                                                                          \
-                                                                                                   \
-        self = offset + min;                                                                       \
+        (a) *= (b);                                                                                \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_lopen_mul(T, self, val, min, max, overflow)
- * @brief Multiplies a variable by a value within a left-open interval (min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to multiply by
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_lopen_mul
+ * @brief Multiplies a variable by a value
+ *        and clamps the result to a left-open interval (min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to multiply @p a by.
+ * @param min      Lower bound of the left-open interval.
+ * @param max      Upper bound of the left-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_lopen_mul(T, self, val, min, max, overflow)                                   \
+#define eya_interval_lopen_mul(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T prod  = self * val;                                                                      \
-        T range = max - min;                                                                       \
-        if (prod > max || prod <= min)                                                             \
-        {                                                                                          \
-            T prod_abs = prod - min;                                                               \
-            T new_abs  = prod_abs % range;                                                         \
-            overflow   = prod_abs / range;                                                         \
-            self       = (new_abs <= 0) ? (new_abs + range + min) : (new_abs + min);               \
-        }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = 0;                                                                          \
-            self     = prod;                                                                       \
-        }                                                                                          \
+        (a) *= (b);                                                                                \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_open_mul(T, self, val, min, max, overflow)
- * @brief Multiplies a variable by a value within an open interval (min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to multiply by
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_open_mul
+ * @brief Multiplies a variable by a value
+ *        and clamps the result to an open interval (min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to multiply @p a by.
+ * @param min      Lower bound of the open interval.
+ * @param max      Upper bound of the open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_open_mul(T, self, val, min, max, overflow)                                    \
+#define eya_interval_open_mul(T, a, b, min, max, overflow)                                         \
     do                                                                                             \
     {                                                                                              \
-        T prod  = self * val;                                                                      \
-        T range = max - min - 1;                                                                   \
-        if (prod <= min)                                                                           \
-        {                                                                                          \
-            overflow = (min - prod + range - 1) / range;                                           \
-            self     = prod + range * overflow;                                                    \
-        }                                                                                          \
-        else if (prod >= max)                                                                      \
-        {                                                                                          \
-            overflow = (prod - max + range - 1) / range;                                           \
-            self     = prod - range * overflow;                                                    \
-        }                                                                                          \
-        else                                                                                       \
-        {                                                                                          \
-            overflow = 0;                                                                          \
-            self     = prod;                                                                       \
-        }                                                                                          \
+        (a) *= (b);                                                                                \
+        eya_numeric_clamp_open(T, a, min, max, overflow);                                          \
     } while (0)
 
 /**
- * @def eya_interval_closed_div(T, self, val, min, max, overflow)
- * @brief Divides a variable by a value within a closed interval [min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to divide by
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_closed_div
+ * @brief Divides a variable by a value
+ *        and clamps the result to a closed interval [min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to divide @p a by.
+ * @param min      Lower bound of the closed interval.
+ * @param max      Upper bound of the closed interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_closed_div(T, self, val, min, max, overflow)                                  \
+#define eya_interval_closed_div(T, a, b, min, max, overflow)                                       \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs  = self - min;                                                                   \
-        T quot_abs = (val != 0) ? cur_abs / val : cur_abs;                                         \
-        T range    = max - min + 1;                                                                \
-        T new_abs  = quot_abs % range;                                                             \
-        overflow   = quot_abs / range;                                                             \
-        self       = (new_abs < 0) ? (new_abs + range + min) : (new_abs + min);                    \
+        (a) /= (b);                                                                                \
+        eya_numeric_clamp_closed(T, a, min, max, overflow);                                        \
     } while (0)
 
 /**
- * @def eya_interval_ropen_div(T, self, val, min, max, overflow)
- * @brief Divides a variable by a value within a right-open interval [min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to divide by
- * @param min Minimum value of the interval
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_ropen_div
+ * @brief Divides a variable by a value
+ *        and clamps the result to a right-open interval [min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to divide @p a by.
+ * @param min      Lower bound of the right-open interval.
+ * @param max      Upper bound of the right-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_ropen_div(T, self, val, min, max, overflow)                                   \
+#define eya_interval_ropen_div(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs  = self - min;                                                                   \
-        T quot_abs = (val != 0) ? cur_abs / val : cur_abs;                                         \
-        T range    = max - min;                                                                    \
-        T new_abs  = quot_abs % range;                                                             \
-        overflow   = quot_abs / range;                                                             \
-        self       = (new_abs < 0) ? (new_abs + range + min) : (new_abs + min);                    \
+        (a) /= (b);                                                                                \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_lopen_div(T, self, val, min, max, overflow)
- * @brief Divides a variable by a value within a left-open interval (min, max].
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to divide by
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_lopen_div
+ * @brief Divides a variable by a value
+ *        and clamps the result to a left-open interval (min, max].
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to divide @p a by.
+ * @param min      Lower bound of the left-open interval.
+ * @param max      Upper bound of the left-open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_lopen_div(T, self, val, min, max, overflow)                                   \
+#define eya_interval_lopen_div(T, a, b, min, max, overflow)                                        \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs  = self - min;                                                                   \
-        T quot_abs = (val != 0) ? cur_abs / val : cur_abs;                                         \
-        T range    = max - min;                                                                    \
-        T new_abs  = quot_abs % range;                                                             \
-        overflow   = quot_abs / range;                                                             \
-        self       = (new_abs <= 0) ? (new_abs + range + min) : (new_abs + min);                   \
+        (a) /= (b);                                                                                \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow);                                         \
     } while (0)
 
 /**
- * @def eya_interval_open_div(T, self, val, min, max, overflow)
- * @brief Divides a variable by a value within an open interval (min, max).
- * @param T Data type of the variable
- * @param self Variable to modify (passed by reference)
- * @param val Value to divide by
- * @param min Minimum value of the interval (exclusive)
- * @param max Maximum value of the interval (exclusive)
- * @param overflow Output parameter for overflow count
+ * @def eya_interval_open_div
+ * @brief Divides a variable by a value
+ *        and clamps the result to an open interval (min, max).
+ *
+ * @param T        Data type of the variable (used by clamping).
+ * @param a        Variable to modify (will be updated in place).
+ * @param b        Value to divide @p a by.
+ * @param min      Lower bound of the open interval.
+ * @param max      Upper bound of the open interval.
+ * @param overflow Output flag set if the result exceeded interval bounds.
  */
-#define eya_interval_open_div(T, self, val, min, max, overflow)                                    \
+#define eya_interval_open_div(T, a, b, min, max, overflow)                                         \
     do                                                                                             \
     {                                                                                              \
-        T cur_abs  = self - min;                                                                   \
-        T quot_abs = (val != 0) ? cur_abs / val : cur_abs;                                         \
-        T range    = max - min - 1;                                                                \
-        T new_abs  = quot_abs % range;                                                             \
-        overflow   = quot_abs / range;                                                             \
-        self       = (new_abs <= 0) ? (new_abs + range + min) : (new_abs + min);                   \
+        (a) /= (b);                                                                                \
+        eya_numeric_clamp_open(T, a, min, max, overflow);                                          \
     } while (0)
 
 #endif // EYA_INTERVAL_UTIL_H

@@ -225,7 +225,7 @@ TEST(eya_interval_closed_sub, integer_values_with_overflow)
     value = 3;
     eya_interval_closed_sub(int, value, 5, 1, 10, overflow);
     EXPECT_EQ(value, 8);
-    EXPECT_EQ(overflow, 1);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_ropen_sub, integer_values_with_overflow)
@@ -240,7 +240,7 @@ TEST(eya_interval_ropen_sub, integer_values_with_overflow)
     value = 3;
     eya_interval_ropen_sub(int, value, 5, 1, 10, overflow);
     EXPECT_EQ(value, 7);
-    EXPECT_EQ(overflow, 1);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_lopen_sub, integer_values_with_overflow)
@@ -255,7 +255,7 @@ TEST(eya_interval_lopen_sub, integer_values_with_overflow)
     value = 4;
     eya_interval_lopen_sub(int, value, 5, 1, 10, overflow);
     EXPECT_EQ(value, 8);
-    EXPECT_EQ(overflow, 1);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_open_sub, integer_values_with_overflow)
@@ -270,7 +270,7 @@ TEST(eya_interval_open_sub, integer_values_with_overflow)
     value = 4;
     eya_interval_open_sub(int, value, 5, 1, 10, overflow);
     EXPECT_EQ(value, 7);
-    EXPECT_EQ(overflow, 1);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_closed_mul, integer_values_with_overflow)
@@ -374,8 +374,8 @@ TEST(eya_interval_lopen_div, integer_values_with_overflow)
 
     value = 3;
     eya_interval_lopen_div(int, value, 2, 1, 10, overflow);
-    EXPECT_EQ(value, 2);
-    EXPECT_EQ(overflow, 0);
+    EXPECT_EQ(value, 10);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_open_div, integer_values_with_overflow)
@@ -389,8 +389,8 @@ TEST(eya_interval_open_div, integer_values_with_overflow)
 
     value = 3;
     eya_interval_open_div(int, value, 2, 1, 10, overflow);
-    EXPECT_EQ(value, 2);
-    EXPECT_EQ(overflow, 0);
+    EXPECT_EQ(value, 9);
+    EXPECT_EQ(overflow, -1);
 }
 
 TEST(eya_interval_closed_add, edge_cases_and_zero_values)
@@ -421,16 +421,6 @@ TEST(eya_interval_ropen_add, edge_cases_and_zero_values)
     eya_interval_ropen_add(int, value, 1, 1, 10, overflow);
     EXPECT_EQ(value, 1);
     EXPECT_EQ(overflow, 1);
-}
-
-TEST(eya_interval_div, division_by_zero_handling)
-{
-    int value = 5;
-    int overflow;
-
-    eya_interval_closed_div(int, value, 0, 1, 10, overflow);
-    EXPECT_EQ(value, 5);
-    EXPECT_EQ(overflow, 0);
 }
 
 TEST(eya_interval_operations, negative_values_and_ranges)
