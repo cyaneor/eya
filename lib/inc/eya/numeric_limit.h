@@ -68,6 +68,26 @@
 #define eya_numeric_limit_is_signed(T) eya_type_is_signed(T)
 
 /**
+ * @def eya_numeric_limit_is_unsigned(T)
+ * @brief Alias macro to check if a numeric type is unsigned.
+ *
+ * This macro provides an alternative name for `eya_type_is_unsigned(T)`,
+ * offering a more descriptive interface in contexts related
+ * to numeric limits and type traits.
+ *
+ * @param T The numeric type to check.
+ *          Must be a fundamental arithmetic type.
+ * @return int Boolean value:
+ *             1 if the type is unsigned, 0 if it is signed.
+ *
+ * @note This is simply an alias for `eya_type_is_unsigned(T)`
+ *       and inherits all of its behavior, requirements, and limitations.
+ * @warning The same caveats apply as for `eya_type_is_unsigned`.
+ *          Not suitable for floating-point types or non-arithmetic types.
+ */
+#define eya_numeric_limit_is_unsigned(T) eya_type_is_unsigned(T)
+
+/**
  * @def eya_numeric_limit_min
  * @brief Returns the minimum value for the numeric type `T`.
  *

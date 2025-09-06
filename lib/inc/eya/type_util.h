@@ -106,4 +106,32 @@
  */
 #define eya_type_is_signed(T) (eya_type_cast(T, 0) > eya_type_cast(T, -1))
 
+/**
+ * @def eya_type_is_unsigned(T)
+ * @brief Determines if a given type is unsigned.
+ *
+ * This macro is the logical inverse of `eya_type_is_signed(T)`.
+ * It evaluates to a boolean expression that checks whether
+ * the specified type `T` is unsigned (true) or signed (false).
+ *
+ * @param T The type to check. Must be a fundamental arithmetic type
+ *          (e.g., int, unsigned char, uint32_t).
+ *
+ * @return int Boolean value:
+ *             1 if the type is unsigned, 0 if it is signed.
+ *
+ * @note This is a convenience macro defined in terms of `eya_type_is_signed`.
+ * @warning The same caveats that apply to `eya_type_is_signed` apply here.
+ *          Do not use with floating-point types.
+ *
+ * Example usage:
+ * @code
+ * eya_type_is_unsigned(unsigned int) // Evaluates to 1 (true)
+ * eya_type_is_unsigned(int)          // Evaluates to 0 (false)
+ * @endcode
+ *
+ * @see eya_type_is_signed()
+ */
+#define eya_type_is_unsigned(T) (!eya_type_is_signed(T))
+
 #endif // EYA_TYPE_UTIL_H
