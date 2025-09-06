@@ -77,4 +77,33 @@
 #    define eya_type_cast(T, V) ((T)V) ///< C-style cast without type checks
 #endif
 
+/**
+ * @def eya_type_is_signed(T)
+ * @brief Determines if a given type is signed or unsigned
+ *
+ * This macro evaluates to a boolean expression that checks
+ * whether the specified type `T` is signed (true) or unsigned (false).
+ * It works by comparing the result of casting 0 and -1 to type `T`.
+ *
+ * @param T The type to check for signedness.
+ *          Must be a fundamental arithmetic type.
+ * @return int Boolean value: 1 if type is signed, 0 if unsigned.
+ *
+ * @note This macro relies on two's complement representation,
+ *       which is standard on most modern systems.
+ *       Behavior with non-arithmetic types is undefined.
+ *
+ * @warning Do not use with floating-point types as the behavior is undefined.
+ *
+ * Example usage:
+ * @code
+ * eya_type_is_signed(int)          // Evaluates to 1 (true)
+ * eya_type_is_signed(unsigned int) // Evaluates to 0 (false)
+ * eya_type_is_signed(char)         // Implementation-defined, depends if char is signed
+ * @endcode
+ *
+ * @see eya_type_cast()
+ */
+#define eya_type_is_signed(T) (eya_type_cast(T, 0) > eya_type_cast(T, -1))
+
 #endif // EYA_TYPE_UTIL_H

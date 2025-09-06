@@ -65,7 +65,7 @@
  * @param T The numeric type to check.
  * @return `true` if `T` is a signed type, `false` if `T` is an unsigned type.
  */
-#define eya_numeric_limit_is_signed(T) (eya_type_cast(T, 0) > eya_type_cast(T, -1))
+#define eya_numeric_limit_is_signed(T) eya_type_is_signed(T)
 
 /**
  * @def eya_numeric_limit_min
