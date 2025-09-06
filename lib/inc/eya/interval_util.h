@@ -300,7 +300,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) -= (b);                                                                                \
-        eya_numeric_clamp_ropen(T, a, min, max, overflow, 1);                                      \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow, 0);                                      \
     } while (0)
 
 /**
@@ -319,7 +319,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) -= (b);                                                                                \
-        eya_numeric_clamp_lopen(T, a, min, max, overflow, 1);                                      \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow, 0);                                      \
     } while (0)
 
 /**
@@ -338,7 +338,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) -= (b);                                                                                \
-        eya_numeric_clamp_open(T, a, min, max, overflow, 1);                                       \
+        eya_numeric_clamp_open(T, a, min, max, overflow, 0);                                       \
     } while (0)
 
 /**
@@ -433,7 +433,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) /= (b);                                                                                \
-        eya_numeric_clamp_closed(T, a, min, max, overflow, 1);                                     \
+        eya_numeric_clamp_closed(T, a, min, max, overflow, 0);                                     \
     } while (0)
 
 /**
@@ -452,7 +452,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) /= (b);                                                                                \
-        eya_numeric_clamp_ropen(T, a, min, max, overflow, 1);                                      \
+        eya_numeric_clamp_ropen(T, a, min, max, overflow, 0);                                      \
     } while (0)
 
 /**
@@ -471,7 +471,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) /= (b);                                                                                \
-        eya_numeric_clamp_lopen(T, a, min, max, overflow, 1);                                      \
+        eya_numeric_clamp_lopen(T, a, min, max, overflow, 0);                                      \
     } while (0)
 
 /**
@@ -490,7 +490,7 @@
     do                                                                                             \
     {                                                                                              \
         (a) /= (b);                                                                                \
-        eya_numeric_clamp_open(T, a, min, max, overflow, 1);                                       \
+        eya_numeric_clamp_open(T, a, min, max, overflow, 0);                                       \
     } while (0)
 
 #endif // EYA_INTERVAL_UTIL_H
