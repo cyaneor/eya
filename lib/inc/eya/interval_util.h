@@ -103,4 +103,41 @@
     (eya_interval_contains_value(interval_type, r1_lower, r2_lower, r1_upper) &&                   \
      eya_interval_contains_value(interval_type, r1_lower, r2_upper, r1_upper))
 
+/**
+ * @def eya_interval_size(interval_type, min, max)
+ * @brief Calculates the size (cardinality) of an interval.
+ *
+ * This macro calculates the number of discrete integer values
+ * contained within the specified interval type.
+ *
+ * For integer intervals, this represents
+ * the count of values between the bounds.
+ *
+ * @param interval_type The type of interval, one of:
+ *                      - EYA_INTERVAL_TYPE_CLOSED       : [min, max]
+ *                      - EYA_INTERVAL_TYPE_LEFT_OPEN    : (min, max]
+ *                      - EYA_INTERVAL_TYPE_RIGHT_OPEN   : [min, max)
+ *                      - EYA_INTERVAL_TYPE_OPEN         : (min, max)
+ * @param min The lower bound of the interval.
+ * @param max The upper bound of the interval.
+ *
+ * @return The number of integer values in the interval, or 0 if the interval is invalid.
+ *         Returns (max - min + 1) for closed intervals,
+ *         (max - min) for left-open and right-open intervals,
+ *         (max - min - 1) for open intervals.
+ *
+ * @note This macro is designed for integer intervals.
+ *       For floating-point intervals,
+ *       the concept of "size" may be different.
+ *
+ * @warning The result may be negative if max < min, indicating an invalid interval
+ * @warning Arguments are evaluated multiple times - avoid expressions with side effects
+ */
+#define eya_interval_size(interval_type, min, max)                                                 \
+    ((interval_type) == EYA_INTERVAL_TYPE_CLOSED       ? (max) - (min) + 1                         \
+     : (interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN  ? (max) - (min)                             \
+     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (max) - (min)                             \
+     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (max) - (min)-1                           \
+                                                       : 0)
+
 #endif // EYA_INTERVAL_UTIL_H
