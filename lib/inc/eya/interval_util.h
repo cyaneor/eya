@@ -79,11 +79,11 @@
                                                        : 0)
 
 /**
- * @def eya_interval_contains_range(interval_type, r1_lower, r1_upper, r2_lower, r2_upper)
+ * @def eya_interval_contains_range(interval_type, r1_min, r1_max, r2_min, r2_max)
  * @brief Checks if one interval is completely contained within another interval.
  *
- * This macro evaluates whether the interval `[r1_lower, r1_upper]` is fully
- * contained within the interval `[r2_lower, r2_upper]`, taking into account
+ * This macro evaluates whether the interval `[r1_min, r1_max]` is fully
+ * contained within the interval `[r2_min, r2_max]`, taking into account
  * the type of interval specified by `interval_type`.
  *
  * @param interval_type The type of interval, one of:
@@ -91,17 +91,75 @@
  *                      - EYA_INTERVAL_TYPE_LEFT_OPEN    : (min, max]
  *                      - EYA_INTERVAL_TYPE_RIGHT_OPEN   : [min, max)
  *                      - EYA_INTERVAL_TYPE_OPEN         : (min, max)
- * @param r1_lower The lower bound of the first interval (the one being checked for containment).
- * @param r1_upper The upper bound of the first interval.
- * @param r2_lower The lower bound of the second interval (the container interval).
- * @param r2_upper The upper bound of the second interval.
+ * @param r1_min The lower bound of the first interval (the one being checked for containment).
+ * @param r1_max The upper bound of the first interval.
+ * @param r2_min The lower bound of the second interval (the container interval).
+ * @param r2_max The upper bound of the second interval.
  *
- * @return Non-zero if `[r1_lower, r1_upper]` is completely contained in
- *         `[r2_lower, r2_upper]` according to `interval_type`, zero otherwise.
+ * @return Non-zero if `[r1_min, r1_max]` is completely contained in
+ *         `[r2_min, r2_max]` according to `interval_type`, zero otherwise.
  */
-#define eya_interval_contains_range(interval_type, r1_lower, r1_upper, r2_lower, r2_upper)         \
-    (eya_interval_contains_value(interval_type, r1_lower, r2_lower, r1_upper) &&                   \
-     eya_interval_contains_value(interval_type, r1_lower, r2_upper, r1_upper))
+#define eya_interval_contains_range(interval_type, r1_min, r1_max, r2_min, r2_max)                 \
+    (eya_interval_contains_value(interval_type, r1_min, r2_min, r1_max) &&                         \
+     eya_interval_contains_value(interval_type, r1_min, r2_max, r1_max))
+
+/**
+ * @def eya_interval_min(interval_type, min)
+ * @brief Calculates the inclusive minimum value of an interval based on its type.
+ *
+ * This macro determines the actual minimum value that belongs to the interval,
+ * adjusting for open/closed interval types.
+ *
+ * @param interval_type The type of interval from the EYA_INTERVAL_TYPE enumeration:
+ *        - EYA_INTERVAL_TYPE_CLOSED: [min, max] - both endpoints included
+ *        - EYA_INTERVAL_TYPE_LEFT_OPEN: (min, max] - left endpoint excluded
+ *        - EYA_INTERVAL_TYPE_RIGHT_OPEN: [min, max) - right endpoint excluded
+ *        - EYA_INTERVAL_TYPE_OPEN: (min, max) - both endpoints excluded
+ * @param min The original minimum value of the interval
+ *
+ * @return The inclusive minimum value that actually belongs to the interval:
+ *         - For CLOSED and RIGHT_OPEN: returns min
+ *         - For LEFT_OPEN and OPEN: returns min + 1 (excludes the original min)
+ *         - For unknown interval types: returns 0
+ *
+ * @note The returned value represents the smallest integer
+ *       that is actually contained within the interval.
+ */
+#define eya_interval_min(interval_type, min)                                                       \
+    ((interval_type) == EYA_INTERVAL_TYPE_CLOSED       ? (min)                                     \
+     : (interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN  ? (min) + 1                                 \
+     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (min)                                     \
+     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (min) + 1                                 \
+                                                       : 0)
+
+/**
+ * @def eya_interval_max(interval_type, max)
+ * @brief Calculates the inclusive maximum value of an interval based on its type.
+ *
+ * This macro determines the actual maximum value that belongs to the interval,
+ * adjusting for open/closed interval types.
+ *
+ * @param interval_type The type of interval from the EYA_INTERVAL_TYPE enumeration:
+ *        - EYA_INTERVAL_TYPE_CLOSED: [min, max] - both endpoints included
+ *        - EYA_INTERVAL_TYPE_LEFT_OPEN: (min, max] - left endpoint excluded
+ *        - EYA_INTERVAL_TYPE_RIGHT_OPEN: [min, max) - right endpoint excluded
+ *        - EYA_INTERVAL_TYPE_OPEN: (min, max) - both endpoints excluded
+ * @param max The original maximum value of the interval
+ *
+ * @return The inclusive maximum value that actually belongs to the interval:
+ *         - For CLOSED and LEFT_OPEN: returns max
+ *         - For RIGHT_OPEN and OPEN: returns max - 1 (excludes the original max)
+ *         - For unknown interval types: returns 0
+ *
+ * @note The returned value represents the largest integer
+ *       that is actually contained within the interval.
+ */
+#define eya_interval_max(interval_type, max)                                                       \
+    ((interval_type) == EYA_INTERVAL_TYPE_CLOSED       ? (max)                                     \
+     : (interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN  ? (max)                                     \
+     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (max)-1                                   \
+     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (max)-1                                   \
+                                                       : 0)
 
 /**
  * @def eya_interval_size(interval_type, min, max)
@@ -134,10 +192,6 @@
  * @warning Arguments are evaluated multiple times - avoid expressions with side effects
  */
 #define eya_interval_size(interval_type, min, max)                                                 \
-    ((interval_type) == EYA_INTERVAL_TYPE_CLOSED       ? (max) - (min) + 1                         \
-     : (interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN  ? (max) - (min)                             \
-     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (max) - (min)                             \
-     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (max) - (min)-1                           \
-                                                       : 0)
+    (eya_interval_max(interval_type, max) - eya_interval_min(interval_type, min) + 1)
 
 #endif // EYA_INTERVAL_UTIL_H

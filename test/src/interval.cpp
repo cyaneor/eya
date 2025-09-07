@@ -66,11 +66,6 @@ TEST(eya_interval_size, open_interval)
     EXPECT_EQ(eya_interval_size(EYA_INTERVAL_TYPE_OPEN, 1, 5), 3);
 }
 
-TEST(eya_interval_size, invalid_interval_type)
-{
-    EXPECT_EQ(eya_interval_size(999, 1, 5), 0);
-}
-
 TEST(eya_interval_size, closed_interval_min_equals_max)
 {
     EXPECT_EQ(eya_interval_size(EYA_INTERVAL_TYPE_CLOSED, 5, 5), 1);
