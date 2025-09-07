@@ -60,7 +60,6 @@ add_executable(${PROJECT_NAME}
         src/memory_raw.cpp
         src/memory_range.cpp
         src/memory_typed.cpp
-        src/numeric_clamp.cpp
         src/numeric_limits.cpp
         src/memory_allocator.cpp
         )
