@@ -145,7 +145,7 @@ eya_memory_range_contains_ptr(const eya_memory_range_t *self, const void *ptr)
 {
     void *begin, *end;
     eya_memory_range_unpack_v(self, &begin, &end);
-    return eya_interval_ropen_contains_value(begin, end, ptr);
+    return eya_interval_contains_value(EYA_INTERVAL_TYPE_RIGHT_OPEN, begin, ptr, end);
 }
 
 bool
@@ -153,7 +153,8 @@ eya_memory_range_contains_range(const eya_memory_range_t *self, const void *begi
 {
     void *self_begin, *self_end;
     eya_memory_range_unpack_v(self, &self_begin, &self_end);
-    return eya_interval_ropen_contains_range(self_begin, self_end, begin, end);
+    return eya_interval_contains_range(
+        EYA_INTERVAL_TYPE_RIGHT_OPEN, self_begin, self_end, begin, end);
 }
 
 bool
