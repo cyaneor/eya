@@ -163,13 +163,11 @@
 
 /**
  * @def eya_interval_size(interval_type, min, max)
- * @brief Calculates the size (cardinality) of an interval.
+ * @brief Calculates the mathematical size of an interval.
  *
- * This macro calculates the number of discrete integer values
- * contained within the specified interval type.
- *
- * For integer intervals, this represents
- * the count of values between the bounds.
+ * This macro calculates the difference between the inclusive maximum
+ * and minimum values of the interval, ignoring whether the bounds
+ * are open or closed for counting integers.
  *
  * @param interval_type The type of interval, one of:
  *                      - EYA_INTERVAL_TYPE_CLOSED       : [min, max]
@@ -179,19 +177,157 @@
  * @param min The lower bound of the interval.
  * @param max The upper bound of the interval.
  *
- * @return The number of integer values in the interval, or 0 if the interval is invalid.
- *         Returns (max - min + 1) for closed intervals,
- *         (max - min) for left-open and right-open intervals,
- *         (max - min - 1) for open intervals.
+ * @return The difference between the inclusive max and min values.
+ *         May be negative if max < min.
  *
- * @note This macro is designed for integer intervals.
- *       For floating-point intervals,
- *       the concept of "size" may be different.
- *
- * @warning The result may be negative if max < min, indicating an invalid interval
- * @warning Arguments are evaluated multiple times - avoid expressions with side effects
+ * @note For integer intervals, this is not the same as the number of elements.
+ * @warning Arguments are evaluated multiple times - avoid expressions with side effects.
  */
 #define eya_interval_size(interval_type, min, max)                                                 \
-    (eya_interval_max(interval_type, max) - eya_interval_min(interval_type, min) + 1)
+    (eya_interval_max(interval_type, max) - eya_interval_min(interval_type, min))
+
+/**
+ * @def eya_interval_cardinality(interval_type, min, max)
+ * @brief Calculates the number of discrete integer values in an interval.
+ *
+ * This macro calculates the count of integers contained within the
+ * specified interval type.
+ *
+ * @param interval_type The type of interval, one of:
+ *                      - EYA_INTERVAL_TYPE_CLOSED       : [min, max]
+ *                      - EYA_INTERVAL_TYPE_LEFT_OPEN    : (min, max]
+ *                      - EYA_INTERVAL_TYPE_RIGHT_OPEN   : [min, max)
+ *                      - EYA_INTERVAL_TYPE_OPEN         : (min, max)
+ * @param min The lower bound of the interval.
+ * @param max The upper bound of the interval.
+ *
+ * @return The number of integer values in the interval.
+ *         Returns 0 if the interval is invalid.
+ *
+ * @note This is equivalent to eya_interval_size(...) + 1.
+ * @warning Arguments are evaluated multiple times - avoid expressions with side effects.
+ */
+#define eya_interval_cardinality(interval_type, min, max)                                          \
+    (eya_interval_size(interval_type, min, max) + 1)
+
+/**
+ * @def eya_interval_wrap_around_to(T, interval_type, x, r, min, max, c)
+ * @brief Wraps a value around a specified interval and calculates the number of cycles.
+ *
+ * This macro takes a value `x` and maps it to the interval defined by `min`
+ * and `max` based on the specified `interval_type`.
+ *
+ * It computes the wrapped value (`r`)
+ * and the number of cycles (`c`) that the value wraps around the interval.
+ * The macro handles edge cases such as zero-range intervals and values outside the interval.
+ *
+ * @param T             The data type of the values (e.g., int, long).
+ * @param interval_type The type of interval (e.g., EYA_INTERVAL_TYPE_OPEN,
+ *                                                  EYA_INTERVAL_TYPE_CLOSED,
+ *                                                  EYA_INTERVAL_TYPE_LEFT_OPEN,
+ *                                                  EYA_INTERVAL_TYPE_RIGHT_OPEN).
+ * @param x            The input value to be wrapped.
+ * @param r            The output wrapped value within the interval [min, max].
+ * @param min          The lower bound of the interval.
+ * @param max          The upper bound of the interval.
+ * @param c            The output number of cycles (wraps) around the interval.
+ *
+ * @note The macro assumes the existence of helper functions `eya_interval_cardinality`
+ *       and `eya_interval_contains_value` to compute the interval's cardinality
+ *       and check if a value lies within the interval, respectively.
+ *
+ * @warning If the interval range (`max - min`) is zero,
+ *          the macro sets `c` to 0 and `r` to `min`.
+ *
+ * Example usage:
+ * ```c
+ * int result, cycles;
+ * eya_interval_wrap_around_to(int, EYA_INTERVAL_TYPE_CLOSED, 10, result, 0, 5, cycles);
+ * // If x = 10, min = 0, max = 5, interval_type = EYA_INTERVAL_TYPE_CLOSED,
+ * // then result = 0, cycles = 2 (since 10 wraps around [0,5] twice).
+ * ```
+ */
+#define eya_interval_wrap_around_to(T, interval_type, x, r, min, max, c)                           \
+    do                                                                                             \
+    {                                                                                              \
+        T _x   = (x);                                                                              \
+        T _min = (min);                                                                            \
+        T _max = (max);                                                                            \
+        T _rng = eya_interval_cardinality(interval_type, _min, _max);                              \
+                                                                                                   \
+        if (_rng == 0)                                                                             \
+        {                                                                                          \
+            (c) = 0;                                                                               \
+            (r) = _min;                                                                            \
+        }                                                                                          \
+        else if (eya_interval_contains_value(interval_type, _min, _x, _max))                       \
+        {                                                                                          \
+            (c) = 0;                                                                               \
+            (r) = _x;                                                                              \
+        }                                                                                          \
+        else                                                                                       \
+        {                                                                                          \
+            T _off     = _x - _min;                                                                \
+            T _cycles  = _off / _rng;                                                              \
+            T _wrapped = _off % _rng;                                                              \
+                                                                                                   \
+            if (_off < 0)                                                                          \
+            {                                                                                      \
+                _cycles  = (_off - _rng + 1) / _rng;                                               \
+                _wrapped = _off - _cycles * _rng;                                                  \
+            }                                                                                      \
+                                                                                                   \
+            _wrapped += _min;                                                                      \
+            if (_wrapped == _min && ((interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN ||             \
+                                     (interval_type) == EYA_INTERVAL_TYPE_OPEN))                   \
+            {                                                                                      \
+                _wrapped += _rng;                                                                  \
+                _cycles--;                                                                         \
+            }                                                                                      \
+                                                                                                   \
+            (c) = _cycles;                                                                         \
+            (r) = _wrapped;                                                                        \
+        }                                                                                          \
+    } while (0)
+
+/**
+ * @def eya_interval_wrap_around(T, interval_type, x, min, max, cycles)
+ * @brief Wraps a value around a specified interval and calculates the number of cycles.
+ *
+ * This macro is a simplified wrapper around `eya_interval_wrap_around_to`.
+ * It takes a value `x` and maps it to the interval defined by `min`
+ * and `max` based on the specified `interval_type`.
+ *
+ * The wrapped value is stored in `x`,
+ * and the number of cycles is stored in `cycles`.
+ *
+ * @param T             The data type of the values (e.g., int, long).
+ * @param interval_type The type of interval (e.g., EYA_INTERVAL_TYPE_OPEN,
+ *                                                  EYA_INTERVAL_TYPE_CLOSED,
+ *                                                  EYA_INTERVAL_TYPE_LEFT_OPEN,
+ *                                                  EYA_INTERVAL_TYPE_RIGHT_OPEN).
+ * @param x            The input value to be wrapped (also used to store the output wrapped value).
+ * @param min          The lower bound of the interval.
+ * @param max          The upper bound of the interval.
+ * @param cycles       The output number of cycles (wraps) around the interval.
+ *
+ * @note This macro relies on `eya_interval_wrap_around_to` for its implementation.
+ *       It assumes the existence of helper functions `eya_interval_cardinality`
+ *       and `eya_interval_contains_value` to compute the interval's cardinality
+ *       and check if a value lies within the interval, respectively.
+ *
+ * @warning If the interval range (`max - min`) is zero,
+ *          the macro sets `cycles` to 0 and `x` to `min`.
+ *
+ * Example usage:
+ * ```c
+ * int value = 10, cycles;
+ * eya_interval_wrap_around(int, EYA_INTERVAL_TYPE_CLOSED, value, 0, 5, cycles);
+ * // If value = 10, min = 0, max = 5, interval_type = EYA_INTERVAL_TYPE_CLOSED,
+ * // then value = 0, cycles = 2 (since 10 wraps around [0,5] twice).
+ * ```
+ */
+#define eya_interval_wrap_around(T, interval_type, x, min, max, cycles)                            \
+    eya_interval_wrap_around_to(T, interval_type, x, x, min, max, cycles)
 
 #endif // EYA_INTERVAL_UTIL_H
