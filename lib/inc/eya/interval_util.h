@@ -19,6 +19,8 @@
 #ifndef EYA_INTERVAL_UTIL_H
 #define EYA_INTERVAL_UTIL_H
 
+#include "bit_util.h"
+
 /**
  * @def EYA_INTERVAL_TYPE_CLOSED
  * @brief Represents a closed interval [lower, upper].
@@ -33,7 +35,7 @@
  *
  * The interval excludes the lower bound but includes the upper bound.
  */
-#define EYA_INTERVAL_TYPE_LEFT_OPEN 1
+#define EYA_INTERVAL_TYPE_LEFT_OPEN eya_bit_make(0)
 
 /**
  * @def EYA_INTERVAL_TYPE_LEFT_OPEN
@@ -41,7 +43,7 @@
  *
  * The interval excludes the lower bound but includes the upper bound.
  */
-#define EYA_INTERVAL_TYPE_RIGHT_OPEN 2
+#define EYA_INTERVAL_TYPE_RIGHT_OPEN eya_bit_make(1)
 
 /**
  * @def EYA_INTERVAL_TYPE_RIGHT_OPEN
@@ -49,7 +51,8 @@
  *
  * The interval includes the lower bound but excludes the upper bound.
  */
-#define EYA_INTERVAL_TYPE_OPEN 3
+#define EYA_INTERVAL_TYPE_OPEN                                                                     \
+    eya_bit_join(EYA_INTERVAL_TYPE_LEFT_OPEN, EYA_INTERVAL_TYPE_RIGHT_OPEN)
 
 /**
  * @def eya_interval_contains_value(interval_type, val, min, max)
@@ -157,8 +160,8 @@
 #define eya_interval_max(interval_type, max)                                                       \
     ((interval_type) == EYA_INTERVAL_TYPE_CLOSED       ? (max)                                     \
      : (interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN  ? (max)                                     \
-     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (max)-1                                   \
-     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (max)-1                                   \
+     : (interval_type) == EYA_INTERVAL_TYPE_RIGHT_OPEN ? (max) - 1                                 \
+     : (interval_type) == EYA_INTERVAL_TYPE_OPEN       ? (max) - 1                                 \
                                                        : 0)
 
 /**
@@ -278,8 +281,7 @@
             }                                                                                      \
                                                                                                    \
             _wrapped += _min;                                                                      \
-            if (_wrapped == _min && ((interval_type) == EYA_INTERVAL_TYPE_LEFT_OPEN ||             \
-                                     (interval_type) == EYA_INTERVAL_TYPE_OPEN))                   \
+            if (_wrapped == _min && eya_bit_and(interval_type, EYA_INTERVAL_TYPE_LEFT_OPEN))       \
             {                                                                                      \
                 _wrapped += _rng;                                                                  \
                 _cycles--;                                                                         \
