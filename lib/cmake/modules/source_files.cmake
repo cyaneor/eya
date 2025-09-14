@@ -36,5 +36,6 @@ list(APPEND EYA_TARGET_SOURCE_FILES
         ${EYA_LIB_SOURCE_DIR}/eya/memory_allocator.c
 
         # Other
+        ${EYA_LIB_SOURCE_DIR}/eya/eya.c
         ${EYA_LIB_SOURCE_DIR}/eya/version.c
         )

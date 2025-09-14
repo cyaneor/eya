@@ -1,98 +1,71 @@
 /**
  * @file version.h
- * @brief Header for library version handling.
+ * @brief Defines the version structure for the EYA library.
  *
- * Provides functions to retrieve library version information
- * including:
- *
- * - Full semantic version string (major.minor.patch)
- * - Individual version components (major, minor, patch)
- *
- * Used for version control and compatibility management.
+ * This file contains the definition of the eya_version_t structure,
+ * which is used to store version information for the EYA library,
+ * including major, minor, and patch version numbers.
  */
 
 #ifndef EYA_VERSION_H
 #define EYA_VERSION_H
 
 #include "attribute.h"
-#include "char.h"
-#include "return.h"
+#include "version_fields.h"
+#include "numeric_fixed_types.h"
+
+/**
+ * @struct eya_version
+ * @brief Structure to hold EYA library version information.
+ *
+ * This structure encapsulates the version information of the EYA library,
+ * with fields for major, minor, and patch version numbers.
+ */
+typedef struct eya_version
+{
+    eya_version_fields(eya_u16_t, eya_u8_t, eya_u8_t);
+} eya_version_t;
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 
 /**
- * @brief Retrieves full semantic version string "major.minor.patch"
+ * @brief Retrieves the major version number.
  *
- * Constructs the version string using eya_str_from_args macro,
- * combining major, minor and patch version components.
+ * This function returns the major version number from the provided eya_version_t
+ * structure. It performs a runtime check to ensure the provided pointer is valid.
  *
- * @return Const pointer to version string (e.g. "1.2.3")
- *
- * @note The string is statically allocated and must not be freed
- *
- * Usage example:
- * @code
- * const char *version = eya_version();
- * printf("Current version: %s\n", version); // Output: "1.2.3" (example)
- * @endcode
+ * @param self Pointer to the eya_version_t structure.
+ * @return The major version number as a 16-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-const eya_char_t *
-eya_version(void);
+eya_u16_t
+eya_version_major(const eya_version_t *self);
 
 /**
- * @brief Retrieves major version component
+ * @brief Retrieves the minor version number.
  *
- * Provides access to the major version number
- * defined via `EYA_VERSION_MAJOR`.
+ * This function returns the minor version number
+ * from the provided eya_version_t structure.
  *
- * @return Major version as `eya_return_t`
- *
- * Usage example:
- * @code
- * eya_return_t major = eya_version_major();
- * printf("Major version: %d\n", major); // Output: 1 (example)
- * @endcode
+ * @param self Pointer to the eya_version_t structure.
+ * @return The minor version number as an 8-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-eya_return_t
-eya_version_major(void);
+eya_u8_t
+eya_version_minor(const eya_version_t *self);
 
 /**
- * @brief Retrieves minor version component
+ * @brief Retrieves the patch version number.
  *
- * Provides access to the minor version number
- * defined via `EYA_VERSION_MINOR`.
+ * This function returns the patch version number
+ * from the provided eya_version_t structure.
  *
- * @return Minor version as `eya_return_t`
- *
- * Usage example:
- * @code
- * eya_return_t minor = eya_version_minor();
- * printf("Minor version: %d\n", minor); // Output: 2 (example)
- * @endcode
+ * @param self Pointer to the eya_version_t structure.
+ * @return The patch version number as an 8-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-eya_return_t
-eya_version_minor(void);
-
-/**
- * @brief Retrieves patch version component
- *
- * Provides access to the patch version number
- * defined via `EYA_VERSION_PATCH`.
- *
- * @return Patch version as eya_return_t
- *
- * Usage example:
- * @code
- * eya_return_t patch = eya_version_patch();
- * printf("Patch version: %d\n", patch); // Output: 3 (example)
- * @endcode
- */
-EYA_ATTRIBUTE(SYMBOL)
-eya_return_t
-eya_version_patch(void);
+eya_u8_t
+eya_version_patch(const eya_version_t *self);
 
 EYA_COMPILER(EXTERN_C_END)
 

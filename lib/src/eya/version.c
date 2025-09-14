@@ -1,26 +1,23 @@
 #include <eya/version.h>
-#include <eya/stringify.h>
+#include <eya/runtime_check_ref.h>
 
-const eya_char_t *
-eya_version(void)
+eya_u16_t
+eya_version_major(const eya_version_t *self)
 {
-    return eya_stringify_va(EYA_VERSION_MAJOR.EYA_VERSION_MINOR.EYA_VERSION_PATCH);
+    eya_runtime_check_ref(self);
+    return self->major;
 }
 
-eya_return_t
-eya_version_major(void)
+eya_u8_t
+eya_version_minor(const eya_version_t *self)
 {
-    return EYA_VERSION_MAJOR;
+    eya_runtime_check_ref(self);
+    return self->minor;
 }
 
-eya_return_t
-eya_version_minor(void)
+eya_u8_t
+eya_version_patch(const eya_version_t *self)
 {
-    return EYA_VERSION_MINOR;
-}
-
-eya_return_t
-eya_version_patch(void)
-{
-    return EYA_VERSION_PATCH;
+    eya_runtime_check_ref(self);
+    return self->patch;
 }
