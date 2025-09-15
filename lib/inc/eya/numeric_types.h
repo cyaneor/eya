@@ -71,20 +71,4 @@ typedef long eya_slong_t;
  */
 typedef long long eya_sllong_t;
 
-#ifdef EYA_INT128_SIZE
-
-/**
- * @typedef eya_sint128_t
- * @brief Alias for signed 128-bit integer
- */
-typedef __int128 eya_sint128_t;
-
-/**
- * @typedef eya_uint128_t
- * @brief Alias for unsigned 128-bit integer
- */
-typedef unsigned __int128 eya_uint128_t;
-
-#endif // EYA_INT128_SIZE
-
 #endif /* EYA_NUMERIC_TYPES_H */
