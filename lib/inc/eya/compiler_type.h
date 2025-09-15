@@ -94,7 +94,7 @@
  * that are compatible with GCC-like behavior.
  * @note Useful for shared optimizations or features common to GCC and Clang.
  */
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 #    define EYA_COMPILER_GCC_LIKE
 #endif
 

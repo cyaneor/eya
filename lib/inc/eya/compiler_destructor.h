@@ -20,7 +20,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
+#ifdef EYA_COMPILER_GCC_LIKE
 /**
  * @def eya_compiler_destructor(f)
  * @brief Destructor attribute for GCC/Clang compilers

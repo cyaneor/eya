@@ -29,7 +29,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
+#ifdef EYA_COMPILER_GCC_LIKE
 /**
  * @def EYA_COMPILER_ATTRIBUTE_SYMBOL_EXPORT
  * @brief Exports symbols in shared libraries for GCC/Clang
