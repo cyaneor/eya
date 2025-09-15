@@ -10,9 +10,9 @@
 #ifndef EYA_NUMERIC_LIMITS_H
 #define EYA_NUMERIC_LIMITS_H
 
+#include "config.h"
 #include "numeric_types.h"
 #include "numeric_limit.h"
-#include "numeric_limits_gen.h"
 
 /**
  * @def EYA_CHAR_T_SIZE

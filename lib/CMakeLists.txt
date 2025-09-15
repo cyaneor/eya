@@ -49,7 +49,7 @@ include(${EYA_CMAKE_EXTENSION_OPTIONS_DIR}/build_options.cmake) # Compiler setti
 
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_cmake_options.cmake)     # Option aggregation
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_compile_options.cmake)   # Flags parsing
-include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/numeric_limits.cmake)            # Numeric limits
+include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/generate_config.cmake)           # Platform config
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/parse_version.cmake)             # Version parsing
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/source_files.cmake)              # Source management
 
@@ -75,8 +75,8 @@ list(APPEND EYA_TARGET_PRIVATE_COMPILE_DEFINITIONS
         EYA_VERSION_MINOR=${EYA_VERSION_MINOR}
         EYA_VERSION_PATCH=${EYA_VERSION_PATCH})
 
-# Generation numeric sizes and limits
-generate_numeric_limits()
+# Generating a configuration for the target architecture
+generate_config()
 
 # Get all current compile options
 get_property(EYA_COMPILE_OPTIONS DIRECTORY PROPERTY VARIABLES)
