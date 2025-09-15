@@ -11,42 +11,36 @@
 
 #include "numeric_limit.h"
 
-#ifdef EYA_VOID_P_SIZE
 /**
  * @def EYA_PTR_SIZE
  * @brief Size identifier for pointer type
- * @details Uses platform-defined EYA_VOID_P_SIZE constant
  */
-#    define EYA_PTR_SIZE EYA_VOID_P_SIZE
+#ifndef EYA_PTR_T_SIZE
+#    define EYA_PTR_T_SIZE eya_type_size(eya_ptr_t)
+#endif /* EYA_VOID_P_SIZE */
 
 /**
  * @def EYA_PTR_MIN
  * @brief Minimum value for pointer type
  * @details Uses eya_numeric_limit_umin() function with eya_ptr_t type
  */
-#    define EYA_PTR_MIN eya_numeric_limit_umin(eya_ptr_t)
+#ifndef EYA_PTR_T_MIN
+#    define EYA_PTR_T_MIN eya_numeric_limit_umin(eya_ptr_t)
+#endif // EYA_PTR_T_MIN
 
 /**
  * @def EYA_PTR_MAX
  * @brief Maximum value for pointer type
  * @details Uses eya_numeric_limit_umax() function with eya_ptr_t type
  */
-#    define EYA_PTR_MAX eya_numeric_limit_umax(eya_ptr_t)
+#ifndef EYA_PTR_T_MAX
+#    define EYA_PTR_T_MAX eya_numeric_limit_umax(eya_ptr_t)
+#endif // EYA_PTR_T_MAX
 
 /**
  * @typedef eya_ptr_t
  * @brief Platform's native pointer type
- * @details Defined as void* when EYA_VOID_P_SIZE is available
  */
-#    define eya_ptr_t void *
-
-#else /* EYA_VOID_P_SIZE not defined */
-/**
- * @brief Compilation error for unsupported platforms
- * @details Generates error if platform doesn't define EYA_VOID_P_SIZE
- */
-#    error "Pointer size not defined for this platform (EYA_VOID_P_SIZE undefined)"
-
-#endif /* EYA_VOID_P_SIZE */
+#define eya_ptr_t void *
 
 #endif /* EYA_PTR_H */
