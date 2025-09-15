@@ -19,7 +19,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /** @brief Major version number for Clang compiler */
 #    define EYA_COMPILER_VERSION_MAJOR __clang_major__
 /** @brief Minor version number for Clang compiler */
@@ -27,7 +27,7 @@
 /** @brief Patch version number for Clang compiler */
 #    define EYA_COMPILER_VERSION_PATCH __clang_patchlevel__
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_GCC)
 /** @brief Major version number for GCC compiler */
 #    define EYA_COMPILER_VERSION_MAJOR __GNUC__
 /** @brief Minor version number for GCC compiler */
@@ -35,7 +35,7 @@
 /** @brief Patch version number for GCC compiler */
 #    define EYA_COMPILER_VERSION_PATCH __GNUC_PATCHLEVEL__
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /** @brief Major version number for MSVC (derived from _MSC_FULL_VER) */
 #    define EYA_COMPILER_VERSION_MAJOR (_MSC_FULL_VER / 10000000)
 /** @brief Minor version number for MSVC (derived from _MSC_FULL_VER) */

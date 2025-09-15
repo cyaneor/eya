@@ -24,7 +24,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_FORCE_INLINE
  * @brief Forces function inlining for GCC/Clang compilers
@@ -35,7 +35,7 @@
  */
 #    define EYA_COMPILER_ATTRIBUTE_FORCE_INLINE __attribute__((always_inline)) inline
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_FORCE_INLINE
  * @brief Forces function inlining for MSVC compiler

@@ -22,7 +22,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_NORETURN
  * @brief Marks non-returning functions for GCC/Clang
@@ -37,7 +37,7 @@
  */
 #    define EYA_COMPILER_ATTRIBUTE_NORETURN __attribute__((noreturn))
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_NORETURN
  * @brief Marks non-returning functions for MSVC

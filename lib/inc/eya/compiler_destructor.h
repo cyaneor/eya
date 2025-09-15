@@ -20,7 +20,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def eya_compiler_destructor(f)
  * @brief Destructor attribute for GCC/Clang compilers
@@ -29,7 +29,7 @@
  */
 #    define eya_compiler_destructor(f) __attribute__((destructor)) static void f(void)
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def eya_compiler_destructor(f)
  * @brief Destructor implementation for MSVC compiler

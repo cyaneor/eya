@@ -199,7 +199,7 @@
  */
 #define eya_bit_sign_type(T) eya_bit_shl(eya_type_cast(T, 1), eya_bit_sign_type_pos(T))
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def eya_bit_scan_forward64(index, mask)
  * @brief Finds first set bit in 64-bit mask (GCC/Clang)
@@ -231,7 +231,7 @@
  * @param mask 32-bit mask to scan
  */
 #    define eya_bit_scan_reverse32(index, mask) (*(index) = 31 - __builtin_clz(mask))
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def eya_bit_scan_forward64(index, mask)
  * @brief Finds first set bit in 64-bit mask (MSVC)

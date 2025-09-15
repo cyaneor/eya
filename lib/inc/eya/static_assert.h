@@ -43,7 +43,7 @@
  */
 #if (EYA_COMPILER_CXX == EYA_OPTION_ON)
 #    define eya_static_assert(expr, msg) static_assert(expr, msg)
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 #    define eya_static_assert(expr, msg) static_assert(expr, msg)
 #else
 #    define eya_static_assert(expr, msg) _Static_assert(expr, msg)

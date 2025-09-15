@@ -34,10 +34,10 @@
  * @param x Target specification string
  * @note Supported only in GCC/Clang toolchains
  */
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 #    define EYA_COMPILER_ATTRIBUTE_TARGET(x) __attribute__((target(x)))
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_TARGET(x)
  * @brief Empty target attribute for MSVC compiler

@@ -26,7 +26,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def eya_compiler_unreachable
  * @brief Unreachable code hint for GCC/Clang compilers
@@ -35,7 +35,7 @@
  */
 #    define eya_compiler_unreachable() __builtin_unreachable()
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def eya_compiler_unreachable
  * @brief Unreachable code directive for MSVC

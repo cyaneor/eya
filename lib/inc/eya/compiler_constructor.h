@@ -26,7 +26,7 @@
 
 #include "compiler_type.h"
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
  * @def eya_compiler_constructor(f)
  * @brief Constructor attribute for GCC/Clang compilers
@@ -35,7 +35,7 @@
  */
 #    define eya_compiler_constructor(f) __attribute__((constructor)) static void f(void)
 
-#elif (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_MSVC)
+#elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)
 /**
  * @def eya_compiler_constructor(f)
  * @brief Constructor implementation for MSVC compiler

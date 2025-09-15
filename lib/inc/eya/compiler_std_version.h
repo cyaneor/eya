@@ -48,7 +48,7 @@
  *          - Clang: 202311L
  *          - Other compilers: 202000L (provisional value)
  */
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_TYPE_CLANG)
+#if (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 #    define EYA_COMPILER_STD_VERSION_C23 202311L
 #else
 #    define EYA_COMPILER_STD_VERSION_C23 202000L
