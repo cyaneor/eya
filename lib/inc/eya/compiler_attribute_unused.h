@@ -21,7 +21,7 @@
 
 #include "compiler_type.h"
 
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_UNUSED
  * @brief Marks variables/functions as potentially unused for GCC/Clang

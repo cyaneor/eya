@@ -34,7 +34,7 @@
  * @param x Target specification string
  * @note Supported only in GCC/Clang toolchains
  */
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 #    define EYA_COMPILER_ATTRIBUTE_TARGET(x) __attribute__((target(x)))
 
 #elif (EYA_COMPILER_TYPE == EYA_COMPILER_MSVC)

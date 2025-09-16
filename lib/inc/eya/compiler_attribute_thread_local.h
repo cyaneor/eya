@@ -27,7 +27,7 @@
 
 #include "compiler_type.h"
 
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_THREAD_LOCAL
  * @brief Thread-local storage attribute for GCC/Clang

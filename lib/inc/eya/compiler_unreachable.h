@@ -26,7 +26,7 @@
 
 #include "compiler_type.h"
 
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 /**
  * @def eya_compiler_unreachable
  * @brief Unreachable code hint for GCC/Clang compilers

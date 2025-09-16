@@ -24,7 +24,7 @@
 
 #include "compiler_type.h"
 
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_FORCE_INLINE
  * @brief Forces function inlining for GCC/Clang compilers

@@ -22,7 +22,7 @@
 
 #include "compiler_type.h"
 
-#ifdef EYA_COMPILER_GCC_LIKE
+#if (EYA_COMPILER_GCC_LIKE)
 /**
  * @def EYA_COMPILER_ATTRIBUTE_NORETURN
  * @brief Marks non-returning functions for GCC/Clang

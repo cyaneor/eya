@@ -1,22 +1,22 @@
 /**
  * @file compiler_type.h
- * @brief Defines macros for compiler type identification.
+ * @brief Definition of macros for compiler type identification.
  *
- * This header contains macros to detect the compiler used for code compilation.
- * Using conditional compilation, it identifies compilers (e.g., GCC, MSVC, Clang)
- * and enables compiler-specific adaptations in the codebase.
+ * This header file contains macros for detecting the compiler used for code compilation.
+ * Using conditional compilation, it identifies compilers (GCC, MSVC, Clang)
+ * and provides the ability to adapt code for specific compilers.
  *
- * Defined macros assign unique identifiers to supported compilers:
+ * The defined macros assign unique identifiers to supported compilers:
  * - `EYA_COMPILER_GCC` for GNU Compiler Collection (GCC)
  * - `EYA_COMPILER_MSVC` for Microsoft Visual C++ (MSVC)
  * - `EYA_COMPILER_CLANG` for Clang compiler
  * - `EYA_COMPILER_UNKNOWN` for unrecognized compilers
  *
- * The `EYA_COMPILER_TYPE` macro is automatically set to match the detected compiler,
- * enabling cross-platform compatibility and build tool interoperability.
+ * The `EYA_COMPILER_TYPE` macro is automatically set according to the detected compiler,
+ * ensuring cross-platform compatibility and integration with build tools.
  *
- * @note Essential for environments requiring compiler-specific
- *       workarounds or configurations.
+ * @note Required in environments that need specific solutions
+ *       or configurations for particular compilers.
  */
 
 #ifndef EYA_COMPILER_TYPE_H
@@ -24,78 +24,118 @@
 
 /**
  * @def EYA_COMPILER_UNKNOWN
- * @brief Identifier for unrecognized compiler type
- *
- * Used when build system fails to detect a known compiler.
- * @note Required for conditional compilation based on compiler type.
+ * @brief Identifier for unknown compiler
  */
-#define EYA_COMPILER_UNKNOWN 0
+#ifndef EYA_COMPILER_UNKNOWN
+#    define EYA_COMPILER_UNKNOWN 0
+#endif // EYA_COMPILER_UNKNOWN
 
 /**
  * @def EYA_COMPILER_GCC
- * @brief Identifier for GNU Compiler Collection
- *
- * Used for GCC-specific code paths in conditional compilation.
- * @note Critical for cross-platform code with compiler-dependent behavior.
+ * @brief Identifier for GCC compiler
  */
-#define EYA_COMPILER_GCC 1
+#ifndef EYA_COMPILER_GCC
+#    define EYA_COMPILER_GCC 1
+#endif // EYA_COMPILER_GCC
 
 /**
  * @def EYA_COMPILER_MSVC
- * @brief Identifier for Microsoft Visual C++
- *
- * Used for MSVC-specific code paths in conditional compilation.
- * @note Essential for Windows platform development adaptations.
+ * @brief Identifier for Microsoft Visual C++ compiler
  */
-#define EYA_COMPILER_MSVC 2
+#ifndef EYA_COMPILER_MSVC
+#    define EYA_COMPILER_MSVC 2
+#endif // EYA_COMPILER_MSVC
 
 /**
  * @def EYA_COMPILER_CLANG
- * @brief Identifier for LLVM Clang compiler
- *
- * Used for Clang-specific code paths in conditional compilation.
- * @note Important for modern toolchain compatibility.
+ * @brief Identifier for Clang compiler
  */
-#define EYA_COMPILER_CLANG 3
+#ifndef EYA_COMPILER_CLANG
+#    define EYA_COMPILER_CLANG 3
+#endif // EYA_COMPILER_CLANG
 
 /**
  * @def EYA_COMPILER_TYPE
- * @brief Active compiler type identifier
+ * @brief Macro defining the current compiler type
  *
- * Detects compiler using vendor-specific predefined macros:
- * - Clang: __clang__
- * - MSVC: _MSC_VER
- * - GCC: __GNUC__
+ * Automatically detects and sets the compiler type based on predefined compiler macros.
+ * The detection follows this order:
+ * 1. Clang compiler (__clang__)
+ * 2. Microsoft Visual C++ (_MSC_VER)
+ * 3. GNU Compiler Collection (__GNUC__)
+ * 4. Unknown compiler (if none of the above are detected)
  *
- * @details Possible values:
- * - `EYA_COMPILER_CLANG`
- * - `EYA_COMPILER_MSVC`
- * - `EYA_COMPILER_GCC`
- * - `EYA_COMPILER_UNKNOWN`
+ * The macro is only defined if not already previously defined, allowing for manual override.
  *
- * @note Fundamental for cross-platform development requiring
- *       compiler-specific implementations.
+ * @note The detection logic follows the industry standard practice for compiler identification.
+ * @see EYA_COMPILER_CLANG
+ * @see EYA_COMPILER_MSVC
+ * @see EYA_COMPILER_GCC
+ * @see EYA_COMPILER_UNKNOWN
  */
+
 #if defined(__clang__)
-#    define EYA_COMPILER_TYPE EYA_COMPILER_CLANG
+/**
+ * @def EYA_COMPILER_TYPE
+ * @brief Sets compiler type to Clang
+ *
+ * Defined when the Clang compiler is detected via the __clang__ predefined macro.
+ * Clang defines this macro to indicate its identity.
+ */
+#    ifndef EYA_COMPILER_TYPE
+#        define EYA_COMPILER_TYPE EYA_COMPILER_CLANG
+#    endif // EYA_COMPILER_TYPE
+
 #elif defined(_MSC_VER)
-#    define EYA_COMPILER_TYPE EYA_COMPILER_MSVC
+/**
+ * @def EYA_COMPILER_TYPE
+ * @brief Sets compiler type to Microsoft Visual C++
+ *
+ * Defined when MSVC compiler is detected via the _MSC_VER predefined macro.
+ * _MSC_VER indicates the version of Microsoft Visual C++ compiler.
+ */
+#    ifndef EYA_COMPILER_TYPE
+#        define EYA_COMPILER_TYPE EYA_COMPILER_MSVC
+#    endif // EYA_COMPILER_TYPE
+
 #elif defined(__GNUC__)
-#    define EYA_COMPILER_TYPE EYA_COMPILER_GCC
+/**
+ * @def EYA_COMPILER_TYPE
+ * @brief Sets compiler type to GNU Compiler Collection
+ *
+ * Defined when GCC compiler is detected via the __GNUC__ predefined macro.
+ * __GNUC__ indicates the major version number of GCC.
+ */
+#    ifndef EYA_COMPILER_TYPE
+#        define EYA_COMPILER_TYPE EYA_COMPILER_GCC
+#    endif // EYA_COMPILER_TYPE
+
 #else
-#    define EYA_COMPILER_TYPE EYA_COMPILER_UNKNOWN
+/**
+ * @def EYA_COMPILER_TYPE
+ * @brief Sets compiler type to unknown
+ *
+ * Defined when none of the known compiler detection macros are present.
+ * This serves as a fallback for unrecognized or unsupported compilers.
+ */
+#    ifndef EYA_COMPILER_TYPE
+#        define EYA_COMPILER_TYPE EYA_COMPILER_UNKNOWN
+#    endif // EYA_COMPILER_TYPE
 #endif
 
 /**
  * @def EYA_COMPILER_GCC_LIKE
  * @brief Identifier for GCC-like compilers
  *
- * Defined when the compiler is either GCC or Clang, enabling code paths
- * that are compatible with GCC-like behavior.
- * @note Useful for shared optimizations or features common to GCC and Clang.
+ * Defined when the compiler is GCC or Clang, allowing the use of code paths
+ * compatible with GCC-like compiler behavior.
+ *
+ * @note Useful for common optimizations or features shared by GCC and Clang.
+ * @return true if compiler is GCC-like, otherwise false
  */
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
-#    define EYA_COMPILER_GCC_LIKE
-#endif
+#ifndef EYA_COMPILER_GCC_LIKE
+#    define EYA_COMPILER_GCC_LIKE                                                                  \
+        (EYA_COMPILER_TYPE == EYA_COMPILER_GCC) || (EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
+#endif // EYA_COMPILER_GCC_LIKE
 
 #endif // EYA_COMPILER_TYPE_H
