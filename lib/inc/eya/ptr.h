@@ -12,7 +12,7 @@
 #include "numeric_limit.h"
 
 /**
- * @def EYA_PTR_SIZE
+ * @def EYA_PTR_T_SIZE
  * @brief Size identifier for pointer type
  */
 #ifndef EYA_PTR_T_SIZE
@@ -20,7 +20,7 @@
 #endif /* EYA_VOID_P_SIZE */
 
 /**
- * @def EYA_PTR_MIN
+ * @def EYA_PTR_T_MIN
  * @brief Minimum value for pointer type
  * @details Uses eya_numeric_limit_umin() function with eya_ptr_t type
  */
@@ -29,7 +29,7 @@
 #endif // EYA_PTR_T_MIN
 
 /**
- * @def EYA_PTR_MAX
+ * @def EYA_PTR_T_MAX
  * @brief Maximum value for pointer type
  * @details Uses eya_numeric_limit_umax() function with eya_ptr_t type
  */
