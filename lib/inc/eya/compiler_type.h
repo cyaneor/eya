@@ -58,16 +58,18 @@
  * @def EYA_COMPILER_TYPE
  * @brief Macro defining the current compiler type
  *
- * Automatically detects and sets the compiler type based on predefined compiler macros.
+ * Automatically detects and sets the compiler type based
+ * on predefined compiler macros.
+ *
  * The detection follows this order:
  * 1. Clang compiler (__clang__)
  * 2. Microsoft Visual C++ (_MSC_VER)
  * 3. GNU Compiler Collection (__GNUC__)
  * 4. Unknown compiler (if none of the above are detected)
  *
- * The macro is only defined if not already previously defined, allowing for manual override.
+ * The macro is only defined if not already previously defined,
+ * allowing for manual override.
  *
- * @note The detection logic follows the industry standard practice for compiler identification.
  * @see EYA_COMPILER_CLANG
  * @see EYA_COMPILER_MSVC
  * @see EYA_COMPILER_GCC
