@@ -21,7 +21,7 @@
  * Each error code represents a specific problem
  * that can happen during execution.
  */
-typedef enum eya_runtime_error_code_t
+enum
 {
     /**
      * @var EYA_RUNTIME_ERROR_OK
@@ -170,7 +170,16 @@ typedef enum eya_runtime_error_code_t
      * has not been initialized before use.
      */
     EYA_RUNTIME_ERROR_DEALLOCATOR_FUNCTION_NOT_INITIALIZED
+};
 
-} eya_runtime_error_code_t;
+/**
+ * @typedef eya_runtime_error_code_t
+ * @brief Type alias for runtime error codes.
+ *
+ * This typedef defines `eya_runtime_error_code_t` as an alias for `eya_error_code_t`.
+ * It is used to represent runtime error codes throughout the application,
+ * providing a consistent type for error handling related to runtime operations.
+ */
+typedef eya_error_code_t eya_runtime_error_code_t;
 
 #endif // EYA_RUNTIME_ERROR_CODE_H
