@@ -1,3 +1,23 @@
+/**
+ * @file numeric_limit.h
+ * @brief Provides macros for determining the minimum and maximum values of numeric types.
+ *
+ * This header defines a set of macros for computing the minimum and maximum values
+ * of both signed and unsigned integer types, as well as checking whether a type
+ * is signed or unsigned. These macros rely on utilities defined in "bit_util.h"
+ * for type casting and sign bit manipulation.
+ *
+ * The macros are designed to be portable and work with fundamental integer types.
+ * They provide a consistent interface for querying numeric limits in a type-safe
+ * manner. Floating-point types and non-arithmetic types are not supported.
+ *
+ * @note All macros assume that the input type `T` is a fundamental integer type.
+ *       Behavior is undefined for non-integer or non-arithmetic types.
+ * @warning Users must include "bit_util.h" before using these macros, as they
+ *          depend on `eya_type_cast`, `eya_bit_sign_type`, `eya_type_is_signed`,
+ *          and `eya_type_is_unsigned` utilities.
+ */
+
 #ifndef EYA_NUMERIC_LIMIT_H
 #define EYA_NUMERIC_LIMIT_H
 
