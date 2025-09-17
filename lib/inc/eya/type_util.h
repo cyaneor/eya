@@ -18,7 +18,7 @@
 #ifndef EYA_TYPE_UTIL_H
 #define EYA_TYPE_UTIL_H
 
-#include "compiler.h"
+#include "static_cast.h"
 
 /**
  * @def eya_type_size(T)
@@ -48,34 +48,21 @@
 #define eya_type_bits(T) (eya_type_size(T) * 8)
 
 /**
- * @def eya_type_cast(T, V)
- * @brief Casts value V to type T
+ * @def eya_type_cast(T, v)
+ * @brief Alias for eya_static_cast to perform a static cast operation.
  *
- * @details Depending on the programming language, it uses:
- *          - In C: Standard C-style cast
- *          - In C++: Type-safe static_cast
+ * This macro is a shorthand for the @ref eya_static_cast macro,
+ * allowing a static cast from the given @p value to the type @p T.
+ * It supports both C and C++ compilation environments
+ * by delegating to @ref eya_static_cast.
  *
- * @param T Target type to cast to
- * @param V Value to be cast
+ * @param T The target type to cast to.
+ * @param v The value to cast.
  *
- * @return Result of casting V to type T
- *
- * @note In C++, using this macro is preferred over direct static_cast usage
- *       to maintain code compatibility with C if needed.
- * @warning In C, this macro doesn't provide compile-time type checking,
- *          unlike the C++ version.
- *
- * Example:
- * @code
- * int x = 10;
- * double y = eya_type_cast(double, x); // Cast int to double
- * @endcode
+ * @return The value cast to type @p T.
+ * @see eya_static_cast
  */
-#if (EYA_COMPILER_CXX == EYA_OPTION_ON)
-#    define eya_type_cast(T, V) static_cast<T>(V) ///< Type-safe C++ static_cast
-#else
-#    define eya_type_cast(T, V) ((T)V) ///< C-style cast without type checks
-#endif
+#define eya_type_cast(T, v) eya_static_cast(T, v)
 
 /**
  * @def eya_type_is_signed(T)
