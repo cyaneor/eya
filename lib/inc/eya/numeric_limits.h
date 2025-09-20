@@ -218,38 +218,4 @@
 #    define EYA_SLLONG_T_MAX eya_numeric_limit_max(eya_sllong_t)
 #endif // EYA_SLLONG_T_MAX
 
-#ifdef EYA_INT128_T_SIZE
-/**
- * @def EYA_UINT128_T_MIN
- * @brief Maximum value of the `eya_uint128_t` type.
- */
-#    ifndef EYA_UINT128_T_MIN
-#        define EYA_UINT128_T_MIN eya_numeric_limit_min(eya_uint128_t)
-#    endif // EYA_UINT128_T_MIN
-
-/**
- * @def EYA_UINT128_T_MAX
- * @brief Maximum value of the `eya_uint128_t` type.
- */
-#    ifndef EYA_UINT128_T_MAX
-#        define EYA_UINT128_T_MAX eya_numeric_limit_max(eya_uint128_t)
-#    endif // EYA_UINT128_T_MAX
-
-/**
- * @def EYA_SINT128_T_MIN
- * @brief Maximum value of the `eya_sint128_t` type.
- */
-#    ifndef EYA_SINT128_T_MIN
-#        define EYA_SINT128_T_MIN eya_numeric_limit_min(eya_sint128_t)
-#    endif // EYA_SINT128_T_MIN
-
-/**
- * @def EYA_SINT128_T_MAX
- * @brief Maximum value of the `eya_sint128_t` type.
- */
-#    ifndef EYA_SINT128_T_MAX
-#        define EYA_SINT128_T_MAX eya_numeric_limit_max(eya_sint128_t)
-#    endif // EYA_SINT128_T_MAX
-#endif     // EYA_INT128_T_SIZE
-
 #endif // EYA_NUMERIC_LIMITS_H
