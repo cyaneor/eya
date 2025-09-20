@@ -34,7 +34,6 @@
 #define EYA_PTR_UTIL_H
 
 #include "addr_util.h"
-#include "nullptr.h"
 
 /**
  * @def eya_ptr_cast(T, ptr)
@@ -83,7 +82,7 @@
  * @param ptr Pointer to check
  * @return true if pointer is nullptr, false otherwise
  */
-#define eya_ptr_is_null(ptr) ((ptr) == nullptr)
+#define eya_ptr_is_null(ptr) ((ptr) == EYA_PTR_T_MIN)
 
 /**
  * @def eya_ptr_to_uaddr(ptr)

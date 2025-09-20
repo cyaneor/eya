@@ -3,6 +3,7 @@
 #include <eya/runtime_check_ref.h>
 #include <eya/algorithm_util.h>
 #include <eya/ptr_util.h>
+#include <eya/nullptr.h>
 
 /*
  * IMPORTANT COMPILATION NOTES FOR GCC:

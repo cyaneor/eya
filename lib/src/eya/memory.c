@@ -5,6 +5,7 @@
 #include <eya/memory_std.h>
 #include <eya/math_util.h>
 #include <eya/ptr_util.h>
+#include <eya/nullptr.h>
 
 void *
 eya_memory_copy(void *dst, eya_usize_t dst_size, const void *src, eya_usize_t src_size)
@@ -80,8 +81,8 @@ const void *
 eya_memory_rcompare(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usize_t rhs_size)
 {
     const eya_usize_t n = eya_math_min(lhs_size, rhs_size);
-    const void   *l = eya_ptr_add(void, lhs, eya_math_sub(lhs_size, n));
-    const void   *r = eya_ptr_add(void, rhs, eya_math_sub(rhs_size, n));
+    const void       *l = eya_ptr_add(void, lhs, eya_math_sub(lhs_size, n));
+    const void       *r = eya_ptr_add(void, rhs, eya_math_sub(rhs_size, n));
 
     return eya_memory_std_rcompare(l, r, n);
 }
