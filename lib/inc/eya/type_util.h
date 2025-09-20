@@ -20,6 +20,7 @@
 #ifndef EYA_TYPE_UTIL_H
 #define EYA_TYPE_UTIL_H
 
+#include "platform_limits.h"
 #include "static_cast.h"
 
 /**
@@ -40,14 +41,14 @@
  * @brief Calculates bit size of type T
  *
  * @param T Data type to determine bit size of
- * @return Number of bits in type T (sizeof(T) * 8)
+ * @return Number of bits in type T (sizeof(T) * EYA_CHAR_BIT)
  *
  * Usage example:
  * @code
  * int bits = eya_type_bits(int); // Returns 32 for 32-bit int
  * @endcode
  */
-#define eya_type_bits(T) (eya_type_size(T) * 8)
+#define eya_type_bits(T) (eya_type_size(T) * EYA_CHAR_BIT)
 
 /**
  * @def eya_type_cast(T, expr)
