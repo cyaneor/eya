@@ -1,39 +1,56 @@
 /**
  * @file reinterpret_cast.h
- * @brief Macro definition for type-safe casting
+ * @brief Provides a portable reinterpret cast macro for C and C++.
  *
- * This file contains the `eya_reinterpret_cast` macro that enables
- * type casting with different implementations depending on
- * whether the code is compiled as C++ or C.
+ * This header file defines a macro for performing reinterpret casts that
+ * works consistently in both C and C++ compilation environments, providing
+ * low-level pointer conversion with appropriate language semantics.
+ *
+ * In C++, `reinterpret_cast<T>(expr)` provides implementation-defined pointer
+ * conversion with well-defined semantics. In C, this macro falls back to
+ * static casting for equivalent functionality when not compiling as C++.
  */
 
 #ifndef EYA_REINTERPRET_CAST_H
 #define EYA_REINTERPRET_CAST_H
 
-#include "compiler.h"
+#include "static_cast.h"
 
 #if (EYA_COMPILER_CXX == EYA_OPTION_ON)
 /**
- * @brief Type casting in C++
+ * @def eya_reinterpret_cast(T, expr)
+ * @brief Type-safe reinterpret cast for C++ environments.
  *
- * Uses reinterpret_cast for type conversion
+ * Uses C++ `reinterpret_cast<T>(expr)` when compiling as C++ code, providing
+ * implementation-defined pointer conversion between unrelated types with
+ * well-defined semantics according to the C++ standard.
  *
- * @param T Target type
- * @param V Value to cast
- * @return Casted value of type T
+ * @param T The target type to cast to (typically a pointer or reference type)
+ * @param expr The expression to be reinterpreted
+ * @return The expression reinterpreted as type T with implementation-defined conversion
+ *
+ * @note In C++, this preserves const/volatile qualifiers and provides stronger
+ *       guarantees than C-style casts for pointer conversions.
  */
-#    define eya_reinterpret_cast(T, V) reinterpret_cast<T>(V)
+#    define eya_reinterpret_cast(T, expr) reinterpret_cast<T>(expr)
 #else
 /**
- * @brief Type casting in C
+ * @def eya_reinterpret_cast(T, expr)
+ * @brief Reinterpret cast emulation for non-C++ environments.
  *
- * Uses standard C-style cast
+ * Uses static casting `eya_static_cast(T, expr)` when compiling as C code,
+ * providing equivalent pointer conversion functionality without C++'s
+ * type safety features and semantic guarantees.
  *
- * @param T Target type
- * @param V Value to cast
- * @return Casted value of type T
+ * @param T The target type to cast to
+ * @param expr The expression to be reinterpreted
+ * @return The expression cast to type T with C-style cast semantics
+ *
+ * @note In C mode, this behaves identically to static casting since C lacks
+ *       proper reinterpret cast semantics. Use with caution for pointer
+ *       conversions between unrelated types.
  */
-#    define eya_reinterpret_cast(T, V) ((T)V)
-#endif // __cplusplus
+#    define eya_reinterpret_cast(T, expr) eya_static_cast(T, expr)
+#endif // EYA_COMPILER_CXX
 
 #endif // EYA_REINTERPRET_CAST_H
