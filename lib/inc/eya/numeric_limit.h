@@ -112,7 +112,7 @@
  * @brief Returns the minimum value for the numeric type `T`.
  *
  * This macro returns the minimum value of `T`, which is `eya_numeric_limit_smin(T)`
- * if `T` is a signed type, or `eya_numeric_limit_umin()` if `T` is an unsigned type.
+ * if `T` is a signed type, or `eya_numeric_limit_umin(T)` if `T` is an unsigned type.
  * The determination is made using `eya_numeric_limit_is_signed(T)`.
  *
  * @param T The numeric type.
@@ -126,7 +126,7 @@
  * @brief Returns the maximum value for the numeric type T.
  *
  * This macro returns the maximum value of T, which is `eya_numeric_limit_smax(T)`
- * if T is a signed type, or eya_numeric_limit_umax(T) if T is an unsigned type.
+ * if T is a signed type, or `eya_numeric_limit_umax(T)` if T is an unsigned type.
  * The determination is made using `eya_numeric_limit_is_signed(T)`.
  *
  * @param T The numeric type.
