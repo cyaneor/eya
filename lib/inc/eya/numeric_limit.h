@@ -15,7 +15,8 @@
  *       Behavior is undefined for non-integer or non-arithmetic types.
  * @warning Users must include "bit_util.h" before using these macros, as they
  *          depend on `eya_type_cast`, `eya_bit_sign_type`, `eya_type_is_signed`,
- *          and `eya_type_is_unsigned` utilities.
+ *          `eya_type_is_unsigned`, `eya_bit_not`, `eya_type_zero_v`, and
+ *          `eya_type_neg_one_v` utilities.
  */
 
 #ifndef EYA_NUMERIC_LIMIT_H
@@ -40,47 +41,43 @@
  * @brief Returns the maximum value for a signed numeric type `T`.
  *
  * This macro computes the maximum value of a signed type `T`
- * by inverting the bits of the minimum signed value.
+ * by applying bitwise NOT to the type (inverts all bits).
  *
  * @param T The numeric type (must be a signed integer type).
  * @return The maximum value of type T.
  */
-#define eya_numeric_limit_smax(T) (~eya_numeric_limit_smin(T))
+#define eya_numeric_limit_smax(T) eya_bit_not(T)
 
 /**
  * @def eya_numeric_limit_umin
  * @brief Returns the minimum value for an unsigned numeric type `T`.
  *
- * This macro returns 0,
- * which is the minimum value for an unsigned type `T`.
+ * This macro returns the zero value for type `T`,
+ * which is the minimum value for an unsigned type.
  *
  * @param T The numeric type (must be an unsigned integer type).
  * @return The minimum value of type T (0).
  */
-#define eya_numeric_limit_umin(T) (eya_type_cast(T, 0))
+#define eya_numeric_limit_umin(T) eya_type_zero_v(T)
 
 /**
  * @def eya_numeric_limit_umax
  * @brief Returns the maximum value for an unsigned numeric type `T`.
  *
- * This macro returns the maximum value
- * of an unsigned type `T` by casting `-1` to `T`,
- * which sets all bits to 1.
+ * This macro returns the maximum value of an unsigned type `T`
+ * by getting the value with all bits set to 1.
  *
  * @param T The numeric type (must be an unsigned integer type).
  * @return The maximum value of type T.
  */
-#define eya_numeric_limit_umax(T) (eya_type_cast(T, -1))
+#define eya_numeric_limit_umax(T) eya_type_neg_one_v(T)
 
 /**
  * @def eya_numeric_limit_is_signed
  * @brief Determines if the numeric type `T` is signed.
  *
- * This macro checks if casting `0` and `-1` to `T`
- * results in `0` being greater than the cast result of `-1`.
- *
- * For signed types, `(T)-1` is -1, so `0 > (T)-1` returns `true`.
- * For unsigned types, `(T)-1` is the maximum value, so `0 > (T)-1` returns `false`.
+ * This macro checks whether the type `T` is signed using
+ * the underlying utility from "bit_util.h".
  *
  * @param T The numeric type to check.
  * @return `true` if `T` is a signed type, `false` if `T` is an unsigned type.
@@ -88,22 +85,19 @@
 #define eya_numeric_limit_is_signed(T) eya_type_is_signed(T)
 
 /**
- * @def eya_numeric_limit_is_unsigned(T)
- * @brief Alias macro to check if a numeric type is unsigned.
+ * @def eya_numeric_limit_is_unsigned
+ * @brief Determines if the numeric type `T` is unsigned.
  *
- * This macro provides an alternative name for `eya_type_is_unsigned(T)`,
- * offering a more descriptive interface in contexts related
- * to numeric limits and type traits.
+ * This macro checks whether the type `T` is unsigned using
+ * the underlying utility from "bit_util.h".
  *
  * @param T The numeric type to check.
  *          Must be a fundamental arithmetic type.
- * @return int Boolean value:
- *             1 if the type is unsigned, 0 if it is signed.
+ * @return `true` if `T` is an unsigned type, `false` if `T` is a signed type.
  *
- * @note This is simply an alias for `eya_type_is_unsigned(T)`
- *       and inherits all of its behavior, requirements, and limitations.
- * @warning The same caveats apply as for `eya_type_is_unsigned`.
- *          Not suitable for floating-point types or non-arithmetic types.
+ * @note This is an alias for `eya_type_is_unsigned(T)`
+ *       and inherits all of its behavior and limitations.
+ * @warning Not suitable for floating-point types or non-arithmetic types.
  */
 #define eya_numeric_limit_is_unsigned(T) eya_type_is_unsigned(T)
 
