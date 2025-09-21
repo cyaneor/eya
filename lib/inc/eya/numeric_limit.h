@@ -34,7 +34,7 @@
  * @param T The numeric type (must be a signed integer type).
  * @return The minimum value of type T.
  */
-#define eya_numeric_limit_smin(T) (eya_type_cast(T, eya_bit_sign_type(T)))
+#define eya_numeric_limit_smin(T) eya_type_cast(T, eya_bit_sign_type(T))
 
 /**
  * @def eya_numeric_limit_smax
