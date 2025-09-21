@@ -33,6 +33,7 @@ set(EYA_LIB_SOURCE_DIR "${EYA_LIB_ROOT_DIR}/src")        # Source code directory
 set(EYA_CMAKE_EXTENSION_DIR ${EYA_LIB_ROOT_DIR}/cmake)   # CMake helpers root
 
 # Set path to build option configuration files
+set(EYA_CMAKE_EXTENSION_CONFIGS_DIR ${EYA_CMAKE_EXTENSION_DIR}/configs)  # Configs
 set(EYA_CMAKE_EXTENSION_OPTIONS_DIR ${EYA_CMAKE_EXTENSION_DIR}/options)  # Build options
 set(EYA_CMAKE_EXTENSION_MODULES_DIR ${EYA_CMAKE_EXTENSION_DIR}/modules)  # CMake modules
 
@@ -49,9 +50,9 @@ include(${EYA_CMAKE_EXTENSION_OPTIONS_DIR}/build_options.cmake) # Compiler setti
 
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_cmake_options.cmake)     # Option aggregation
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/process_compile_options.cmake)   # Flags parsing
+include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/platform_limits.cmake)           # Platform limits
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/parse_version.cmake)             # Version parsing
 include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/source_files.cmake)              # Source management
-include(${EYA_CMAKE_EXTENSION_MODULES_DIR}/config.cmake)                    # Platform config
 
 # -------------------------------------------------------------------------------------------- #
 # Base Target Configuration                                                                    #
@@ -76,7 +77,7 @@ list(APPEND EYA_TARGET_PRIVATE_COMPILE_DEFINITIONS
         EYA_VERSION_PATCH=${EYA_VERSION_PATCH})
 
 # Generating a configuration for the target architecture
-generate_config()
+generate_platform_limits()
 
 # Get all current compile options
 get_property(EYA_COMPILE_OPTIONS DIRECTORY PROPERTY VARIABLES)

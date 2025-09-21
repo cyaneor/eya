@@ -1,0 +1,72 @@
+/**
+ * @file platform_limits.h
+ * @brief Platform-specific limits and size definitions
+ *
+ * This header provides platform-specific definitions
+ * for fundamental limits and type sizes.
+
+ * It serves as a bridge between system headers
+ * and the EYA library's portable type system.
+ *
+ * The definitions include:
+ * - Bit size of char (CHAR_BIT)
+ * - Size of pointer types
+ * - Size of size_t type
+ *
+ * This header uses configuration values (prefixed with @)
+ * that should be replaced during the build system configuration phase.
+ */
+
+#ifndef EYA_PLATFORM_LIMITS_H
+#define EYA_PLATFORM_LIMITS_H
+
+#include <limits.h>
+
+/**
+ * @def EYA_CHAR_BIT
+ * @brief Number of bits in a char (byte)
+ *
+ * Defines the number of bits in the smallest addressable unit (char).
+ * Falls back to system CHAR_BIT definition if available.
+ *
+ * @note Typically 8 on most modern platforms,
+ *       but can be different on some embedded or legacy systems.
+ */
+#ifndef EYA_CHAR_BIT
+#    ifdef CHAR_BIT
+#        define EYA_CHAR_BIT CHAR_BIT
+#    else
+#        error "CHAR_BIT not defined"
+#    endif // CHAR_BIT
+#endif     // EYA_CHAR_BIT
+
+/**
+ * @def EYA_PTR_T_SIZE
+ * @brief Size of void pointer type in bytes
+ *
+ * Defines the size of void pointer (void*) for the target platform.
+ * This value is configured during build system processing
+ * and replaces the @SIZEOF_VOID_P@ placeholder.
+ *
+ * @note This is typically 4 bytes for 32-bit platforms
+ *       and 8 bytes for 64-bit platforms
+ */
+#ifndef EYA_PTR_T_SIZE
+#    define EYA_PTR_T_SIZE @SIZEOF_VOID_P@
+#endif // EYA_PTR_T_SIZE
+
+/**
+ * @def EYA_SIZE_T_SIZE
+ * @brief Size of size_t type in bytes
+ *
+ * Defines the size of the size_t type for the target platform.
+ * This value is configured during build system processing
+ * and replaces the @SIZEOF_SIZE_T@ placeholder.
+ *
+ * @note size_t size typically matches the pointer size on most platforms
+ */
+#ifndef EYA_SIZE_T_SIZE
+#    define EYA_SIZE_T_SIZE @SIZEOF_SIZE_T@
+#endif // EYA_SIZE_T_SIZE
+
+#endif // EYA_PLATFORM_LIMITS_H

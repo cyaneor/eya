@@ -7,4 +7,4 @@ cmake-build-debug
 cmake-build-release
 build
 docs/html
-/lib/inc/eya/config.h
+/lib/inc/eya/platform_limits.h

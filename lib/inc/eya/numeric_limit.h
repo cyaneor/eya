@@ -41,12 +41,12 @@
  * @brief Returns the maximum value for a signed numeric type `T`.
  *
  * This macro computes the maximum value of a signed type `T`
- * by applying bitwise NOT to the type (inverts all bits).
+ * by applying bitwise NOT to the minimum value of type `T`.
  *
  * @param T The numeric type (must be a signed integer type).
  * @return The maximum value of type T.
  */
-#define eya_numeric_limit_smax(T) eya_bit_not(T)
+#define eya_numeric_limit_smax(T) eya_bit_not(eya_numeric_limit_smin(T))
 
 /**
  * @def eya_numeric_limit_umin

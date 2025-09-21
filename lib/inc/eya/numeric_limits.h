@@ -10,7 +10,6 @@
 #ifndef EYA_NUMERIC_LIMITS_H
 #define EYA_NUMERIC_LIMITS_H
 
-#include "config.h"
 #include "numeric_types.h"
 #include "numeric_limit.h"
 
