@@ -64,7 +64,16 @@ add_subdirectory(${EYA_LIB_ROOT_DIR})
 # Conditional inclusion of test components
 if (EYA_TESTS_BUILD)
     message(STATUS "Enabling tests build")
-    add_subdirectory(${EYA_TEST_ROOT_DIR})
+
+    if (NOT EXISTS ${EYA_TEST_ROOT_DIR})
+        message(WARNING "Tests directory '${EYA_TEST_ROOT_DIR}' does not exist!")
+    elseif (NOT IS_DIRECTORY ${EYA_TEST_ROOT_DIR})
+        message(WARNING "'${EYA_TEST_ROOT_DIR}' is not a directory!")
+    else()
+        add_subdirectory(${EYA_TEST_ROOT_DIR})
+        message(STATUS "Tests directory successfully added: ${EYA_TEST_ROOT_DIR}")
+    endif()
+
 else ()
     message(STATUS "Tests build disabled")
 endif ()
