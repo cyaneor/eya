@@ -197,7 +197,7 @@
  * @param T Signed integer type
  * @return Value with most significant bit set
  */
-#define eya_bit_sign_type(T) eya_bit_shl(eya_type_cast(T, 1), eya_bit_sign_type_pos(T))
+#define eya_bit_sign_type(T) eya_bit_shl(eya_type_one_v(T), eya_bit_sign_type_pos(T))
 
 #if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
 /**
