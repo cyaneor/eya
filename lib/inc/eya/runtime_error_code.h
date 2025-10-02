@@ -12,7 +12,6 @@
 #include "error_code.h"
 
 /**
- * @enum eya_runtime_error_code_t
  * @brief Runtime error codes enumeration
  *
  * This enumeration contains error codes that may occur
