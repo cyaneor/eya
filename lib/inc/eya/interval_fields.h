@@ -11,7 +11,7 @@
  *
  * The resulting structure contains:
  * - `bounds`: the lower and upper bounds of the interval, defined by the type `T`.
- * - `type`: the type of interval, using `eya_interval_type`.
+ * - `flags`: interval boundary flags, using `eya_interval_flags`.
  *
  * @note `T` is expected to be a structure created using the interval bounds macros
  *       (`eya_interval_bounds_struct` or `eya_interval_bounds_type`) which contains
@@ -21,7 +21,7 @@
 #ifndef EYA_INTERVAL_FIELDS_H
 #define EYA_INTERVAL_FIELDS_H
 
-#include <eya/interval_type.h>
+#include <eya/interval_flags.h>
 
 /**
  * @def eya_interval_fields(T)
@@ -29,13 +29,13 @@
  *
  * Expands to:
  * - A `bounds` field of type `T`, which holds the lower and upper bounds.
- * - A `type` field of type `eya_interval_type`, indicating the interval's type.
+ * - A `flags` field of type `eya_interval_flags`, indicating the interval's openness.
  *
  * @param T Structure type containing the interval bounds, typically created using
  *          `eya_interval_bounds_struct(T, Name)` or `eya_interval_bounds_type(T, Name)`.
  *
+ * Example usage:
  * @code
- * // Example usage:
  * typedef struct my_bounds {
  *     double lower;
  *     double upper;
@@ -44,10 +44,16 @@
  * struct my_interval {
  *     eya_interval_fields(my_bounds_t)
  * };
+ *
+ * // Access example:
+ * struct my_interval interval;
+ * interval.bounds.lower = 0.0;
+ * interval.bounds.upper = 1.0;
+ * interval.flags = EYA_INTERVAL_FLAGS_OPEN_RIGHT;
  * @endcode
  */
 #define eya_interval_fields(T)                                                                     \
-    T                 bounds;                                                                      \
-    eya_interval_type type;
+    T                  bounds;                                                                     \
+    eya_interval_flags flags;
 
 #endif // EYA_INTERVAL_FIELDS_H
