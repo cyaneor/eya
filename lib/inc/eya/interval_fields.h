@@ -54,6 +54,6 @@
  */
 #define eya_interval_fields(T)                                                                     \
     T                  bounds;                                                                     \
-    eya_interval_flags flags;
+    eya_interval_flags flags
 
 #endif // EYA_INTERVAL_FIELDS_H

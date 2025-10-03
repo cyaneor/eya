@@ -13,6 +13,7 @@
  *
  * @note All macros assume that the input type `T` is a fundamental integer type.
  *       Behavior is undefined for non-integer or non-arithmetic types.
+ *
  * @warning Users must include "bit_util.h" before using these macros, as they
  *          depend on `eya_type_cast`, `eya_bit_sign_type`, `eya_type_is_signed`,
  *          `eya_type_is_unsigned`, `eya_bit_not`, `eya_type_zero_v`, and

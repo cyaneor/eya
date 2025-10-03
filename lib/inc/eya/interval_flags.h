@@ -20,12 +20,6 @@
 
 #include <eya/numeric_types.h>
 
-/**
- * @enum
- * @brief Interval boundary flags.
- *
- * Flags for indicating which sides of an interval are open or closed.
- */
 enum
 {
     /**
