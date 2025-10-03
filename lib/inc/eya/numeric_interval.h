@@ -1,34 +1,18 @@
 /**
  * @file numeric_interval.h
- * @brief Predefined numeric interval constants.
+ * @brief Defines global interval constants for various numeric types.
  *
- * This header defines a set of constant intervals for all numeric type aliases.
- * Each interval consists of interval bounds (lower and upper) and interval flags.
- * By default, all intervals use @ref EYA_INTERVAL_FLAGS_CLOSED.
+ * This header provides constant interval objects for both unsigned and signed
+ * integer types, initialized with their respective minimum and maximum bounds.
+ * Each interval is defined as a closed interval, encompassing all possible values
+ * for the corresponding numeric type.
  *
- * Defined constants:
- * - `EYA_UCHAR_INTERVAL`  → interval for `unsigned char`
- * - `EYA_USHORT_INTERVAL` → interval for `unsigned short`
- * - `EYA_UINT_INTERVAL`   → interval for `unsigned int`
- * - `EYA_ULONG_INTERVAL`  → interval for `unsigned long`
- * - `EYA_ULLONG_INTERVAL` → interval for `unsigned long long`
- * - `EYA_SCHAR_INTERVAL`  → interval for `signed char`
- * - `EYA_SSHORT_INTERVAL` → interval for `signed short`
- * - `EYA_SINT_INTERVAL`   → interval for `signed int`
- * - `EYA_SLONG_INTERVAL`  → interval for `signed long`
- * - `EYA_SLLONG_INTERVAL` → interval for `signed long long`
+ * The intervals are initialized using the corresponding bounds initializers
+ * from @ref numeric_interval_bounds_initializer.h and use the types defined
+ * in @ref numeric_interval_types.h.
  *
- * Example usage:
- * @code
- * if (value >= EYA_UINT_INTERVAL.bounds.lower &&
- *     value <= EYA_UINT_INTERVAL.bounds.upper) {
- *     // value is within the closed interval for unsigned int
- * }
- * @endcode
- *
- * @see numeric_interval_bounds.h
  * @see numeric_interval_types.h
- * @see EYA_INTERVAL_FLAGS_CLOSED
+ * @see numeric_interval_bounds_initializer.h
  */
 
 #ifndef EYA_NUMERIC_INTERVAL_H
@@ -39,45 +23,105 @@
 
 EYA_COMPILER(EXTERN_C_BEGIN)
 
-/** Closed interval for `unsigned char`. */
-static const eya_uchar_interval EYA_UCHAR_INTERVAL = {eya_uchar_interval_bounds_initializer,
-                                                      EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_UCHAR_T_INTERVAL
+ * @brief Constant interval for the `eya_uchar_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_uchar_t` type,
+ * initialized with `eya_uchar_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_uchar_interval_t EYA_UCHAR_T_INTERVAL = {eya_uchar_interval_bounds_initializer};
 
-/** Closed interval for `unsigned short`. */
-static const eya_ushort_interval EYA_USHORT_INTERVAL = {eya_ushort_interval_bounds_initializer,
-                                                        EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_USHORT_T_INTERVAL
+ * @brief Constant interval for the `eya_ushort_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_ushort_t` type,
+ * initialized with `eya_ushort_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_ushort_interval_t EYA_USHORT_T_INTERVAL = {eya_ushort_interval_bounds_initializer};
 
-/** Closed interval for `unsigned int`. */
-static const eya_uint_interval EYA_UINT_INTERVAL = {eya_uint_interval_bounds_initializer,
-                                                    EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_UINT_T_INTERVAL
+ * @brief Constant interval for the `eya_uint_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_uint_t` type,
+ * initialized with `eya_uint_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_uint_interval_t EYA_UINT_T_INTERVAL = {eya_uint_interval_bounds_initializer};
 
-/** Closed interval for `unsigned long`. */
-static const eya_ulong_interval EYA_ULONG_INTERVAL = {eya_ulong_interval_bounds_initializer,
-                                                      EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_ULONG_T_INTERVAL
+ * @brief Constant interval for the `eya_ulong_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_ulong_t` type,
+ * initialized with `eya_ulong_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_ulong_interval_t EYA_ULONG_T_INTERVAL = {eya_ulong_interval_bounds_initializer};
 
-/** Closed interval for `unsigned long long`. */
-static const eya_ullong_interval EYA_ULLONG_INTERVAL = {eya_ullong_interval_bounds_initializer,
-                                                        EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_ULLONG_T_INTERVAL
+ * @brief Constant interval for the `eya_ullong_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_ullong_t` type,
+ * initialized with `eya_ullong_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_ullong_interval_t EYA_ULLONG_T_INTERVAL = {eya_ullong_interval_bounds_initializer};
 
-/** Closed interval for `signed char`. */
-static const eya_schar_interval EYA_SCHAR_INTERVAL = {eya_schar_interval_bounds_initializer,
-                                                      EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_SCHAR_T_INTERVAL
+ * @brief Constant interval for the `eya_schar_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_schar_t` type,
+ * initialized with `eya_schar_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_schar_interval_t EYA_SCHAR_T_INTERVAL = {eya_schar_interval_bounds_initializer};
 
-/** Closed interval for `signed short`. */
-static const eya_sshort_interval EYA_SSHORT_INTERVAL = {eya_sshort_interval_bounds_initializer,
-                                                        EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_SSHORT_T_INTERVAL
+ * @brief Constant interval for the `eya_sshort_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_sshort_t` type,
+ * initialized with `eya_sshort_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_sshort_interval_t EYA_SSHORT_T_INTERVAL = {eya_sshort_interval_bounds_initializer};
 
-/** Closed interval for `signed int`. */
-static const eya_sint_interval EYA_SINT_INTERVAL = {eya_sint_interval_bounds_initializer,
-                                                    EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_SINT_T_INTERVAL
+ * @brief Constant interval for the `eya_sint_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_sint_t` type,
+ * initialized with `eya_sint_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_sint_interval_t EYA_SINT_T_INTERVAL = {eya_sint_interval_bounds_initializer};
 
-/** Closed interval for `signed long`. */
-static const eya_slong_interval EYA_SLONG_INTERVAL = {eya_slong_interval_bounds_initializer,
-                                                      EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_SLONG_T_INTERVAL
+ * @brief Constant interval for the `eya_slong_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_slong_t` type,
+ * initialized with `eya_slong_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_slong_interval_t EYA_SLONG_T_INTERVAL = {eya_slong_interval_bounds_initializer};
 
-/** Closed interval for `signed long long`. */
-static const eya_sllong_interval EYA_SLLONG_INTERVAL = {eya_sllong_interval_bounds_initializer,
-                                                        EYA_INTERVAL_FLAGS_CLOSED};
+/**
+ * @var EYA_SLLONG_T_INTERVAL
+ * @brief Constant interval for the `eya_sllong_t` type.
+ *
+ * Represents a closed interval containing all possible values of the `eya_sllong_t` type,
+ * initialized with `eya_sllong_interval_bounds_initializer` and marked as closed with
+ * `EYA_INTERVAL_FLAGS_CLOSED`.
+ */
+static const eya_sllong_interval_t EYA_SLLONG_T_INTERVAL = {eya_sllong_interval_bounds_initializer};
 
 EYA_COMPILER(EXTERN_C_END)
 

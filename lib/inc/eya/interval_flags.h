@@ -2,7 +2,7 @@
  * @file interval_flags.h
  * @brief Interval flags enumeration and definitions.
  *
- * This header defines the `eya_interval_flags` type
+ * This header defines the `eya_interval_flags_t` type
  * and constants representing interval boundary openness.
  *
  * The flags distinguish between:
@@ -53,9 +53,9 @@ enum
 };
 
 /**
- * @typedef eya_interval_flags
+ * @typedef eya_interval_flags_t
  * @brief Type used to store interval flags.
  */
-typedef eya_uchar_t eya_interval_flags;
+typedef eya_uchar_t eya_interval_flags_t;
 
 #endif // EYA_INTERVAL_FLAGS_H
