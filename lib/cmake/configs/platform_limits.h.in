@@ -22,6 +22,8 @@
 
 #include <limits.h>
 
+#ifndef EYA_CHAR_BIT
+#    ifdef CHAR_BIT
 /**
  * @def EYA_CHAR_BIT
  * @brief Number of bits in a char (byte)
@@ -32,14 +34,13 @@
  * @note Typically 8 on most modern platforms,
  *       but can be different on some embedded or legacy systems.
  */
-#ifndef EYA_CHAR_BIT
-#    ifdef CHAR_BIT
 #        define EYA_CHAR_BIT CHAR_BIT
 #    else
 #        error "CHAR_BIT not defined"
 #    endif // CHAR_BIT
 #endif     // EYA_CHAR_BIT
 
+#ifndef EYA_PTR_T_SIZE
 /**
  * @def EYA_PTR_T_SIZE
  * @brief Size of void pointer type in bytes
@@ -51,10 +52,10 @@
  * @note This is typically 4 bytes for 32-bit platforms
  *       and 8 bytes for 64-bit platforms
  */
-#ifndef EYA_PTR_T_SIZE
-#    define EYA_PTR_T_SIZE @SIZEOF_VOID_P@
+#    define EYA_PTR_T_SIZE @SIZEOF_VOID_P @
 #endif // EYA_PTR_T_SIZE
 
+#ifndef EYA_SIZE_T_SIZE
 /**
  * @def EYA_SIZE_T_SIZE
  * @brief Size of size_t type in bytes
@@ -65,8 +66,7 @@
  *
  * @note size_t size typically matches the pointer size on most platforms
  */
-#ifndef EYA_SIZE_T_SIZE
-#    define EYA_SIZE_T_SIZE @SIZEOF_SIZE_T@
+#    define EYA_SIZE_T_SIZE @SIZEOF_SIZE_T @
 #endif // EYA_SIZE_T_SIZE
 
 #endif // EYA_PLATFORM_LIMITS_H
