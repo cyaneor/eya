@@ -18,13 +18,13 @@
  * @details This macro leverages the eya_struct_initializer to create an initialized
  *          eya_version_t instance.
  *
- *          It takes the major version (eya_u16_t),
- *          minor version (eya_u8_t), and patch version (eya_u8_t) as arguments,
+ *          It takes the major version (eya_ushort_t),
+ *          minor version (eya_uchar_t), and patch version (eya_uchar_t) as arguments,
  *          which must match the field order in the eya_version_t structure.
  *
- * @param major The major version number (eya_u16_t).
- * @param minor The minor version number (eya_u8_t).
- * @param patch The patch version number (eya_u8_t).
+ * @param major The major version number (eya_ushort_t).
+ * @param minor The minor version number (eya_uchar_t).
+ * @param patch The patch version number (eya_uchar_t).
  * @return An initialized eya_version_t structure with the provided version numbers.
  * @note This macro is typically used to initialize global or static version variables.
  * @warning Ensure the arguments match the expected types to avoid compilation errors.

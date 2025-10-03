@@ -10,9 +10,9 @@
 #ifndef EYA_VERSION_H
 #define EYA_VERSION_H
 
-#include "attribute.h"
-#include "version_fields.h"
-#include "numeric_fixed_types.h"
+#include <eya/attribute.h>
+#include <eya/numeric_types.h>
+#include <eya/version_fields.h>
 
 /**
  * @struct eya_version
@@ -23,7 +23,7 @@
  */
 typedef struct eya_version
 {
-    eya_version_fields(eya_u16_t, eya_u8_t, eya_u8_t);
+    eya_version_fields(eya_ushort_t, eya_uchar_t, eya_uchar_t);
 } eya_version_t;
 
 EYA_COMPILER(EXTERN_C_BEGIN)
@@ -38,7 +38,7 @@ EYA_COMPILER(EXTERN_C_BEGIN)
  * @return The major version number as a 16-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-eya_u16_t
+eya_ushort_t
 eya_version_major(const eya_version_t *self);
 
 /**
@@ -51,7 +51,7 @@ eya_version_major(const eya_version_t *self);
  * @return The minor version number as an 8-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-eya_u8_t
+eya_uchar_t
 eya_version_minor(const eya_version_t *self);
 
 /**
@@ -64,7 +64,7 @@ eya_version_minor(const eya_version_t *self);
  * @return The patch version number as an 8-bit unsigned integer.
  */
 EYA_ATTRIBUTE(SYMBOL)
-eya_u8_t
+eya_uchar_t
 eya_version_patch(const eya_version_t *self);
 
 EYA_COMPILER(EXTERN_C_END)

@@ -12,7 +12,8 @@
 #ifndef EYA_SIZE_H
 #define EYA_SIZE_H
 
-#include "numeric_fixed.h"
+#include <eya/numeric_types.h>
+#include <eya/numeric_limits.h>
 
 #if EYA_COMPILER_OS_TYPE == EYA_COMPILER_OS_TYPE_WINDOWS
 #    if EYA_COMPILER_BIT_DEPTH == 64
@@ -46,9 +47,9 @@
 /**
  * @typedef eya_ssize_t
  * @brief Signed integer type for representing sizes or counts (Windows, 64-bit)
- * @details Alias for eya_s64_t on 64-bit Windows platforms
+ * @details Alias for eya_sllong_t on 64-bit Windows platforms
  */
-typedef eya_s64_t eya_ssize_t;
+typedef eya_sllong_t eya_ssize_t;
 
 /**
  * @def EYA_USIZE_T_MIN
@@ -71,9 +72,9 @@ typedef eya_s64_t eya_ssize_t;
 /**
  * @typedef eya_usize_t
  * @brief Unsigned integer type for representing sizes or counts (Windows, 64-bit)
- * @details Alias for eya_u64_t on 64-bit Windows platforms
+ * @details Alias for eya_ullong_t on 64-bit Windows platforms
  */
-typedef eya_u64_t eya_usize_t;
+typedef eya_ullong_t eya_usize_t;
 #    else /* EYA_COMPILER_OS_TYPE != EYA_COMPILER_OS_TYPE_WINDOWS */
 /**
  * @def EYA_SIZE_SIZE

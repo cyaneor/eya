@@ -96,8 +96,8 @@ eya_memory_find(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usiz
     eya_runtime_return_ifn(lhs_size, nullptr);
     eya_runtime_return_ifn(rhs_size, nullptr);
 
-    const eya_u8_t *l = eya_ptr_cast(const eya_u8_t, lhs);
-    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(const eya_u8_t, l, lhs_size);
+    const eya_uchar_t *l = eya_ptr_cast(const eya_uchar_t, lhs);
+    const eya_uchar_t *e = eya_ptr_add_by_offset_unsafe(const eya_uchar_t, l, lhs_size);
 
     for (; l < e; ++l)
     {
@@ -118,8 +118,8 @@ eya_memory_rfind(const void *lhs, eya_usize_t lhs_size, const void *rhs, eya_usi
     eya_runtime_return_ifn(lhs_size, nullptr);
     eya_runtime_return_ifn(rhs_size, nullptr);
 
-    const eya_u8_t *l = eya_ptr_cast(const eya_u8_t, lhs);
-    const eya_u8_t *e = eya_ptr_add_by_offset_unsafe(const eya_u8_t, l, lhs_size);
+    const eya_uchar_t *l = eya_ptr_cast(const eya_uchar_t, lhs);
+    const eya_uchar_t *e = eya_ptr_add_by_offset_unsafe(const eya_uchar_t, l, lhs_size);
 
     for (; e > l; --e)
     {

@@ -10,7 +10,8 @@
 #ifndef EYA_ADDR_H
 #define EYA_ADDR_H
 
-#include "numeric_fixed.h"
+#include <eya/numeric_types.h>
+#include <eya/numeric_limits.h>
 
 #ifdef EYA_PTR_T_SIZE
 #    if EYA_PTR_T_SIZE == 8
@@ -43,7 +44,7 @@
  * @typedef eya_uaddr_t
  * @brief Unsigned address type for 64-bit systems
  */
-typedef eya_u64_t eya_uaddr_t;
+typedef eya_ullong_t eya_uaddr_t;
 
 #        ifndef EYA_SADDR_T_MIN
 /**
@@ -73,7 +74,7 @@ typedef eya_u64_t eya_uaddr_t;
  * @typedef eya_saddr_t
  * @brief Signed address type for 64-bit systems
  */
-typedef eya_s64_t eya_saddr_t;
+typedef eya_sllong_t eya_saddr_t;
 
 #    elif EYA_PTR_T_SIZE == 4
 
@@ -105,7 +106,7 @@ typedef eya_s64_t eya_saddr_t;
  * @typedef eya_uaddr_t
  * @brief Unsigned address type for 32-bit systems
  */
-typedef eya_u32_t eya_uaddr_t;
+typedef eya_uint_t eya_uaddr_t;
 
 #        ifndef EYA_SADDR_T_MIN
 /**
@@ -135,7 +136,7 @@ typedef eya_u32_t eya_uaddr_t;
  * @typedef eya_saddr_t
  * @brief Signed address type for 32-bit systems
  */
-typedef eya_s32_t eya_saddr_t;
+typedef eya_sint_t eya_saddr_t;
 
 #    elif EYA_PTR_T_SIZE == 2
 
@@ -167,7 +168,7 @@ typedef eya_s32_t eya_saddr_t;
  * @typedef eya_uaddr_t
  * @brief Unsigned address type for 16-bit systems
  */
-typedef eya_u16_t eya_uaddr_t;
+typedef eya_ushort_t eya_uaddr_t;
 
 #        ifndef EYA_SADDR_T_MIN
 /**
@@ -197,7 +198,7 @@ typedef eya_u16_t eya_uaddr_t;
  * @typedef eya_saddr_t
  * @brief Signed address type for 16-bit systems
  */
-typedef eya_s16_t eya_saddr_t;
+typedef eya_sshort_t eya_saddr_t;
 
 #    elif EYA_PTR_T_SIZE == 1
 
@@ -229,7 +230,7 @@ typedef eya_s16_t eya_saddr_t;
  * @typedef eya_uaddr_t
  * @brief Unsigned address type for 8-bit systems
  */
-typedef eya_u8_t eya_uaddr_t;
+typedef eya_uchar_t eya_uaddr_t;
 
 #        ifndef EYA_SADDR_T_MIN
 /**
@@ -259,7 +260,7 @@ typedef eya_u8_t eya_uaddr_t;
  * @typedef eya_saddr_t
  * @brief Signed address type for 8-bit systems
  */
-typedef eya_s8_t eya_saddr_t;
+typedef eya_schar_t eya_saddr_t;
 
 #    else
 #        error "Unsupported pointer size EYA_PTR_T_SIZE"
