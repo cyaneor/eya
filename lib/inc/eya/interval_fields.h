@@ -1,21 +1,12 @@
 /**
  * @file interval_fields.h
- * @brief Defines the fields for an interval structure.
+ * @brief Macro for defining interval fields with bounds and flags.
  *
- * This header provides a macro `eya_interval_fields(T)`
- * to define the common fields of an interval structure.
+ * This header provides a macro to define the fields for an interval structure,
+ * including the bounds and the interval flags that specify boundary openness.
+ * The macro is designed to be used with different types for the bounds.
  *
- * The macro is designed to be used with structures representing interval bounds,
- * typically defined via `eya_interval_bounds_struct(T, Name)`
- * or `eya_interval_bounds_type(T, Name)`.
- *
- * The resulting structure contains:
- * - `bounds`: the lower and upper bounds of the interval, defined by the type `T`.
- * - `flags`: interval boundary flags, using `eya_interval_flags_t`.
- *
- * @note `T` is expected to be a structure created using the interval bounds macros
- *       (`eya_interval_bounds_struct` or `eya_interval_bounds_type`) which contains
- *       `lower` and `upper` fields.
+ * @see interval_flags.h for details on the interval flags.
  */
 
 #ifndef EYA_INTERVAL_FIELDS_H
@@ -25,32 +16,16 @@
 
 /**
  * @def eya_interval_fields(T)
- * @brief Defines the common fields for an interval structure.
+ * @brief Macro to define interval fields.
+ * @param T The type of the interval bounds (e.g., int, double, float).
+ * @details Expands to define two fields:
+ *          - `bounds` of type `T` to store the interval boundaries.
+ *          - `flags` of type `eya_interval_flags_t` to store boundary openness flags.
  *
- * Expands to:
- * - A `bounds` field of type `T`, which holds the lower and upper bounds.
- * - A `flags` field of type `eya_interval_flags_t`, indicating the interval's openness.
+ * @note The `bounds` field typically represents the lower and upper limits of the interval,
+ *       while `flags` indicates whether the boundaries are open or closed.
  *
- * @param T Structure type containing the interval bounds, typically created using
- *          `eya_interval_bounds_struct(T, Name)` or `eya_interval_bounds_type(T, Name)`.
- *
- * Example usage:
- * @code
- * typedef struct my_bounds {
- *     double lower;
- *     double upper;
- * } my_bounds_t;
- *
- * struct my_interval {
- *     eya_interval_fields(my_bounds_t)
- * };
- *
- * // Access example:
- * struct my_interval interval;
- * interval.bounds.lower = 0.0;
- * interval.bounds.upper = 1.0;
- * interval.flags = EYA_INTERVAL_FLAGS_OPEN_RIGHT;
- * @endcode
+ * @see eya_interval_flags_t for flag definitions.
  */
 #define eya_interval_fields(T)                                                                     \
     T                    bounds;                                                                   \
