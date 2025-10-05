@@ -18,6 +18,7 @@
 #ifndef EYA_INTERVAL_FLAGS_H
 #define EYA_INTERVAL_FLAGS_H
 
+#include <eya/bit_util.h>
 #include <eya/numeric_types.h>
 
 enum
@@ -34,14 +35,14 @@ enum
      * @brief Left-open interval (a, b].
      * @details The left boundary is open, the right boundary is closed.
      */
-    EYA_INTERVAL_FLAGS_OPEN_LEFT = (1 << 1),
+    EYA_INTERVAL_FLAGS_OPEN_LEFT = eya_bit_make(0),
 
     /**
      * @var EYA_INTERVAL_FLAGS_OPEN_RIGHT
      * @brief Right-open interval [a, b).
      * @details The left boundary is closed, the right boundary is open.
      */
-    EYA_INTERVAL_FLAGS_OPEN_RIGHT = (1 << 2),
+    EYA_INTERVAL_FLAGS_OPEN_RIGHT = eya_bit_make(1),
 
     /**
      * @var EYA_INTERVAL_FLAGS_OPEN
@@ -49,7 +50,8 @@ enum
      * @details Both boundaries are open.
      *          Equivalent to (EYA_INTERVAL_FLAGS_OPEN_LEFT | EYA_INTERVAL_FLAGS_OPEN_RIGHT).
      */
-    EYA_INTERVAL_FLAGS_OPEN = (EYA_INTERVAL_FLAGS_OPEN_LEFT | EYA_INTERVAL_FLAGS_OPEN_RIGHT),
+    EYA_INTERVAL_FLAGS_OPEN =
+        (EYA_INTERVAL_FLAGS_CLOSED | EYA_INTERVAL_FLAGS_OPEN_LEFT | EYA_INTERVAL_FLAGS_OPEN_RIGHT),
 };
 
 /**
