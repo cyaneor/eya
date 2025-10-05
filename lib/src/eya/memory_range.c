@@ -1,9 +1,9 @@
 #include <eya/memory_range.h>
 
 #include <eya/memory_range_initializer.h>
+#include <eya/numeric_interval_util.h>
 #include <eya/runtime_check_ref.h>
 #include <eya/algorithm_util.h>
-#include <eya/interval_util.h>
 #include <eya/runtime_try.h>
 #include <eya/memory_raw.h>
 #include <eya/ptr_util.h>
@@ -145,7 +145,7 @@ eya_memory_range_contains_ptr(const eya_memory_range_t *self, const void *ptr)
 {
     void *begin, *end;
     eya_memory_range_unpack_v(self, &begin, &end);
-    return eya_interval_contains_value(EYA_INTERVAL_TYPE_RIGHT_OPEN, begin, ptr, end);
+    return eya_numeric_interval_contains_value(EYA_INTERVAL_FLAGS_OPEN_RIGHT, begin, ptr, end);
 }
 
 bool
@@ -153,8 +153,8 @@ eya_memory_range_contains_range(const eya_memory_range_t *self, const void *begi
 {
     void *self_begin, *self_end;
     eya_memory_range_unpack_v(self, &self_begin, &self_end);
-    return eya_interval_contains_range(
-        EYA_INTERVAL_TYPE_RIGHT_OPEN, self_begin, self_end, begin, end);
+    return eya_numeric_interval_contains_range(
+        EYA_INTERVAL_FLAGS_OPEN_RIGHT, self_begin, self_end, begin, end);
 }
 
 bool
