@@ -199,7 +199,7 @@
  */
 #define eya_bit_sign_type(T) eya_bit_shl(eya_type_one_v(T), eya_bit_sign_type_pos(T))
 
-#if (EYA_COMPILER_TYPE == EYA_COMPILER_GCC || EYA_COMPILER_TYPE == EYA_COMPILER_CLANG)
+#if EYA_COMPILER_GCC_LIKE
 /**
  * @def eya_bit_scan_forward64(index, mask)
  * @brief Finds first set bit in 64-bit mask (GCC/Clang)
